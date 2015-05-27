@@ -1,0 +1,15 @@
+*.ncrunchproject
+
+*.ncrunchsolution
+*.suo
+*.user
+*.cache
+
+_ReSharper.BeautifulBlueprints
+packages
+
+BeautifulBlueprints/bin
+BeautifulBlueprints/obj
+
+BeautifulBlueprints.Test/bin
+BeautifulBlueprints.Test/obj
