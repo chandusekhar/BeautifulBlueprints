@@ -1,6 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Text;
 using BeautifulBlueprints.Elements;
 using BeautifulBlueprints.Layout;
+using BeautifulBlueprints.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BeautifulBlueprints.Test.Elements
@@ -41,6 +45,30 @@ namespace BeautifulBlueprints.Test.Elements
 
             foreach (var el in solution.Where(a => a.Element != s))
                 Assert.AreEqual(20, el.Right - el.Left);
+        }
+
+        [TestMethod]
+        public void AssertThat_StackElement_CanSerializeAndDeserialize_WithDefaults()
+        {
+            var element = new Stack();
+
+            StringBuilder builder = new StringBuilder();
+            Yaml.Serialize(element, new StringWriter(builder));
+
+            Console.WriteLine(builder.ToString());
+
+            var deserialized = (Stack)Yaml.Deserialize(new StringReader(builder.ToString()));
+
+            Assert.AreEqual(element.InlineSpacing, deserialized.InlineSpacing);
+            Assert.AreEqual(element.OffsideSpacing, deserialized.OffsideSpacing);
+            Assert.AreEqual(element.HorizontalAlignment, deserialized.HorizontalAlignment);
+            Assert.AreEqual(element.VerticalAlignment, deserialized.VerticalAlignment);
+            Assert.AreEqual(element.Orientation, deserialized.Orientation);
+            Assert.AreEqual(element.Margin, deserialized.Margin);
+            Assert.AreEqual(element.MaxHeight, deserialized.MaxHeight);
+            Assert.AreEqual(element.MinHeight, deserialized.MinHeight);
+            Assert.AreEqual(element.MaxWidth, deserialized.MaxWidth);
+            Assert.AreEqual(element.MinWidth, deserialized.MinWidth);
         }
     }
 }

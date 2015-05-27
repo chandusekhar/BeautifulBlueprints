@@ -54,6 +54,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Elements\AspectRatioTest.cs" />
+    <Compile Include="Elements\FallbackTest.cs" />
+    <Compile Include="Elements\FloatTest.cs" />
+    <Compile Include="Elements\GridTest.cs" />
     <Compile Include="Elements\SpaceTest.cs" />
     <Compile Include="Playground.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

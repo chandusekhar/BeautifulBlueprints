@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Security.Cryptography;
 using System.Text;
 using BeautifulBlueprints.Elements;
 using BeautifulBlueprints.Layout;
@@ -11,74 +10,48 @@ using System.Linq;
 namespace BeautifulBlueprints.Test.Elements
 {
     [TestClass]
-    public class AspectRatioTest
+    public class FloatTest
     {
         [TestMethod]
-        public void AssertThat_AspectRatioElement_ExpandsToFillSpace_WithCorrectRatio()
+        public void AssertThat_FloatElement_VerticallyAlignsToCenter()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 2)).ToArray();
+            var solution = Solver.Solve(0, 100, 100, 0, new Float { 
+                new Space(maxHeight: 50)
+            }).ToArray();
 
-            var sol = solution.Single();
-
-            var width = sol.Right - sol.Left;
-            var height = sol.Top - sol.Bottom;
-
-            var ratio = width / height;
-            Assert.AreEqual(2, ratio);
-        }
-
-        [TestMethod]
-        public void AssertThat_AspectRatioElement_FailsLayout_WithImpossibleHeightConstraint()
-        {
-            var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 2, minHeight: 90)).ToArray();
-
-            Assert.AreEqual(0, solution.Length);
-        }
-
-        [TestMethod]
-        public void AssertThat_AspectRatioElement_FailsLayout_WithImpossibleWidthConstraint()
-        {
-            var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 0.5f, minWidth: 90)).ToArray();
-
-            Assert.AreEqual(0, solution.Length);
-        }
-
-        [TestMethod]
-        public void AssertThat_AspectRatioElement_VerticallyAlignsToCenter()
-        {
-            var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 2)).ToArray();
-
-            var sol = solution.Single();
+            var fl = solution.Single(a => a.Element is Float);
 
             //Fills up all width
-            Assert.AreEqual(0, sol.Left);
-            Assert.AreEqual(100, sol.Right);
+            Assert.AreEqual(0, fl.Left);
+            Assert.AreEqual(100, fl.Right);
 
             //Uses half of height, and aligns to center
-            Assert.AreEqual(25, sol.Bottom);
-            Assert.AreEqual(75, sol.Top);
+            Assert.AreEqual(25, fl.Bottom);
+            Assert.AreEqual(75, fl.Top);
         }
 
         [TestMethod]
-        public void AssertThat_AspectRatioElement_HorizontallyAlignsToCenter()
+        public void AssertThat_FloatElement_HorizontallyAlignsToCenter()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 0.5f)).ToArray();
+            var solution = Solver.Solve(0, 100, 100, 0, new Float { 
+                new Space(maxWidth: 50)
+            }).ToArray();
 
-            var sol = solution.Single();
+            var fl = solution.Single(a => a.Element is Float);
 
             //Fills up all width
-            Assert.AreEqual(25, sol.Left);
-            Assert.AreEqual(75, sol.Right);
+            Assert.AreEqual(25, fl.Left);
+            Assert.AreEqual(75, fl.Right);
 
             //Uses half of height, and aligns to center
-            Assert.AreEqual(0, sol.Bottom);
-            Assert.AreEqual(100, sol.Top);
+            Assert.AreEqual(0, fl.Bottom);
+            Assert.AreEqual(100, fl.Top);
         }
 
         [TestMethod]
-        public void AssertThat_AspectRatioElement_FloatsCorrectly_WithAlignmentCenterCenter()
+        public void AssertThat_FloatElement_FloatsCorrectly_WithAlignmentCenterCenter()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 1, maxWidth: 50, maxHeight: 50)).ToArray();
+            var solution = Solver.Solve(0, 100, 100, 0, new Float(maxWidth: 50, maxHeight: 50)).ToArray();
 
             var sol = solution.Single();
 
@@ -92,9 +65,9 @@ namespace BeautifulBlueprints.Test.Elements
         }
 
         [TestMethod]
-        public void AssertThat_AspectRatioElement_FloatsCorrectly_WithAlignmentLeftCenter()
+        public void AssertThat_FloatElement_FloatsCorrectly_WithAlignmentLeftCenter()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 1, maxWidth: 50, maxHeight: 50, horizontalAlignment: HorizontalAlignment.Left)).ToArray();
+            var solution = Solver.Solve(0, 100, 100, 0, new Float(maxWidth: 50, maxHeight: 50, horizontalAlignment: HorizontalAlignment.Left)).ToArray();
 
             var sol = solution.Single();
 
@@ -108,9 +81,9 @@ namespace BeautifulBlueprints.Test.Elements
         }
 
         [TestMethod]
-        public void AssertThat_AspectRatioElement_FloatsCorrectly_WithAlignmentRightCenter()
+        public void AssertThat_FloatElement_FloatsCorrectly_WithAlignmentRightCenter()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 1, maxWidth: 50, maxHeight: 50, horizontalAlignment: HorizontalAlignment.Right)).ToArray();
+            var solution = Solver.Solve(0, 100, 100, 0, new Float(maxWidth: 50, maxHeight: 50, horizontalAlignment: HorizontalAlignment.Right)).ToArray();
 
             var sol = solution.Single();
 
@@ -124,9 +97,9 @@ namespace BeautifulBlueprints.Test.Elements
         }
 
         [TestMethod]
-        public void AssertThat_AspectRatioElement_FloatsCorrectly_WithAlignmentCenterTop()
+        public void AssertThat_FloatElement_FloatsCorrectly_WithAlignmentCenterTop()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 1, maxWidth: 50, maxHeight: 50, verticalAlignment: VerticalAlignment.Top)).ToArray();
+            var solution = Solver.Solve(0, 100, 100, 0, new Float(maxWidth: 50, maxHeight: 50, verticalAlignment: VerticalAlignment.Top)).ToArray();
 
             var sol = solution.Single();
 
@@ -140,9 +113,9 @@ namespace BeautifulBlueprints.Test.Elements
         }
 
         [TestMethod]
-        public void AssertThat_AspectRatioElement_FloatsCorrectly_WithAlignmentCenterBottom()
+        public void AssertThat_FloatElement_FloatsCorrectly_WithAlignmentCenterBottom()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 1, maxWidth: 50, maxHeight: 50, verticalAlignment: VerticalAlignment.Bottom)).ToArray();
+            var solution = Solver.Solve(0, 100, 100, 0, new Float(maxWidth: 50, maxHeight: 50, verticalAlignment: VerticalAlignment.Bottom)).ToArray();
 
             var sol = solution.Single();
 
@@ -156,15 +129,15 @@ namespace BeautifulBlueprints.Test.Elements
         }
 
         [TestMethod]
-        public void AssertThat_AspectRatioElement_PositionsChildElementCorrectly()
+        public void AssertThat_FloatElement_PositionsChildElementCorrectly()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 1, maxWidth: 50, maxHeight: 50) {
+            var solution = Solver.Solve(0, 100, 100, 0, new Float(maxWidth: 50, maxHeight: 50) {
                 new Space()
             }).ToArray();
 
             Assert.AreEqual(2, solution.Length);
 
-            var ar = solution.Where(a => a.Element is AspectRatio).Single();
+            var ar = solution.Where(a => a.Element is Float).Single();
             Assert.AreEqual(25, ar.Left);
             Assert.AreEqual(75, ar.Right);
             Assert.AreEqual(25, ar.Bottom);
@@ -178,16 +151,16 @@ namespace BeautifulBlueprints.Test.Elements
         }
 
         [TestMethod]
-        public void AssertThat_AspectRatioElement_CanSerializeAndDeserialize_WithDefaults()
+        public void AssertThat_FloatElement_CanSerializeAndDeserialize_WithDefaults()
         {
-            var element = new AspectRatio();
+            var element = new Float();
 
             StringBuilder builder = new StringBuilder();
             Yaml.Serialize(element, new StringWriter(builder));
 
             Console.WriteLine(builder.ToString());
 
-            var deserialized = (AspectRatio)Yaml.Deserialize(new StringReader(builder.ToString()));
+            var deserialized = (Float)Yaml.Deserialize(new StringReader(builder.ToString()));
 
             Assert.AreEqual(element.HorizontalAlignment, deserialized.HorizontalAlignment);
             Assert.AreEqual(element.VerticalAlignment, deserialized.VerticalAlignment);

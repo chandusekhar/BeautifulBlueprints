@@ -1,4 +1,6 @@
 ﻿
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace BeautifulBlueprints.Elements
@@ -6,6 +8,11 @@ namespace BeautifulBlueprints.Elements
     public class Flow
         : BaseElement
     {
+        internal const Orientation DEFAULT_ORIENTATION = Orientation.Horizontal;
+        internal const HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.Center;
+        internal const VerticalAlignment DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.Center;
+        internal const Spacing DEFAULT_SPACING = Spacing.Uniform;
+
         [DefaultValue(Orientation.Horizontal)]
         public Orientation Orientation { get; set; }
 
@@ -20,15 +27,15 @@ namespace BeautifulBlueprints.Elements
 
         public Flow(
             string name = null,
-            float minWidth = 0,
-            float maxWidth = float.PositiveInfinity,
-            float minHeight = 0,
-            float maxHeight = float.PositiveInfinity,
+            float minWidth = DEFAULT_MIN_WIDTH,
+            float maxWidth = DEFAULT_MAX_WIDTH,
+            float minHeight = DEFAULT_MIN_HEIGHT,
+            float maxHeight = DEFAULT_MAX_HEIGHT,
             Margin margin = null,
-            Orientation orientation = Orientation.Horizontal,
-            HorizontalAlignment horizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment verticalAlignment = VerticalAlignment.Center,
-            Spacing spacing = Spacing.Uniform
+            Orientation orientation = DEFAULT_ORIENTATION,
+            HorizontalAlignment horizontalAlignment = DEFAULT_HORIZONTAL_ALIGNMENT,
+            VerticalAlignment verticalAlignment = DEFAULT_VERTICAL_ALIGNMENT,
+            Spacing spacing = DEFAULT_SPACING
         )
             : base(name, minWidth, maxWidth, minHeight, maxHeight, margin)
         {
@@ -36,11 +43,6 @@ namespace BeautifulBlueprints.Elements
             HorizontalAlignment = horizontalAlignment;
             VerticalAlignment = verticalAlignment;
             Spacing = spacing;
-        }
-
-        public Flow()
-            : this(minWidth: 0)
-        {
         }
 
         protected override int MaximumChildren
@@ -51,16 +53,21 @@ namespace BeautifulBlueprints.Elements
             }
         }
 
-        internal override System.Collections.Generic.IEnumerable<Layout.Solver.Solution> Solve(float left, float right, float top, float bottom)
+        internal override IEnumerable<Layout.Solver.Solution> Solve(float left, float right, float top, float bottom)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         internal override void Prepare()
         {
             base.Prepare();
 
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
+        }
+
+        internal override BaseElementContainer Contain()
+        {
+            throw new NotImplementedException();
         }
     }
 }

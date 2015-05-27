@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 using BeautifulBlueprints.Elements;
 using BeautifulBlueprints.Layout;
+using BeautifulBlueprints.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BeautifulBlueprints.Test.Elements
@@ -54,6 +57,25 @@ namespace BeautifulBlueprints.Test.Elements
         public void AssertThat_SpaceElement_DoesNot_AllowChildren()
         {
             new Space().Add(new Space());
+        }
+
+        [TestMethod]
+        public void AssertThat_SpaceElement_CanSerializeAndDeserialize_WithDefaults()
+        {
+            var element = new Space();
+
+            StringBuilder builder = new StringBuilder();
+            Yaml.Serialize(element, new StringWriter(builder));
+
+            Console.WriteLine(builder.ToString());
+
+            var deserialized = (Space)Yaml.Deserialize(new StringReader(builder.ToString()));
+
+            Assert.AreEqual(element.Margin, deserialized.Margin);
+            Assert.AreEqual(element.MaxHeight, deserialized.MaxHeight);
+            Assert.AreEqual(element.MinHeight, deserialized.MinHeight);
+            Assert.AreEqual(element.MaxWidth, deserialized.MaxWidth);
+            Assert.AreEqual(element.MinWidth, deserialized.MinWidth);
         }
     }
 }

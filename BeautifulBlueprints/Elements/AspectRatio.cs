@@ -7,6 +7,10 @@ namespace BeautifulBlueprints.Elements
     public class AspectRatio
         : BaseElement
     {
+        internal const HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.Center;
+        internal const VerticalAlignment DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.Center;
+        internal const float DEFAULT_RATIO = 1;
+
         private readonly float _ratio;
         public float Ratio
         {
@@ -24,14 +28,14 @@ namespace BeautifulBlueprints.Elements
 
         public AspectRatio(
             string name = null,
-            float minWidth = 0,
-            float maxWidth = float.PositiveInfinity,
-            float minHeight = 0,
-            float maxHeight = float.PositiveInfinity,
+            float minWidth = DEFAULT_MIN_WIDTH,
+            float maxWidth = DEFAULT_MAX_WIDTH,
+            float minHeight = DEFAULT_MIN_HEIGHT,
+            float maxHeight = DEFAULT_MAX_HEIGHT,
             Margin margin = null,
-            float ratio = 1,
-            HorizontalAlignment horizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment verticalAlignment = VerticalAlignment.Center
+            float ratio = DEFAULT_RATIO,
+            HorizontalAlignment horizontalAlignment = DEFAULT_HORIZONTAL_ALIGNMENT,
+            VerticalAlignment verticalAlignment = DEFAULT_VERTICAL_ALIGNMENT
         )
             : base(name, minWidth, maxWidth, minHeight, maxHeight, margin)
         {
@@ -53,8 +57,8 @@ namespace BeautifulBlueprints.Elements
             //Fill up the available space (no care for aspect ratio)
             var self = FillSpace(left, right, top, bottom, checkMaxWidth: false, checkMaxHeight: false);
 
-            var maxWidth = Math.Min(MaxWidth, right - left);
-            var maxHeight = Math.Min(MaxHeight, top - bottom);
+            var maxWidth = Math.Min(MaxWidth, self.Right - self.Left);
+            var maxHeight = Math.Min(MaxHeight, self.Top - self.Bottom);
 
             //Correct the aspect ratio
             var width = maxWidth;
@@ -65,49 +69,12 @@ namespace BeautifulBlueprints.Elements
                 RecalculateWidth(height, maxWidth, ref width);
             }
 
-            //Position the element correctly (Horizontal)
-            var spareHSpace = (right - left) - width;
-            float l, r;
-            switch (HorizontalAlignment)
-            {
-                case HorizontalAlignment.Left:
-                    l = self.Left;
-                    r = l + width;
-                    break;
-                case HorizontalAlignment.Right:
-                    r = self.Right;
-                    l = r - width;
-                    break;
-                case HorizontalAlignment.Center:
-                    l = self.Left + spareHSpace / 2;
-                    r = l + width;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            var floated = Float.FloatElement(this, HorizontalAlignment, VerticalAlignment, width, height, left, right, top, bottom);
+            yield return floated;
 
-            //Position the element correctly (Vertical)
-            var spareVSpace = (top - bottom) - height;
-            float t, b;
-            switch (VerticalAlignment)
-            {
-                case VerticalAlignment.Top:
-                    t = self.Top;
-                    b = t - height;
-                    break;
-                case VerticalAlignment.Bottom:
-                    b = self.Bottom;
-                    t = b + height;
-                    break;
-                case VerticalAlignment.Center:
-                    b = self.Bottom + spareVSpace / 2;
-                    t = b + height;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            yield return new Solver.Solution(this, l, r, t, b);
+            foreach (var child in Children)
+                foreach (var solution in child.Solve(floated.Left, floated.Right, floated.Top, floated.Bottom))
+                    yield return solution;
         }
 
         protected bool RecalculateHeight(float width, float maxHeight, ref float height)
@@ -143,16 +110,36 @@ namespace BeautifulBlueprints.Elements
             width = w;
             return true;
         }
+
+        internal override BaseElementContainer Contain()
+        {
+            return new AspectRatioContainer(this);
+        }
     }
 
     internal class AspectRatioContainer
-        : BaseElementContainer
+        : BaseElement.BaseElementContainer
     {
         public float Ratio { get; set; }
 
         public HorizontalAlignment HorizontalAlignment { get; set; }
 
         public VerticalAlignment VerticalAlignment { get; set; }
+
+        public AspectRatioContainer()
+        {
+            Ratio = AspectRatio.DEFAULT_RATIO;
+            HorizontalAlignment = AspectRatio.DEFAULT_HORIZONTAL_ALIGNMENT;
+            VerticalAlignment = AspectRatio.DEFAULT_VERTICAL_ALIGNMENT;
+        }
+
+        public AspectRatioContainer(AspectRatio aspect)
+            : base(aspect)
+        {
+            Ratio = aspect.Ratio;
+            HorizontalAlignment = aspect.HorizontalAlignment;
+            VerticalAlignment = aspect.VerticalAlignment;
+        }
 
         public override BaseElement Unwrap()
         {
@@ -166,8 +153,6 @@ namespace BeautifulBlueprints.Elements
                 horizontalAlignment: HorizontalAlignment,
                 verticalAlignment: VerticalAlignment
             );
-
-            //todo: correctly set defaults
 
             foreach (var child in Children)
                 s.Add(child.Unwrap());

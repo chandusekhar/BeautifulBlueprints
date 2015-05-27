@@ -1,12 +1,13 @@
-﻿using BeautifulBlueprints.Layout;
+﻿using System.Linq;
+using BeautifulBlueprints.Layout;
 using System.Collections.Generic;
 
 namespace BeautifulBlueprints.Elements
 {
-    public class Space
+    public class Fallback
         : BaseElement
     {
-        public Space(
+        public Fallback(
             string name = null,
             float minWidth = DEFAULT_MIN_WIDTH,
             float maxWidth = DEFAULT_MAX_WIDTH,
@@ -22,44 +23,54 @@ namespace BeautifulBlueprints.Elements
         {
             get
             {
-                return 0;
+                return int.MaxValue;
             }
         }
 
-        /// <summary>
-        /// Fill up as much of the available space as possible
-        /// </summary>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <param name="top"></param>
-        /// <param name="bottom"></param>
-        /// <returns></returns>
         internal override IEnumerable<Solver.Solution> Solve(float left, float right, float top, float bottom)
         {
-            yield return FillSpace(left, right, top, bottom);
+            List<Solver.Solution> solutions = new List<Solver.Solution>();
+
+            var self = FillSpace(left, right, top, bottom);
+            solutions.Add(self);
+
+            foreach (var child in Children)
+            {
+                try
+                {
+                    solutions.AddRange(child.Solve(self.Left, self.Right, self.Top, self.Bottom));
+                    return solutions;
+                }
+                catch (LayoutFailureException)
+                {
+                    //Eat exception, we want to keep falling back until we find something which does not fail
+                }
+            }
+
+            return new Solver.Solution[0];
         }
 
         internal override BaseElementContainer Contain()
         {
-            return new SpaceContainer(this);
+            return new FallbackContainer(this);
         }
     }
 
-    internal class SpaceContainer
+    internal class FallbackContainer
         : BaseElement.BaseElementContainer
     {
-        public SpaceContainer()
+        public FallbackContainer()
         {
         }
 
-        public SpaceContainer(Space space)
-            : base(space)
+        public FallbackContainer(Fallback fallback)
+            : base(fallback)
         {
         }
 
         public override BaseElement Unwrap()
         {
-            var s = new Space(name: Name,
+            var s = new Fallback(name: Name,
                 minWidth: MinWidth,
                 maxWidth: MaxWidth,
                 minHeight: MinHeight,

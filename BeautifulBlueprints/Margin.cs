@@ -1,9 +1,11 @@
 ﻿
+using System;
 using System.ComponentModel;
 
 namespace BeautifulBlueprints
 {
     public class Margin
+        : IEquatable<Margin>
     {
         [DefaultValue(0)]
         public float Left { get; private set; }
@@ -23,6 +25,45 @@ namespace BeautifulBlueprints
             Right = right;
             Bottom = bottom;
             Top = top;
+        }
+
+        public bool Equals(Margin other)
+        {
+            return Math.Abs(other.Left - Left) < float.Epsilon
+                && Math.Abs(other.Right - Right) < float.Epsilon
+                && Math.Abs(other.Top - Top) < float.Epsilon
+                && Math.Abs(other.Bottom - Bottom) < float.Epsilon;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var a = obj as Margin;
+            if (a != null)
+                return Equals(a);
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hashCode = Left.GetHashCode();
+                hashCode = (hashCode * 397) ^ Right.GetHashCode();
+                hashCode = (hashCode * 397) ^ Top.GetHashCode();
+                hashCode = (hashCode * 397) ^ Bottom.GetHashCode();
+                return hashCode;
+            }
+        }
+
+        internal MarginContainer Contain()
+        {
+            return new MarginContainer {
+                Left = Left,
+                Bottom = Bottom,
+                Right = Right,
+                Top = Top
+            };
         }
     }
 

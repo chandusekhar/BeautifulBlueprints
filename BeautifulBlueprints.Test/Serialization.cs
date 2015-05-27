@@ -42,7 +42,7 @@ VerticalAlignment: Top
         {
             var el = new Stack(inlineSpacing: Spacing.Maximize) {
                 new Stack(inlineSpacing: Spacing.Minimize) {
-                    new Flow()
+                    new Space()
                 },
                 new Space(margin: new Margin(bottom: 10))
             };

@@ -9,6 +9,12 @@ namespace BeautifulBlueprints.Elements
     public class Stack
         : BaseElement
     {
+        internal const Orientation DEFAULT_ORIENTATION = Orientation.Horizontal;
+        internal const HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.Center;
+        internal const VerticalAlignment DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.Bottom;
+        internal const Spacing DEFAULT_INLINE_SPACING = Spacing.Uniform;
+        internal const Spacing DEFAULT_OFFSIDE_SPACING = Spacing.Minimize;
+
         private readonly Orientation _orientation;
         [DefaultValue(Orientation.Horizontal)]
         public Orientation Orientation { get { return _orientation; } }
@@ -68,16 +74,16 @@ namespace BeautifulBlueprints.Elements
 
         public Stack(
             string name = null,
-            float minWidth = 0,
-            float maxWidth = float.PositiveInfinity,
-            float minHeight = 0,
-            float maxHeight = float.PositiveInfinity,
+            float minWidth = DEFAULT_MIN_WIDTH,
+            float maxWidth = DEFAULT_MAX_WIDTH,
+            float minHeight = DEFAULT_MIN_HEIGHT,
+            float maxHeight = DEFAULT_MAX_HEIGHT,
             Margin margin = null,
-            Orientation orientation = Orientation.Horizontal,
-            HorizontalAlignment horizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment verticalAlignment = VerticalAlignment.Bottom,
-            Spacing inlineSpacing = Spacing.Uniform,
-            Spacing offsideSpacing = Spacing.Minimize
+            Orientation orientation = DEFAULT_ORIENTATION,
+            HorizontalAlignment horizontalAlignment = DEFAULT_HORIZONTAL_ALIGNMENT,
+            VerticalAlignment verticalAlignment = DEFAULT_VERTICAL_ALIGNMENT,
+            Spacing inlineSpacing = DEFAULT_INLINE_SPACING,
+            Spacing offsideSpacing = DEFAULT_OFFSIDE_SPACING
         )
             : base(name, minWidth, maxWidth, minHeight, maxHeight, margin)
         {
@@ -86,11 +92,6 @@ namespace BeautifulBlueprints.Elements
             _verticalAlignment = verticalAlignment;
             _inlineSpacing = inlineSpacing;
             _offsideSpacing = offsideSpacing;
-        }
-
-        public Stack()
-            : this(minWidth: 0)
-        {
         }
 
         protected override int MaximumChildren
@@ -160,10 +161,15 @@ namespace BeautifulBlueprints.Elements
                 throw new NotImplementedException();
             }
         }
+
+        internal override BaseElementContainer Contain()
+        {
+            return new StackContainer(this);
+        }
     }
 
     internal class StackContainer
-        : BaseElementContainer
+        : BaseElement.BaseElementContainer
     {
         public Orientation Orientation { get; set; }
 
@@ -174,6 +180,25 @@ namespace BeautifulBlueprints.Elements
         public Spacing InlineSpacing { get; set; }
 
         public Spacing OffsideSpacing { get; set; }
+
+        public StackContainer()
+        {
+            Orientation = Stack.DEFAULT_ORIENTATION;
+            HorizontalAlignment = Stack.DEFAULT_HORIZONTAL_ALIGNMENT;
+            VerticalAlignment = Stack.DEFAULT_VERTICAL_ALIGNMENT;
+            InlineSpacing = Stack.DEFAULT_INLINE_SPACING;
+            OffsideSpacing = Stack.DEFAULT_OFFSIDE_SPACING;
+        }
+
+        public StackContainer(Stack stack)
+            : base(stack)
+        {
+            Orientation = stack.Orientation;
+            HorizontalAlignment = stack.HorizontalAlignment;
+            VerticalAlignment = stack.VerticalAlignment;
+            InlineSpacing = stack.InlineSpacing;
+            OffsideSpacing = stack.OffsideSpacing;
+        }
 
         public override BaseElement Unwrap()
         {
