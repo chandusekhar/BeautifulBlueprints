@@ -1,24 +1,44 @@
-﻿using System;
+﻿using BeautifulBlueprints.Layout;
+using SharpYaml.Serialization;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using BeautifulBlueprints.Layout;
 
 namespace BeautifulBlueprints.Elements
 {
+    /// <summary>
+    /// Abstract base class for all element types
+    /// </summary>
     public abstract class BaseElement
         : IEnumerable<BaseElement>
     {
-        [DefaultValue(0)]
-        public float MinWidth { get; set; }
+        private readonly string _name;
+        /// <summary>
+        /// The unique name of this element
+        /// </summary>
+        public string Name { get { return _name; } }
 
+        private readonly float _minWidth;
+        /// <summary>
+        /// The minimum width this element may be shrunk to
+        /// </summary>
+        [DefaultValue(0)]
+        public virtual float MinWidth { get { return _minWidth; } }
+
+        private readonly float _maxWidth;
+        /// <summary>
+        /// The maximum width this element may be stretched to
+        /// </summary>
         [DefaultValue(float.PositiveInfinity)]
-        public float MaxWidth { get; set; }
+        public virtual float MaxWidth { get { return _maxWidth; } }
 
         private float? _preferredWidth;
-
+        /// <summary>
+        /// Once all other constraints are satisfied, the width this element should be closest to
+        /// </summary>
         [DefaultValue(float.PositiveInfinity)]
-        public float PreferredWidth
+        public virtual float PreferredWidth
         {
             get
             {
@@ -36,16 +56,26 @@ namespace BeautifulBlueprints.Elements
             }
         }
 
+        private readonly float _minHeight;
+        /// <summary>
+        /// The minimum height of this element
+        /// </summary>
         [DefaultValue(0)]
-        public float MinHeight { get; set; }
+        public virtual float MinHeight { get { return _minHeight; } }
 
+        private readonly float _maxHeight;
+        /// <summary>
+        /// The maximum height this element may be stretched to
+        /// </summary>
         [DefaultValue(float.PositiveInfinity)]
-        public float MaxHeight { get; set; }
+        public virtual float MaxHeight { get { return _maxHeight; } }
 
         private float? _preferredHeight;
-
+        /// <summary>
+        /// Once all other constraints are satisfied, the height this element should be closest to
+        /// </summary>
         [DefaultValue(float.PositiveInfinity)]
-        public float PreferredHeight
+        public virtual float PreferredHeight
         {
             get
             {
@@ -63,30 +93,39 @@ namespace BeautifulBlueprints.Elements
             }
         }
 
-        public Margin Margin { get; set; }
+        private readonly Margin _margin;
+        /// <summary>
+        /// The empty space which is always included around this element
+        /// </summary>
+        public Margin Margin { get { return _margin; } }
 
-        public List<BaseElement> Children { get; set; }
-
-        protected BaseElement(float minWidth = 0, float maxWidth = float.PositiveInfinity, float minHeight = 0, float maxHeight = float.PositiveInfinity, Margin? margin = null)
+        private readonly List<BaseElement> _children = new List<BaseElement>();
+        /// <summary>
+        /// All child elements of this element
+        /// </summary>
+        public IEnumerable<BaseElement> Children { get { return _children; } }
+        
+        protected BaseElement(string name = null, float minWidth = 0, float maxWidth = float.PositiveInfinity, float minHeight = 0, float maxHeight = float.PositiveInfinity, Margin margin = null)
         {
-            Children = new List<BaseElement>();
+            _name = name ?? Guid.NewGuid().ToString();
 
-            MinWidth = minWidth;
-            MaxWidth = maxWidth;
+            _minWidth = minWidth;
+            _maxWidth = maxWidth;
 
-            MinHeight = minHeight;
-            MaxHeight = maxHeight;
+            _minHeight = minHeight;
+            _maxHeight = maxHeight;
 
-            Margin = margin ?? new Margin();
+            _margin = margin ?? new Margin();
         }
 
-        protected abstract bool AllowChildren { get; }
+        [YamlIgnore]
+        protected abstract int MaximumChildren { get; }
 
-        public void Add(BaseElement baseElement)
+        public virtual void Add(BaseElement baseElement)
         {
-            if (!AllowChildren)
-                throw new NotSupportedException(string.Format("{0} elements do not allow children", GetType().Name));
-            Children.Add(baseElement);
+            if (_children.Count == MaximumChildren)
+                throw new NotSupportedException(string.Format("{0}({1}) element allows a maximum of {2} children", GetType().Name, Name, MaximumChildren));
+            _children.Add(baseElement);
         }
 
         public IEnumerator<BaseElement> GetEnumerator()
@@ -100,5 +139,48 @@ namespace BeautifulBlueprints.Elements
         }
 
         internal abstract IEnumerable<Solver.Solution> Solve(float left, float right, float top, float bottom);
+
+        internal virtual void Prepare()
+        {
+            foreach (var child in Children)
+                child.Prepare();
+        }
+
+        protected Solver.Solution FillSpace(float left, float right, float top, float bottom, bool checkMinWidth = true, bool checkMaxWidth = true, bool checkMinHeight = true, bool checkMaxHeight = true)
+        {
+            var width = (right - left) - (Margin.Left + Margin.Right);
+            var height = (top - bottom) - (Margin.Top + Margin.Bottom);
+
+            if (checkMinWidth && width < MinWidth)
+                throw new LayoutFailureException(string.Format("available width is < MinWidth for element {0}({1})", GetType().Name, Name));
+            if (checkMaxWidth && width > MaxWidth)
+                throw new LayoutFailureException(string.Format("available width is > MaxWidth for element {0}({1})", GetType().Name, Name));
+
+            if (checkMinHeight && height < MinHeight)
+                throw new LayoutFailureException(string.Format("available height is < MinHeight for element {0}({1})", GetType().Name, Name));
+            if (checkMaxHeight && height > MaxHeight)
+                throw new LayoutFailureException(string.Format("available height is > MaxHeight for element {0}({1})", GetType().Name, Name));
+
+            return new Solver.Solution(this, left + Margin.Left, right - Margin.Right, top - Margin.Top, bottom + Margin.Bottom);
+        }
+    }
+
+    internal abstract class BaseElementContainer
+    {
+        public string Name { get; set; }
+
+        public float MinWidth { get; set; }
+        public float MaxWidth { get; set; }
+        public float PreferredWidth { get; set; }
+
+        public float MinHeight { get; set; }
+        public float MaxHeight { get; set; }
+        public float PreferredHeight { get; set; }
+
+        public MarginContainer Margin { get; set; }
+
+        public List<BaseElementContainer> Children { get; set; }
+
+        public abstract BaseElement Unwrap();
     }
 }

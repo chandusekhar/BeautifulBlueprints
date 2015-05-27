@@ -1,6 +1,5 @@
-﻿
+﻿using BeautifulBlueprints.Layout;
 using System.Collections.Generic;
-using BeautifulBlueprints.Layout;
 
 namespace BeautifulBlueprints.Elements
 {
@@ -8,13 +7,14 @@ namespace BeautifulBlueprints.Elements
         : BaseElement
     {
         public Space(
+            string name = null,
             float minWidth = 0,
             float maxWidth = float.PositiveInfinity,
             float minHeight = 0,
             float maxHeight = float.PositiveInfinity,
-            Margin? margin = null
+            Margin margin = null
         )
-            : base(minWidth, maxWidth, minHeight, maxHeight, margin)
+            : base(name, minWidth, maxWidth, minHeight, maxHeight, margin)
         {
         }
 
@@ -22,11 +22,11 @@ namespace BeautifulBlueprints.Elements
         {
         }
 
-        protected override bool AllowChildren
+        protected override int MaximumChildren
         {
             get
             {
-                return false;
+                return 0;
             }
         }
 
@@ -40,13 +40,27 @@ namespace BeautifulBlueprints.Elements
         /// <returns></returns>
         internal override IEnumerable<Solver.Solution> Solve(float left, float right, float top, float bottom)
         {
-            var width = (right - left) - (Margin.Left + Margin.Right);
-            var height = (top - bottom) - (Margin.Top + Margin.Bottom);
+            yield return FillSpace(left, right, top, bottom);
+        }
+    }
 
-            if (width < MinWidth || width > MaxWidth || height < MinHeight || height > MaxHeight)
-                yield break;
+    internal class SpaceContainer
+        : BaseElementContainer
+    {
+        public override BaseElement Unwrap()
+        {
+            var s = new Space(name: Name,
+                minWidth: MinWidth,
+                maxWidth: MaxWidth,
+                minHeight: MinHeight,
+                maxHeight: MaxHeight,
+                margin: (Margin ?? new MarginContainer()).Unwrap()
+            );
 
-            yield return new Solver.Solution(this, left + Margin.Left, right - Margin.Right, top - Margin.Top, bottom + Margin.Bottom);
+            foreach (var child in Children)
+                s.Add(child.Unwrap());
+
+            return s;
         }
     }
 }

@@ -20,7 +20,7 @@ Children:
   - !Stack
     Children: []
     HorizontalAlignment: Left
-    Spacing: Minimize
+    InlineSpacing: Uniform
     VerticalAlignment: Top
     MinWidth: 10
   - !Space
@@ -28,23 +28,23 @@ Children:
     Margin:
       Bottom: 10.0
 HorizontalAlignment: Left
-Spacing: Maximize
+InlineSpacing: Maximize
 VerticalAlignment: Top
-
 "));
 
             Assert.AreEqual(2, el.Children.Count());
             Assert.AreEqual(10, el.Children.First().MinWidth);
+            Assert.AreEqual(Spacing.Uniform, el.Children.OfType<Stack>().Single().InlineSpacing);
         }
 
         [TestMethod]
         public void SerializeElement()
         {
-            var el = new Stack(spacing: Spacing.Maximize) {
-                new Stack(spacing: Spacing.Minimize) {
+            var el = new Stack(inlineSpacing: Spacing.Maximize) {
+                new Stack(inlineSpacing: Spacing.Minimize) {
                     new Flow()
                 },
-                new Space(margin: new Margin { Bottom = 10 })
+                new Space(margin: new Margin(bottom: 10))
             };
 
             StringBuilder builder = new StringBuilder();

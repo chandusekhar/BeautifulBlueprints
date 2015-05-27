@@ -15,21 +15,44 @@ namespace BeautifulBlueprints.Serialization
             get
             {
                 if (_serializer == null)
-                    _serializer = Create();
+                    _serializer = CreateSerializer();
                 return _serializer;
             }
         }
 
-        private static Serializer Create()
+        [ThreadStatic]
+        private static Serializer _deserializer;
+        private static Serializer Deserializer
+        {
+            get
+            {
+                if (_deserializer == null)
+                    _deserializer = CreateDeserializer();
+                return _deserializer;
+            }
+        }
+
+        private static Serializer CreateSerializer()
         {
             var serializer = new Serializer(new SerializerSettings
             {
                 EmitTags = true,
-                EmitShortTypeName = true
             });
 
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(a => typeof(BaseElement).IsAssignableFrom(a) && !a.IsAbstract))
                 serializer.Settings.RegisterTagMapping(type.Name, type);
+
+            return serializer;
+        }
+
+        private static Serializer CreateDeserializer()
+        {
+            var serializer = new Serializer(new SerializerSettings
+            {
+            });
+
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(a => typeof(BaseElementContainer).IsAssignableFrom(a) && !a.IsAbstract))
+                serializer.Settings.RegisterTagMapping(type.Name.Replace("Container", ""), type);
 
             return serializer;
         }
@@ -41,7 +64,7 @@ namespace BeautifulBlueprints.Serialization
 
         public static BaseElement Deserialize(TextReader reader)
         {
-            return Serializer.Deserialize<BaseElement>(reader);
+            return Deserializer.Deserialize<BaseElementContainer>(reader).Unwrap();
         }
     }
 }

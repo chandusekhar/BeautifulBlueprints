@@ -19,17 +19,18 @@ namespace BeautifulBlueprints.Elements
         public Spacing Spacing { get; set; }
 
         public Flow(
+            string name = null,
             float minWidth = 0,
             float maxWidth = float.PositiveInfinity,
             float minHeight = 0,
             float maxHeight = float.PositiveInfinity,
-            Margin?margin= null,
+            Margin margin = null,
             Orientation orientation = Orientation.Horizontal,
             HorizontalAlignment horizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment verticalAlignment = VerticalAlignment.Center,
             Spacing spacing = Spacing.Uniform
         )
-            : base(minWidth, maxWidth, minHeight, maxHeight, margin)
+            : base(name, minWidth, maxWidth, minHeight, maxHeight, margin)
         {
             Orientation = orientation;
             HorizontalAlignment = horizontalAlignment;
@@ -42,16 +43,23 @@ namespace BeautifulBlueprints.Elements
         {
         }
 
-        protected override bool AllowChildren
+        protected override int MaximumChildren
         {
             get
             {
-                return true;
+                return int.MaxValue;
             }
         }
 
         internal override System.Collections.Generic.IEnumerable<Layout.Solver.Solution> Solve(float left, float right, float top, float bottom)
         {
+            throw new System.NotImplementedException();
+        }
+
+        internal override void Prepare()
+        {
+            base.Prepare();
+
             throw new System.NotImplementedException();
         }
     }

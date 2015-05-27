@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cassowary">
-      <HintPath>..\packages\Cassowary.3.0.0.0\lib\net35-Client\Cassowary.dll</HintPath>
-    </Reference>
     <Reference Include="SharpYaml">
       <HintPath>..\packages\SharpYaml.1.4.0\lib\SharpYaml.dll</HintPath>
     </Reference>
@@ -45,11 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Elements\AspectRatio.cs" />
     <Compile Include="Elements\BaseElement.cs" />
     <Compile Include="Elements\Flow.cs" />
     <Compile Include="Elements\Grid.cs" />
     <Compile Include="Elements\Space.cs" />
     <Compile Include="HorizontalAlignment.cs" />
+    <Compile Include="Layout\LayoutFailureException.cs" />
     <Compile Include="Layout\Solver.cs" />
     <Compile Include="Margin.cs" />
     <Compile Include="Orientation.cs" />

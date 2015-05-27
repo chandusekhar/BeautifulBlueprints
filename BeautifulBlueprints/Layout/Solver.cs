@@ -1,5 +1,6 @@
 ﻿using BeautifulBlueprints.Elements;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BeautifulBlueprints.Layout
 {
@@ -7,7 +8,20 @@ namespace BeautifulBlueprints.Layout
     {
         public static IEnumerable<Solution> Solve(float left, float right, float top, float bottom, BaseElement root)
         {
-            return root.Solve(left, right, top, bottom);
+            root.Prepare();
+
+            Solution[] solutions;
+            try
+            {
+                solutions = root.Solve(left, right, top, bottom).ToArray();
+            }
+            catch (LayoutFailureException)
+            {
+                yield break;
+            }
+
+            foreach (var solution in solutions)
+                yield return solution;
         }
 
         public struct Solution
