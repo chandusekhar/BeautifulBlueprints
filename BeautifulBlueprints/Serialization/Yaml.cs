@@ -24,11 +24,12 @@ namespace BeautifulBlueprints.Serialization
             serializer.Settings.RegisterTagMapping("Fallback", typeof(FallbackContainer));
             serializer.Settings.RegisterTagMapping("Float", typeof(FloatContainer));
             //serializer.Settings.RegisterTagMapping("Flow", typeof(FlowContainer));
-
+            serializer.Settings.RegisterTagMapping("Repeat", typeof(RepeatContainer));
             serializer.Settings.RegisterTagMapping("Grid", typeof(GridContainer));
-            serializer.Settings.RegisterTagMapping("Row", typeof(GridRowContainer));
-            serializer.Settings.RegisterTagMapping("Column", typeof(GridColumnContainer));
-
+            {
+                serializer.Settings.RegisterTagMapping("Row", typeof(GridRowContainer));
+                serializer.Settings.RegisterTagMapping("Column", typeof(GridColumnContainer));
+            }
             serializer.Settings.RegisterTagMapping("Space", typeof(SpaceContainer));
             //serializer.Settings.RegisterTagMapping("Stack", typeof(StackContainer));
 
