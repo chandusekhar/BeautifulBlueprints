@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using BeautifulBlueprints.Layout;
+﻿using BeautifulBlueprints.Layout;
 using System.Collections.Generic;
 
 namespace BeautifulBlueprints.Elements
@@ -10,12 +9,14 @@ namespace BeautifulBlueprints.Elements
         public Fallback(
             string name = null,
             float minWidth = DEFAULT_MIN_WIDTH,
+            float preferredWidth = DEFAULT_PREFERRED_WIDTH,
             float maxWidth = DEFAULT_MAX_WIDTH,
             float minHeight = DEFAULT_MIN_HEIGHT,
+            float preferredHeight = DEFAULT_PREFERRED_HEIGHT,
             float maxHeight = DEFAULT_MAX_HEIGHT,
             Margin margin = null
         )
-            : base(name, minWidth, maxWidth, minHeight, maxHeight, margin)
+            : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight, margin)
         {
         }
 
@@ -72,8 +73,10 @@ namespace BeautifulBlueprints.Elements
         {
             var s = new Fallback(name: Name,
                 minWidth: MinWidth,
+                preferredWidth: PreferredWidth ?? BaseElement.DEFAULT_PREFERRED_WIDTH,
                 maxWidth: MaxWidth,
                 minHeight: MinHeight,
+                preferredHeight: PreferredHeight ?? BaseElement.DEFAULT_PREFERRED_HEIGHT,
                 maxHeight: MaxHeight,
                 margin: (Margin ?? new MarginContainer()).Unwrap()
             );

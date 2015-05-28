@@ -18,4 +18,11 @@ namespace BeautifulBlueprints
         /// </summary>
         Grow
     }
+
+    public interface ISizeable
+    {
+        SizeMode Mode { get; }
+
+        float Size { get; }
+    }
 }

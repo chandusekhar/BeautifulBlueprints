@@ -4,7 +4,7 @@ using System;
 namespace BeautifulBlueprints.Elements
 {
     public class GridRow
-        : IEquatable<GridRow>
+        : IEquatable<GridRow>, ISizeable
     {
         public float Size { get; private set; }
 

@@ -30,15 +30,17 @@ namespace BeautifulBlueprints.Elements
         public AspectRatio(
             string name = null,
             float minWidth = DEFAULT_MIN_WIDTH,
+            float preferredWidth = DEFAULT_PREFERRED_WIDTH,
             float maxWidth = DEFAULT_MAX_WIDTH,
             float minHeight = DEFAULT_MIN_HEIGHT,
+            float preferredHeight = DEFAULT_PREFERRED_HEIGHT,
             float maxHeight = DEFAULT_MAX_HEIGHT,
             Margin margin = null,
             float ratio = DEFAULT_RATIO,
             HorizontalAlignment horizontalAlignment = DEFAULT_HORIZONTAL_ALIGNMENT,
             VerticalAlignment verticalAlignment = DEFAULT_VERTICAL_ALIGNMENT
         )
-            : base(name, minWidth, maxWidth, minHeight, maxHeight, margin)
+            : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight, margin)
         {
             _ratio = ratio;
             _horizontalAlignment = horizontalAlignment;
@@ -83,7 +85,7 @@ namespace BeautifulBlueprints.Elements
             var h = width / Ratio;
 
             if (h < MinHeight)
-                throw new LayoutFailureException(string.Format("height is < MinHeight for element {0}({1})", GetType().Name, Name));
+                throw new LayoutFailureException("height is < MinHeight", this);
 
             if (h > maxHeight)
                 h = maxHeight;
@@ -100,7 +102,7 @@ namespace BeautifulBlueprints.Elements
             var w = height * Ratio;
 
             if (w < MinWidth)
-                throw new LayoutFailureException(string.Format("width is < MinWidth for element {0}({1})", GetType().Name, Name));
+                throw new LayoutFailureException("width is < MinWidth", this);
 
             if (w > maxWidth)
                 w = maxWidth;
@@ -149,8 +151,10 @@ namespace BeautifulBlueprints.Elements
         {
             var s = new AspectRatio(name: Name,
                 minWidth: MinWidth,
+                preferredWidth: PreferredWidth ?? BaseElement.DEFAULT_PREFERRED_WIDTH,
                 maxWidth: MaxWidth,
                 minHeight: MinHeight,
+                preferredHeight: PreferredHeight ?? BaseElement.DEFAULT_PREFERRED_HEIGHT,
                 maxHeight: MaxHeight,
                 margin: (Margin ?? new MarginContainer()).Unwrap(),
                 ratio: Ratio,

@@ -65,14 +65,16 @@ namespace BeautifulBlueprints.Elements
         public Float(
             string name = null,
             float minWidth = DEFAULT_MIN_WIDTH,
+            float preferredWidth = DEFAULT_PREFERRED_WIDTH,
             float maxWidth = DEFAULT_MAX_WIDTH,
             float minHeight = DEFAULT_MIN_HEIGHT,
+            float preferredHeight = DEFAULT_PREFERRED_HEIGHT,
             float maxHeight = DEFAULT_MAX_HEIGHT,
             Margin margin = null,
             HorizontalAlignment horizontalAlignment = DEFAULT_HORIZONTAL_ALIGNMENT,
             VerticalAlignment verticalAlignment = DEFAULT_VERTICAL_ALIGNMENT
         )
-            : base(name, minWidth, maxWidth, minHeight, maxHeight, margin)
+            : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight, margin)
         {
             _horizontalAlignment = horizontalAlignment;
             _verticalAlignment = verticalAlignment;
@@ -180,8 +182,10 @@ namespace BeautifulBlueprints.Elements
         {
             var s = new Float(name: Name,
                 minWidth: MinWidth,
+                preferredWidth: PreferredWidth ?? BaseElement.DEFAULT_PREFERRED_WIDTH,
                 maxWidth: MaxWidth,
                 minHeight: MinHeight,
+                preferredHeight: PreferredHeight ?? BaseElement.DEFAULT_PREFERRED_HEIGHT,
                 maxHeight: MaxHeight,
                 margin: (Margin ?? new MarginContainer()).Unwrap(),
                 horizontalAlignment: HorizontalAlignment,

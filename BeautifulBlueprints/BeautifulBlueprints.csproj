@@ -52,6 +52,7 @@
     <Compile Include="Elements\GridRow.cs" />
     <Compile Include="Elements\GridColumn.cs" />
     <Compile Include="Elements\Space.cs" />
+    <Compile Include="Elements\Repeat.cs" />
     <Compile Include="HorizontalAlignment.cs" />
     <Compile Include="Layout\LayoutFailureException.cs" />
     <Compile Include="Layout\Solver.cs" />

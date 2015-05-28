@@ -15,8 +15,10 @@ namespace BeautifulBlueprints.Elements
         : IEnumerable<BaseElement>
     {
         internal const float DEFAULT_MIN_WIDTH = 0;
+        internal const float DEFAULT_PREFERRED_WIDTH = float.NaN;
         internal const float DEFAULT_MAX_WIDTH = 10000;
         internal const float DEFAULT_MIN_HEIGHT = 0;
+        internal const float DEFAULT_PREFERRED_HEIGHT = float.NaN;
         internal const float DEFAULT_MAX_HEIGHT = 10000;
 
         private readonly string _name;
@@ -107,17 +109,21 @@ namespace BeautifulBlueprints.Elements
         
         protected BaseElement(string name = null,
             float minWidth = DEFAULT_MIN_WIDTH,
+            float preferredWidth = DEFAULT_PREFERRED_WIDTH,
             float maxWidth = DEFAULT_MAX_WIDTH,
             float minHeight = DEFAULT_MIN_HEIGHT,
+            float preferredHeight = DEFAULT_PREFERRED_HEIGHT,
             float maxHeight = DEFAULT_MAX_HEIGHT,
             Margin margin = null)
         {
             _name = name ?? Guid.NewGuid().ToString();
 
             _minWidth = minWidth;
+            _preferredWidth = float.IsNaN(preferredWidth) ? (float?)null : preferredWidth;
             _maxWidth = maxWidth;
 
             _minHeight = minHeight;
+            _preferredHeight = float.IsNaN(preferredHeight) ? (float?)null : preferredHeight;
             _maxHeight = maxHeight;
 
             _margin = margin ?? new Margin();
@@ -157,14 +163,14 @@ namespace BeautifulBlueprints.Elements
             var height = (top - bottom) - (Margin.Top + Margin.Bottom);
 
             if (checkMinWidth && width < MinWidth)
-                throw new LayoutFailureException(string.Format("available width is < MinWidth for element {0}({1})", GetType().Name, Name));
+                throw new LayoutFailureException("available width is < MinWidth", this);
             if (checkMaxWidth && width > MaxWidth)
-                throw new LayoutFailureException(string.Format("available width is > MaxWidth for element {0}({1})", GetType().Name, Name));
+                throw new LayoutFailureException("available width is > MaxWidth", this);
 
             if (checkMinHeight && height < MinHeight)
-                throw new LayoutFailureException(string.Format("available height is < MinHeight for element {0}({1})", GetType().Name, Name));
+                throw new LayoutFailureException("available height is < MinHeight", this);
             if (checkMaxHeight && height > MaxHeight)
-                throw new LayoutFailureException(string.Format("available height is > MaxHeight for element {0}({1})", GetType().Name, Name));
+                throw new LayoutFailureException("available height is > MaxHeight", this);
 
             return new Solver.Solution(this, left + Margin.Left, right - Margin.Right, top - Margin.Top, bottom + Margin.Bottom);
         }
