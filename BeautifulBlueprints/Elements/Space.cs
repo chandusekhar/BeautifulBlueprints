@@ -67,8 +67,11 @@ namespace BeautifulBlueprints.Elements
                 margin: (Margin ?? new MarginContainer()).Unwrap()
             );
 
-            foreach (var child in Children)
-                s.Add(child.Unwrap());
+            if (Children != null)
+            {
+                foreach (var child in Children)
+                    s.Add(child.Unwrap());
+            }
 
             return s;
         }

@@ -74,12 +74,12 @@ namespace BeautifulBlueprints.Elements
             var elements = Children.ToArray();
 
             // "Fixed" and "Auto" rows/cols have been laid out already, now size "Grow" rows/cols
-            DistributeExcessSpace(_rowSizes, _totalUnsizedRowSpace, (self.Right - self.Left) - _totalSizedRowSpace);
-            DistributeExcessSpace(_columnSizes, _totalUnsizedColSpace, (self.Top - self.Bottom) - _totalSizedColSpace);
+            DistributeExcessSpace(_rowSizes, _totalUnsizedRowSpace, (self.Top - self.Bottom) - _totalSizedRowSpace);
+            DistributeExcessSpace(_columnSizes, _totalUnsizedColSpace, (self.Right - self.Left) - _totalSizedColSpace);
 
             //Check that the grid consumes all space
-            AssertAllSpaceIsUsed(_rowSizes, self.Right - self.Left, "row", "height");
-            AssertAllSpaceIsUsed(_columnSizes, self.Top - self.Bottom, "column", "width");
+            AssertAllSpaceIsUsed(_rowSizes, self.Top - self.Bottom, "row", "height");
+            AssertAllSpaceIsUsed(_columnSizes, self.Right - self.Left, "column", "width");
 
             //Now fit each element into the space allotted for it's grid cell
             FitChildren(_rowSizes, _columnSizes, elements, self, solutions);
@@ -133,7 +133,7 @@ namespace BeautifulBlueprints.Elements
                     continue;
 
                 //Excess space is distributed over unsized elements by the ratio of their size
-                var amount = totalUnsizedSpace / -sizes[i];
+                var amount = -sizes[i] / totalUnsizedSpace;
                 sizes[i] = excess * amount;
             }
         }
@@ -153,7 +153,7 @@ namespace BeautifulBlueprints.Elements
                         break;
                     case SizeMode.Auto:
                         //Smallest size wide enough for child elements
-                        columnSizes[i] = MeasureColumnElementWidths(elements, i * _columns.Length, _columns.Length);
+                        columnSizes[i] = MeasureColumnElementWidths(elements, i, _columns.Length);
                         totalSizedColSpace += columnSizes[i];
                         break;
                     case SizeMode.Grow:
@@ -182,7 +182,7 @@ namespace BeautifulBlueprints.Elements
                         break;
                     case SizeMode.Auto:
                         //Smallest size wide enough for child elements
-                        rowSizes[i] = MeasureRowElementHeights(elements, i * _columns.Length, _columns.Length);
+                        rowSizes[i] = MeasureRowElementHeights(elements, i, _columns.Length);
                         totalSizedRowSpace += rowSizes[i];
                         break;
                     case SizeMode.Grow:
@@ -196,24 +196,22 @@ namespace BeautifulBlueprints.Elements
             }
         }
 
-        private float MeasureRowElementHeights(BaseElement[] allElements, int min, int count)
+        private float MeasureRowElementHeights(BaseElement[] allElements, int rowIndex, int itemsPerRow)
         {
             float height = 0;
-            for (int i = min; i < min + count; i++)
+            for (int i = rowIndex * itemsPerRow; i < rowIndex * itemsPerRow + itemsPerRow && i < allElements.Length; i++)
             {
-                if (i < allElements.Length)
-                    height = Math.Max(height, allElements[i].MinHeight);
+                height = Math.Max(height, allElements[i].MinHeight);
             }
             return height;
         }
 
-        private float MeasureColumnElementWidths(BaseElement[] allElements, int min, int count)
+        private float MeasureColumnElementWidths(BaseElement[] allElements, int columnIndex, int itemsPerRow)
         {
             float width = 0;
-            for (int i = min; i < min + count; i++)
+            for (int i = columnIndex; i < allElements.Length; i += itemsPerRow)
             {
-                if (i < allElements.Length)
-                    width = Math.Max(width, allElements[i].MinWidth);
+                width = Math.Max(width, allElements[i].MinWidth);
             }
             return width;
         }
@@ -255,8 +253,11 @@ namespace BeautifulBlueprints.Elements
                 margin: (Margin ?? new MarginContainer()).Unwrap()
             );
 
-            foreach (var child in Children)
-                s.Add(child.Unwrap());
+            if (Children != null)
+            {
+                foreach (var child in Children)
+                    s.Add(child.Unwrap());
+            }
 
             return s;
         }
