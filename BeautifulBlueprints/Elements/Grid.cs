@@ -57,16 +57,14 @@ namespace BeautifulBlueprints.Elements
                 }
                 else if (definitions[i].Mode == SizeMode.Grow)
                 {
-                    output[i].Size = 0;
+                    output[i].Size = measureElementSizes(elements, i, rowCount, columnCount);
                     output[i].PreferredSize = definitions[i].Size;
                 }
                 else if (definitions[i].Mode == SizeMode.Auto)
                 {
                     //Configure to the smallest size large enough for child elements
-                    float prefer = measureElementPreferredSize(elements, i, rowCount, columnCount);
-                    float size = measureElementSizes(elements, i, rowCount, columnCount);
-                    output[i].Size = size;
-                    output[i].PreferredSize = prefer;
+                    output[i].Size = measureElementSizes(elements, i, rowCount, columnCount);
+                    output[i].PreferredSize = measureElementPreferredSize(elements, i, rowCount, columnCount);
                 }
                 else
                     throw new NotSupportedException(string.Format("Unknwon size mode {0}", definitions[i].Mode));

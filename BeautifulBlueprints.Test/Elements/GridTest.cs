@@ -222,5 +222,26 @@ namespace BeautifulBlueprints.Test.Elements
             Assert.AreEqual(75, r.Left);
             Assert.AreEqual(100, r.Right);
         }
+
+        [TestMethod]
+        public void AssertThat_GridElements_AutoElementsAdoptMinimumPossibleSize()
+        {
+            var root = new Grid(
+                new GridRow[] {new GridRow(1, SizeMode.Grow)},
+                new GridColumn[] {new GridColumn(1, SizeMode.Auto), new GridColumn(1, SizeMode.Grow), new GridColumn(1, SizeMode.Auto)}
+            ) {
+                new Space(name: "a"),
+                new Space(name: "b", minWidth: 20),
+                new Space(name: "c")
+            };
+
+            var solution = Solver.Solve(-100, 100, 50, -50, root).ToArray();
+
+            Assert.AreNotEqual(0, solution.Length);
+
+            //Check that the middle grid row has grown to the minimum size of the middle element and no more
+            var b = solution.Single(a => a.Element.Name == "b");
+            Assert.AreEqual(20, b.Right - b.Left);
+        }
     }
 }

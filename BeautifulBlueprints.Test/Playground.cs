@@ -63,5 +63,32 @@ namespace BeautifulBlueprints.Test
             foreach (var part in sol.Where(a => !(a.Element is Grid)))
                 Console.WriteLine(part.Element.GetType().Name + " " + (part.Top - part.Bottom));
         }
+
+        [TestMethod]
+        public void MethodName()
+        {
+            var layout = @"
+!Grid
+Name: Root
+Columns:
+  - { Mode: Auto, Size: 1 }
+  - { Mode: Grow, Size: 1 }
+  - { Mode: Auto, Size: 1 }
+Rows:
+  - { Mode: Grow, Size: 1 }
+Children:
+  - !Space {}
+  - !Space
+    MinWidth: 20
+  - !Space {}
+";
+
+            var des = Yaml.Deserialize(new StringReader(layout));
+            var solution = Layout.Solver.Solve(-450, 450, 75, -75, des).ToArray();
+
+            Assert.AreNotEqual(0, solution.Length);
+            foreach (var part in solution)
+                Console.WriteLine(part.Element.GetType().Name + " " + part.Left + " " + part.Right + " " + part.Top + " " + part.Bottom);
+        }
     }
 }
