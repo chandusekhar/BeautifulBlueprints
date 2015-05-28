@@ -20,7 +20,7 @@ Children:
   - !Stack
     Children: []
     HorizontalAlignment: Left
-    InlineSpacing: Uniform
+    InlineSpacing: Minimize
     VerticalAlignment: Top
     MinWidth: 10
   - !Space
@@ -34,7 +34,7 @@ VerticalAlignment: Top
 
             Assert.AreEqual(2, el.Children.Count());
             Assert.AreEqual(10, el.Children.First().MinWidth);
-            Assert.AreEqual(Spacing.Uniform, el.Children.OfType<Stack>().Single().InlineSpacing);
+            Assert.AreEqual(Spacing.Minimize, el.Children.OfType<Stack>().Single().InlineSpacing);
         }
 
         [TestMethod]

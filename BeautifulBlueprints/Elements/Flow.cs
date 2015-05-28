@@ -10,7 +10,7 @@ namespace BeautifulBlueprints.Elements
         internal const Orientation DEFAULT_ORIENTATION = Orientation.Horizontal;
         internal const HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.Center;
         internal const VerticalAlignment DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.Center;
-        internal const Spacing DEFAULT_SPACING = Spacing.Uniform;
+        internal const Spacing DEFAULT_SPACING = Spacing.Minimize;
 
         public Orientation Orientation { get; set; }
 

@@ -26,6 +26,7 @@ namespace BeautifulBlueprints.Test.Elements
 
         [TestMethod]
         public void AssertThat_FlowElement_CanSerializeAndDeserialize_WithDefaults()
+
         {
             var element = new Flow();
 

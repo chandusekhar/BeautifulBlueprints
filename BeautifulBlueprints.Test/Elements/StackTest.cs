@@ -15,7 +15,7 @@ namespace BeautifulBlueprints.Test.Elements
         [TestMethod]
         public void AssertThat_StackElement_ExpandsToFillSpace()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new Stack()).ToArray();
+            var solution = Solver.Solve(0, 100, 100, 0, new Stack(inlineSpacing: Spacing.Maximize)).ToArray();
 
             Assert.AreEqual(1, solution.Count());
             Assert.AreEqual(0, solution.Single().Left);
@@ -27,7 +27,7 @@ namespace BeautifulBlueprints.Test.Elements
         [TestMethod]
         public void AssertThat_StackElement_LaysOutChildrenWithMinimumSpace()
         {
-            var s = new Stack(inlineSpacing: Spacing.Minimize) {
+            var s = new Stack(inlineSpacing: Spacing.Maximize) {
                 new Space(minWidth: 10, maxWidth: 20),
                 new Space(minWidth: 10, maxWidth: 20),
                 new Space(minWidth: 10, maxWidth: 20),
@@ -38,13 +38,15 @@ namespace BeautifulBlueprints.Test.Elements
 
             Assert.AreEqual(5, solution.Length);
 
+            //Check that parent element takes all space
             Assert.AreEqual(0, solution.Where(a => a.Element == s).Single().Left);
             Assert.AreEqual(100, solution.Where(a => a.Element == s).Single().Right);
             Assert.AreEqual(100, solution.Where(a => a.Element == s).Single().Top);
             Assert.AreEqual(0, solution.Where(a => a.Element == s).Single().Bottom);
 
+            //Since we're maximising space, make sure all the children have the minimum allowed extent
             foreach (var el in solution.Where(a => a.Element != s))
-                Assert.AreEqual(20, el.Right - el.Left);
+                Assert.AreEqual(10, el.Right - el.Left);
         }
 
         [TestMethod]
