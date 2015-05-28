@@ -28,7 +28,8 @@ namespace BeautifulBlueprints.Test
             StringBuilder b = new StringBuilder();
             Yaml.Serialize(root, new StringWriter(b));
 
-            //Console.WriteLine(b);
+            Console.WriteLine(b);
+            var d = Yaml.Deserialize(new StringReader(b.ToString()));
 
             var sol = Layout.Solver.Solve(0, 100, 10, 0, root).ToArray();
             Assert.AreEqual(6, sol.Length);

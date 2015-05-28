@@ -153,5 +153,74 @@ namespace BeautifulBlueprints.Test.Elements
             for (int i = 0; i < expectedColumns.Length; i++)
                 Assert.AreEqual(expectedColumns[i], actualColumns[i]);
         }
+
+        [TestMethod]
+        public void AssertThat_GridElement_LaysOutFixedElements()
+        {
+            var solution = Solver.Solve(0, 100, 100, 0, new Grid(
+                rows: new[] { new GridRow(100, SizeMode.Fixed) },
+                columns: new[] { new GridColumn(50, SizeMode.Fixed), new GridColumn(50, SizeMode.Fixed) }
+            ) {
+                new Space("l"), new Space("r")
+            }).ToArray();
+
+            Assert.AreEqual(3, solution.Length);
+
+            var l = solution.Single(a => a.Element.Name == "l");
+            var r = solution.Single(a => a.Element.Name == "r");
+
+            Assert.AreEqual(0, l.Left);
+            Assert.AreEqual(50, l.Right);
+
+            Assert.AreEqual(50, r.Left);
+            Assert.AreEqual(100, r.Right);
+        }
+
+        [TestMethod]
+        public void AssertThat_GridElement_LaysOutAutoElements()
+        {
+            var solution = Solver.Solve(0, 100, 100, 0, new Grid(
+                rows: new[] { new GridRow(100, SizeMode.Fixed) },
+                columns: new[] { new GridColumn(1, SizeMode.Auto), new GridColumn(1, SizeMode.Auto) }
+            ) {
+                new Space("l"), new Space("r")
+            }).ToArray();
+
+            Assert.AreEqual(3, solution.Length);
+
+            var l = solution.Single(a => a.Element.Name == "l");
+            var r = solution.Single(a => a.Element.Name == "r");
+
+            //Check that space is equally distributed between the two auto elements
+
+            Assert.AreEqual(0, l.Left);
+            Assert.AreEqual(50, l.Right);
+
+            Assert.AreEqual(50, r.Left);
+            Assert.AreEqual(100, r.Right);
+        }
+
+        [TestMethod]
+        public void AssertThat_GridElement_LaysOutGrowElements()
+        {
+            var solution = Solver.Solve(0, 100, 100, 0, new Grid(
+                rows: new[] { new GridRow(100, SizeMode.Fixed) },
+                columns: new[] { new GridColumn(3, SizeMode.Grow), new GridColumn(1, SizeMode.Grow) }
+            ) {
+                new Space("l"), new Space("r")
+            }).ToArray();
+
+            Assert.AreEqual(3, solution.Length);
+
+            var l = solution.Single(a => a.Element.Name == "l");
+            var r = solution.Single(a => a.Element.Name == "r");
+
+            //Check that space is distributed between the two auto elements (according to ratio of initial sizes)
+            Assert.AreEqual(0, l.Left);
+            Assert.AreEqual(75, l.Right);
+
+            Assert.AreEqual(75, r.Left);
+            Assert.AreEqual(100, r.Right);
+        }
     }
 }

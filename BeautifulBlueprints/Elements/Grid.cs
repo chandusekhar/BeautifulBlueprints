@@ -164,7 +164,7 @@ namespace BeautifulBlueprints.Elements
             if ((self.Top - self.Bottom) < allocatedRowSpace)
                 throw new LayoutFailureException("Height of row is greater than height of grid", this);
 
-            var excessWidth = (self.Right - self.Left) - allocatedRowSpace;
+            var excessWidth = (self.Right - self.Left) - allocatedColSpace;
             var excessHeight = (self.Top - self.Bottom) - allocatedRowSpace;
 
             // ...use up some space by expanding "Auto" elements to their preferred size...
