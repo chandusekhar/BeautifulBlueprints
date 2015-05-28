@@ -58,6 +58,9 @@ namespace BeautifulBlueprints
 
         internal MarginContainer Wrap()
         {
+            if (Math.Abs(Left) < float.Epsilon && Math.Abs(Right) < float.Epsilon && Math.Abs(Top) < float.Epsilon && Math.Abs(Bottom) < float.Epsilon)
+                return null;
+
             return new MarginContainer {
                 Left = Left,
                 Bottom = Bottom,

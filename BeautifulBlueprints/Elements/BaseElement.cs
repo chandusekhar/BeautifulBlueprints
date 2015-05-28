@@ -193,8 +193,10 @@ namespace BeautifulBlueprints.Elements
             [DefaultValue(null)]
             public float? PreferredHeight { get; set; }
 
+            [DefaultValue(null)]
             public MarginContainer Margin { get; set; }
 
+            [DefaultValue(null)]
             public List<BaseElementContainer> Children { get; set; }
 
             public BaseElementContainer()
@@ -209,6 +211,9 @@ namespace BeautifulBlueprints.Elements
             protected BaseElementContainer(BaseElement element)
             {
                 Children = element.Children.Select(a => a.Wrap()).ToList();
+                if (Children.Count == 0)
+                    Children = null;
+
                 Margin = element.Margin.Wrap();
                 MaxHeight = element.MaxHeight;
                 MaxWidth = element.MaxWidth;
