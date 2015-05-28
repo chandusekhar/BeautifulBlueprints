@@ -39,7 +39,7 @@ namespace BeautifulBlueprints.Elements
             }
         }
 
-        internal GridRowContainer Contain()
+        internal GridRowContainer Wrap()
         {
             return new GridRowContainer
             {

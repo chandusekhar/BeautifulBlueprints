@@ -50,7 +50,7 @@ namespace BeautifulBlueprints.Elements
             return new Solver.Solution[0];
         }
 
-        internal override BaseElementContainer Contain()
+        internal override BaseElementContainer Wrap()
         {
             return new FallbackContainer(this);
         }

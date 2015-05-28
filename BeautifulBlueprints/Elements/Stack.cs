@@ -162,7 +162,7 @@ namespace BeautifulBlueprints.Elements
             }
         }
 
-        internal override BaseElementContainer Contain()
+        internal override BaseElementContainer Wrap()
         {
             return new StackContainer(this);
         }
@@ -214,8 +214,6 @@ namespace BeautifulBlueprints.Elements
                 inlineSpacing: InlineSpacing,
                 offsideSpacing: OffsideSpacing
             );
-
-            //todo: correctly set defaults
 
             foreach (var child in Children)
                 s.Add(child.Unwrap());

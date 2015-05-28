@@ -58,6 +58,7 @@
     <Compile Include="Elements\FloatTest.cs" />
     <Compile Include="Elements\GridTest.cs" />
     <Compile Include="Elements\SpaceTest.cs" />
+    <Compile Include="Elements\FlowTest.cs" />
     <Compile Include="Playground.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization.cs" />

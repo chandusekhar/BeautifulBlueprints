@@ -111,7 +111,7 @@ namespace BeautifulBlueprints.Elements
             return true;
         }
 
-        internal override BaseElementContainer Contain()
+        internal override BaseElementContainer Wrap()
         {
             return new AspectRatioContainer(this);
         }

@@ -39,7 +39,7 @@ namespace BeautifulBlueprints.Elements
             yield return FillSpace(left, right, top, bottom);
         }
 
-        internal override BaseElementContainer Contain()
+        internal override BaseElementContainer Wrap()
         {
             return new SpaceContainer(this);
         }

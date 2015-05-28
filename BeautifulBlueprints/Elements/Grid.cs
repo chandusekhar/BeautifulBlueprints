@@ -218,7 +218,7 @@ namespace BeautifulBlueprints.Elements
             return width;
         }
 
-        internal override BaseElementContainer Contain()
+        internal override BaseElementContainer Wrap()
         {
             return new GridContainer(this);
         }
@@ -238,8 +238,8 @@ namespace BeautifulBlueprints.Elements
         public GridContainer(Grid grid)
             : base(grid)
         {
-            Rows = grid.Rows.Select(a => a.Contain()).ToArray();
-            Columns = grid.Columns.Select(a => a.Contain()).ToArray();
+            Rows = grid.Rows.Select(a => a.Wrap()).ToArray();
+            Columns = grid.Columns.Select(a => a.Wrap()).ToArray();
         }
 
         public override BaseElement Unwrap()

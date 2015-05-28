@@ -18,24 +18,12 @@ namespace BeautifulBlueprints.Serialization
             }
         }
 
-        [ThreadStatic]
-        private static Serializer _deserializer;
-        private static Serializer Deserializer
-        {
-            get
-            {
-                if (_deserializer == null)
-                    _deserializer = CreateDeserializer();
-                return _deserializer;
-            }
-        }
-
         private static void RegisterTags(Serializer serializer)
         {
             serializer.Settings.RegisterTagMapping("AspectRatio", typeof(AspectRatioContainer));
             serializer.Settings.RegisterTagMapping("Fallback", typeof(FallbackContainer));
             serializer.Settings.RegisterTagMapping("Float", typeof(FloatContainer));
-            //serializer.Settings.RegisterTagMapping("Flow", typeof(FlowContainer));
+            serializer.Settings.RegisterTagMapping("Flow", typeof(FlowContainer));
 
             serializer.Settings.RegisterTagMapping("Grid", typeof(GridContainer));
             serializer.Settings.RegisterTagMapping("Row", typeof(GridRowContainer));
@@ -59,23 +47,14 @@ namespace BeautifulBlueprints.Serialization
             return serializer;
         }
 
-        private static Serializer CreateDeserializer()
-        {
-            var serializer = new Serializer(new SerializerSettings());
-
-            RegisterTags(serializer);
-
-            return serializer;
-        }
-
         public static void Serialize(BaseElement root, TextWriter writer)
         {
-            Serializer.Serialize(writer, root.Contain());
+            Serializer.Serialize(writer, root.Wrap());
         }
 
         public static BaseElement Deserialize(TextReader reader)
         {
-            return Deserializer.Deserialize<BaseElement.BaseElementContainer>(reader).Unwrap();
+            return Serializer.Deserialize<BaseElement.BaseElementContainer>(reader).Unwrap();
         }
     }
 }

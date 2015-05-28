@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -13,16 +12,12 @@ namespace BeautifulBlueprints.Elements
         internal const VerticalAlignment DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.Center;
         internal const Spacing DEFAULT_SPACING = Spacing.Uniform;
 
-        [DefaultValue(Orientation.Horizontal)]
         public Orientation Orientation { get; set; }
 
-        [DefaultValue(HorizontalAlignment.Center)]
         public HorizontalAlignment HorizontalAlignment { get; set; }
 
-        [DefaultValue(VerticalAlignment.Center)]
         public VerticalAlignment VerticalAlignment { get; set; }
 
-        [DefaultValue(Spacing.Uniform)]
         public Spacing Spacing { get; set; }
 
         public Flow(
@@ -65,9 +60,62 @@ namespace BeautifulBlueprints.Elements
             throw new NotImplementedException();
         }
 
-        internal override BaseElementContainer Contain()
+        internal override BaseElementContainer Wrap()
         {
-            throw new NotImplementedException();
+            return new FlowContainer(this);
+        }
+    }
+
+    internal class FlowContainer
+        : BaseElement.BaseElementContainer
+    {
+        [DefaultValue(Flow.DEFAULT_ORIENTATION)]
+        public Orientation Orientation { get; set; }
+
+        [DefaultValue(Flow.DEFAULT_HORIZONTAL_ALIGNMENT)]
+        public HorizontalAlignment HorizontalAlignment { get; set; }
+
+        [DefaultValue(Flow.DEFAULT_VERTICAL_ALIGNMENT)]
+        public VerticalAlignment VerticalAlignment { get; set; }
+
+        [DefaultValue(Flow.DEFAULT_SPACING)]
+        public Spacing Spacing { get; set; }
+
+        public FlowContainer()
+        {
+            Orientation = Flow.DEFAULT_ORIENTATION;
+            HorizontalAlignment = Flow.DEFAULT_HORIZONTAL_ALIGNMENT;
+            VerticalAlignment = Flow.DEFAULT_VERTICAL_ALIGNMENT;
+            Spacing = Flow.DEFAULT_SPACING;
+        }
+
+        public FlowContainer(Flow flow)
+            : base(flow)
+        {
+            Orientation = flow.Orientation;
+            HorizontalAlignment = flow.HorizontalAlignment;
+            VerticalAlignment = flow.VerticalAlignment;
+            Spacing = flow.Spacing;
+        }
+
+        public override BaseElement Unwrap()
+        {
+            var s = new Flow(name: Name,
+                minWidth: MinWidth,
+                maxWidth: MaxWidth,
+                minHeight: MinHeight,
+                maxHeight: MaxHeight,
+                margin: (Margin ?? new MarginContainer()).Unwrap(),
+                orientation: Orientation,
+                horizontalAlignment: HorizontalAlignment,
+                verticalAlignment: VerticalAlignment,
+                spacing: Spacing
+            );
+
+            foreach (var child in Children)
+                s.Add(child.Unwrap());
+
+            return s;
         }
     }
 }

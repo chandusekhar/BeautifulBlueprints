@@ -147,7 +147,7 @@ namespace BeautifulBlueprints.Elements
             return new Solver.Solution(el, l, r, t, b);
         }
 
-        internal override BaseElementContainer Contain()
+        internal override BaseElementContainer Wrap()
         {
             return new FloatContainer(this);
         }

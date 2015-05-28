@@ -169,7 +169,7 @@ namespace BeautifulBlueprints.Elements
             return new Solver.Solution(this, left + Margin.Left, right - Margin.Right, top - Margin.Top, bottom + Margin.Bottom);
         }
 
-        internal abstract BaseElementContainer Contain();
+        internal abstract BaseElementContainer Wrap();
 
         internal abstract class BaseElementContainer
         {
@@ -208,8 +208,8 @@ namespace BeautifulBlueprints.Elements
 
             protected BaseElementContainer(BaseElement element)
             {
-                Children = element.Children.Select(a => a.Contain()).ToList();
-                Margin = element.Margin.Contain();
+                Children = element.Children.Select(a => a.Wrap()).ToList();
+                Margin = element.Margin.Wrap();
                 MaxHeight = element.MaxHeight;
                 MaxWidth = element.MaxWidth;
                 MinHeight = element.MinHeight;

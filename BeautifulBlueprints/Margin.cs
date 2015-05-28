@@ -56,7 +56,7 @@ namespace BeautifulBlueprints
             }
         }
 
-        internal MarginContainer Contain()
+        internal MarginContainer Wrap()
         {
             return new MarginContainer {
                 Left = Left,
