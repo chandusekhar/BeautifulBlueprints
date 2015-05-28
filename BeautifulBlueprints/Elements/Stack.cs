@@ -1,4 +1,5 @@
-﻿using BeautifulBlueprints.Layout;
+﻿using System.ComponentModel;
+using BeautifulBlueprints.Layout;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -103,6 +104,7 @@ namespace BeautifulBlueprints.Elements
             var self = FillSpace(left, right, top, bottom);
             solutions.Add(self);
 
+            //Early exit when there are no children
             var children = Children.ToArray();
             if (children.Length == 0)
                 return solutions;
@@ -111,19 +113,21 @@ namespace BeautifulBlueprints.Elements
             float totalMin = 0;
             float totalMax = 0;
             float totalPreferred = 0;
-            for (int i = 0; i < children.Length; i++)
+            foreach (var child in children)
             {
                 if (Orientation == Orientation.Horizontal)
                 {
-                    totalMax += children[i].MaxWidth;
-                    totalMin += children[i].MinWidth;
-                    totalPreferred += children[i].PreferredWidth;
+                    var margin = child.Margin.Left + child.Margin.Right;
+                    totalMax += child.MaxWidth + margin;
+                    totalMin += child.MinWidth + margin;
+                    totalPreferred += child.PreferredWidth + margin;
                 }
                 else
                 {
-                    totalMax += children[i].MaxHeight;
-                    totalMin += children[i].MinHeight;
-                    totalPreferred += children[i].PreferredHeight;
+                    var margin = child.Margin.Top + child.Margin.Bottom;
+                    totalMax += child.MaxHeight + margin;
+                    totalMin += child.MinHeight + margin;
+                    totalPreferred += child.PreferredHeight + margin;
                 }
             }
 
@@ -131,6 +135,7 @@ namespace BeautifulBlueprints.Elements
             if (totalMin > (Orientation == Orientation.Horizontal ? (right - left) : (top - bottom)))
                 throw new LayoutFailureException(string.Format("total minimum {0} is > {0} for element {1}({2})", (Orientation == Orientation.Horizontal ? "Width" : "Height"), GetType().Name, Name));
 
+            //Calculate the spacing of the elements
             switch (InlineSpacing)
             {
                 //No spacing is allowed, size all the elements so that they all touch
@@ -140,6 +145,7 @@ namespace BeautifulBlueprints.Elements
                 //Maximise the spacing, shrink all elements to their minimum allowed extent
                 case Spacing.Maximize:
                     throw new NotImplementedException();
+                    break;
 
                 //Minimise the spacing, expand all elements to their maximum allowed extent (so long as that does not exceed parent extent, in which case size in ratios of preferred size)
                 case Spacing.Minimize:
@@ -148,6 +154,12 @@ namespace BeautifulBlueprints.Elements
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            //Distribute the calculate space according to the inline alignment
+            throw new NotImplementedException();
+
+            //Move each element across the axis acording to the offside alignment
+            throw new NotImplementedException();
 
             return solutions;
         }
@@ -228,14 +240,19 @@ namespace BeautifulBlueprints.Elements
     internal class StackContainer
         : BaseElement.BaseElementContainer
     {
+        [DefaultValue(Stack.DEFAULT_ORIENTATION)]
         public Orientation Orientation { get; set; }
 
+        [DefaultValue(Stack.DEFAULT_HORIZONTAL_ALIGNMENT)]
         public HorizontalAlignment HorizontalAlignment { get; set; }
 
+        [DefaultValue(Stack.DEFAULT_VERTICAL_ALIGNMENT)]
         public VerticalAlignment VerticalAlignment { get; set; }
 
+        [DefaultValue(Stack.DEFAULT_INLINE_SPACING)]
         public Spacing InlineSpacing { get; set; }
 
+        [DefaultValue(Stack.DEFAULT_OFFSIDE_SPACING)]
         public Spacing OffsideSpacing { get; set; }
 
         public StackContainer()

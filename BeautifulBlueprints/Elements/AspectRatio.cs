@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using BeautifulBlueprints.Layout;
 using System.Collections.Generic;
 
@@ -120,10 +121,13 @@ namespace BeautifulBlueprints.Elements
     internal class AspectRatioContainer
         : BaseElement.BaseElementContainer
     {
+        [DefaultValue(AspectRatio.DEFAULT_RATIO)]
         public float Ratio { get; set; }
 
+        [DefaultValue(AspectRatio.DEFAULT_HORIZONTAL_ALIGNMENT)]
         public HorizontalAlignment HorizontalAlignment { get; set; }
 
+        [DefaultValue(AspectRatio.DEFAULT_VERTICAL_ALIGNMENT)]
         public VerticalAlignment VerticalAlignment { get; set; }
 
         public AspectRatioContainer()

@@ -1,4 +1,5 @@
-﻿using BeautifulBlueprints.Layout;
+﻿using System.ComponentModel;
+using BeautifulBlueprints.Layout;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -156,8 +157,10 @@ namespace BeautifulBlueprints.Elements
     internal class FloatContainer
         : BaseElement.BaseElementContainer
     {
+        [DefaultValue(Float.DEFAULT_HORIZONTAL_ALIGNMENT)]
         public HorizontalAlignment HorizontalAlignment { get; set; }
 
+        [DefaultValue(Float.DEFAULT_VERTICAL_ALIGNMENT)]
         public VerticalAlignment VerticalAlignment { get; set; }
 
         public FloatContainer()
