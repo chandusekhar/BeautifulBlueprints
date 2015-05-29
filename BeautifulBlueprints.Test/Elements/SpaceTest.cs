@@ -53,13 +53,6 @@ namespace BeautifulBlueprints.Test.Elements
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotSupportedException))]
-        public void AssertThat_SpaceElement_DoesNot_AllowChildren()
-        {
-            new Space().Add(new Space());
-        }
-
-        [TestMethod]
         public void AssertThat_SpaceElement_CanSerializeAndDeserialize_WithDefaults()
         {
             var element = new Space();

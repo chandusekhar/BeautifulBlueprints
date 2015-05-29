@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Elements\AspectRatio.cs" />
+    <Compile Include="Elements\BaseContainerElement.cs" />
     <Compile Include="Elements\BaseElement.cs" />
     <Compile Include="Elements\Fallback.cs" />
     <Compile Include="Elements\Float.cs" />

@@ -12,7 +12,6 @@ namespace BeautifulBlueprints.Elements
     /// Abstract base class for all element types
     /// </summary>
     public abstract class BaseElement
-        : IEnumerable<BaseElement>
     {
         internal const float DEFAULT_MIN_WIDTH = 0;
         internal const float DEFAULT_PREFERRED_WIDTH = float.NaN;
@@ -101,12 +100,6 @@ namespace BeautifulBlueprints.Elements
         /// </summary>
         public Margin Margin { get { return _margin; } }
 
-        private readonly List<BaseElement> _children = new List<BaseElement>();
-        /// <summary>
-        /// All child elements of this element
-        /// </summary>
-        public IEnumerable<BaseElement> Children { get { return _children; } }
-        
         protected BaseElement(string name = null,
             float minWidth = DEFAULT_MIN_WIDTH,
             float preferredWidth = DEFAULT_PREFERRED_WIDTH,
@@ -129,32 +122,10 @@ namespace BeautifulBlueprints.Elements
             _margin = margin ?? new Margin();
         }
 
-        [YamlIgnore]
-        protected abstract int MaximumChildren { get; }
-
-        public virtual void Add(BaseElement baseElement)
-        {
-            if (_children.Count == MaximumChildren)
-                throw new NotSupportedException(string.Format("{0}({1}) element allows a maximum of {2} children", GetType().Name, Name, MaximumChildren));
-            _children.Add(baseElement);
-        }
-
-        public IEnumerator<BaseElement> GetEnumerator()
-        {
-            return Children.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
         internal abstract IEnumerable<Solver.Solution> Solve(float left, float right, float top, float bottom);
 
         internal virtual void Prepare()
         {
-            foreach (var child in Children)
-                child.Prepare();
         }
 
         protected internal Solver.Solution FillSpace(float left, float right, float top, float bottom, bool checkMinWidth = true, bool checkMaxWidth = true, bool checkMinHeight = true, bool checkMaxHeight = true)
@@ -202,9 +173,6 @@ namespace BeautifulBlueprints.Elements
             [DefaultValue(null)]
             public MarginContainer Margin { get; set; }
 
-            [DefaultValue(null)]
-            public List<BaseElementContainer> Children { get; set; }
-
             public BaseElementContainer()
             {
                 MinWidth = DEFAULT_MIN_WIDTH;
@@ -216,10 +184,6 @@ namespace BeautifulBlueprints.Elements
 
             protected BaseElementContainer(BaseElement element)
             {
-                Children = element.Children.Select(a => a.Wrap()).ToList();
-                if (Children.Count == 0)
-                    Children = null;
-
                 Margin = element.Margin.Wrap();
                 MaxHeight = element.MaxHeight;
                 MaxWidth = element.MaxWidth;

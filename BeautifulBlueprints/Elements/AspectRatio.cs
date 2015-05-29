@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace BeautifulBlueprints.Elements
 {
     public class AspectRatio
-        : BaseElement
+        : BaseContainerElement
     {
         internal const HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.Center;
         internal const VerticalAlignment DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.Center;
@@ -68,15 +68,17 @@ namespace BeautifulBlueprints.Elements
             var height = maxHeight;
             if (Math.Abs((width / height) - Ratio) > float.Epsilon)
             {
-                bool hOk, wOk, changed;
+                bool changed;
                 do
                 {
                     float h;
                     float w = width;
-                    hOk = RecalculateHeight(w, maxHeight, out h);
-                    wOk = RecalculateWidth(h, maxWidth, out w);
+                    bool hOk = RecalculateHeight(w, maxHeight, out h);
+                    bool wOk = RecalculateWidth(h, maxWidth, out w);
 
+// ReSharper disable CompareOfFloatsByEqualityOperator
                     changed = h != height || w != width;
+// ReSharper restore CompareOfFloatsByEqualityOperator
                     if (changed)
                     {
                         width = w;
@@ -154,7 +156,7 @@ namespace BeautifulBlueprints.Elements
     }
 
     internal class AspectRatioContainer
-        : BaseElement.BaseElementContainer
+        : BaseContainerElement.BaseContainerElementContainer
     {
         [DefaultValue(AspectRatio.DEFAULT_RATIO)]
         public float Ratio { get; set; }
@@ -195,11 +197,7 @@ namespace BeautifulBlueprints.Elements
                 verticalAlignment: VerticalAlignment
             );
 
-            if (Children != null)
-            {
-                foreach (var child in Children)
-                    s.Add(child.Unwrap());
-            }
+            UnwrapChildren(s);
 
             return s;
         }

@@ -7,7 +7,7 @@ using BeautifulBlueprints.Layout;
 namespace BeautifulBlueprints.Elements
 {
     public class Repeat
-        : BaseElement
+        : BaseContainerElement
     {
         internal const Orientation DEFAULT_ORIENTATION = Orientation.Horizontal;
         internal const bool DEFAULT_MINIMIZE_REPEATS = true;
@@ -115,7 +115,7 @@ namespace BeautifulBlueprints.Elements
     }
 
     internal class RepeatContainer
-        : BaseElement.BaseElementContainer
+        : BaseContainerElement.BaseContainerElementContainer
     {
         [DefaultValue(Repeat.DEFAULT_ORIENTATION)]
         public Orientation Orientation { get; set; }
@@ -154,11 +154,7 @@ namespace BeautifulBlueprints.Elements
                 margin: (Margin ?? new MarginContainer()).Unwrap()
             );
 
-            if (Children != null)
-            {
-                foreach (var child in Children)
-                    s.Add(child.Unwrap());
-            }
+            UnwrapChildren(s);
 
             return s;
         }

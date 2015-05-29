@@ -26,14 +26,13 @@ Children:
     Margin: {}
     Name: eefa8f75-d082-4955-b8af-88b4b8b6c6b2
   - !Space
-    Children: []
     Margin:
       Bottom: 10.0
     Name: 319ed878-b52f-4181-b0db-be379af9e1b5
 "));
 
-            Assert.AreEqual(2, el.Children.Count());
-            Assert.AreEqual(10, el.Children.Skip(1).First().Margin.Bottom);
+            Assert.AreEqual(2, ((BaseContainerElement)el).Children.Count());
+            Assert.AreEqual(10, ((BaseContainerElement)el).Children.Skip(1).First().Margin.Bottom);
         }
 
         [TestMethod]

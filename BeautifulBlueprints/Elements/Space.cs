@@ -20,14 +20,6 @@ namespace BeautifulBlueprints.Elements
         {
         }
 
-        protected override int MaximumChildren
-        {
-            get
-            {
-                return 0;
-            }
-        }
-
         /// <summary>
         /// Fill up as much of the available space as possible
         /// </summary>
@@ -70,12 +62,6 @@ namespace BeautifulBlueprints.Elements
                 maxHeight: MaxHeight,
                 margin: (Margin ?? new MarginContainer()).Unwrap()
             );
-
-            if (Children != null)
-            {
-                foreach (var child in Children)
-                    s.Add(child.Unwrap());
-            }
 
             return s;
         }

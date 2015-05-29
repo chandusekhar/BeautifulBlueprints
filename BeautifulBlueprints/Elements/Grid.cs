@@ -7,7 +7,7 @@ using System.Linq;
 namespace BeautifulBlueprints.Elements
 {
     public class Grid
-        : BaseElement
+        : BaseContainerElement
     {
         private readonly GridRow[] _rows;
         public IEnumerable<GridRow> Rows { get { return _rows; } }
@@ -313,7 +313,7 @@ namespace BeautifulBlueprints.Elements
     }
 
     internal class GridContainer
-        : BaseElement.BaseElementContainer
+        : BaseContainerElement.BaseContainerElementContainer
     {
         public GridRowContainer[] Rows { get; set; }
 

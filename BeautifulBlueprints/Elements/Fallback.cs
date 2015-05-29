@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace BeautifulBlueprints.Elements
 {
     public class Fallback
-        : BaseElement
+        : BaseContainerElement
     {
         public Fallback(
             string name = null,
@@ -58,7 +58,7 @@ namespace BeautifulBlueprints.Elements
     }
 
     internal class FallbackContainer
-        : BaseElement.BaseElementContainer
+        : BaseContainerElement.BaseContainerElementContainer
     {
         public FallbackContainer()
         {
@@ -81,11 +81,7 @@ namespace BeautifulBlueprints.Elements
                 margin: (Margin ?? new MarginContainer()).Unwrap()
             );
 
-            if (Children != null)
-            {
-                foreach (var child in Children)
-                    s.Add(child.Unwrap());
-            }
+            UnwrapChildren(s);
 
             return s;
         }

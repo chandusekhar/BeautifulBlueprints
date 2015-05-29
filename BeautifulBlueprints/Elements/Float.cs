@@ -7,7 +7,7 @@ using System.Linq;
 namespace BeautifulBlueprints.Elements
 {
     public class Float
-        : BaseElement
+        : BaseContainerElement
     {
         internal const HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.Center;
         internal const VerticalAlignment DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.Center;
@@ -157,7 +157,7 @@ namespace BeautifulBlueprints.Elements
     }
 
     internal class FloatContainer
-        : BaseElement.BaseElementContainer
+        : BaseContainerElement.BaseContainerElementContainer
     {
         [DefaultValue(Float.DEFAULT_HORIZONTAL_ALIGNMENT)]
         public HorizontalAlignment HorizontalAlignment { get; set; }
@@ -192,11 +192,7 @@ namespace BeautifulBlueprints.Elements
                 verticalAlignment: VerticalAlignment
             );
 
-            if (Children != null)
-            {
-                foreach (var child in Children)
-                    s.Add(child.Unwrap());
-            }
+            UnwrapChildren(s);
 
             return s;
         }
