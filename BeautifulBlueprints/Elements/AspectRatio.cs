@@ -100,7 +100,7 @@ namespace BeautifulBlueprints.Elements
             }
 
             //Go as far up as we can
-            if (h > MaxHeight)
+            if (h > maxHeight)
             {
                 height = MaxHeight;
                 return false;
