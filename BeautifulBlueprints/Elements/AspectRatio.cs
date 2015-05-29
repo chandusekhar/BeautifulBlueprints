@@ -68,15 +68,27 @@ namespace BeautifulBlueprints.Elements
             var height = maxHeight;
             if (Math.Abs((width / height) - Ratio) > float.Epsilon)
             {
-                bool hOk, wOk;
+                bool hOk, wOk, changed;
                 do
                 {
-                    hOk = RecalculateHeight(width, maxHeight, out height);
-                    wOk = RecalculateWidth(height, maxWidth, out width);
-                } while (hOk ^ wOk);
+                    float h;
+                    float w = width;
+                    hOk = RecalculateHeight(w, maxHeight, out h);
+                    wOk = RecalculateWidth(h, maxWidth, out w);
 
-                if (!hOk && !wOk)
-                    throw new LayoutFailureException(string.Format("Cannot satisfy aspect ratio constraint (best attempt {0} out of {1})", width / height, Ratio), this);
+                    changed = h != height || w != width;
+                    if (changed)
+                    {
+                        width = w;
+                        height = h;
+                    }
+                    else
+                    {
+                        if (!hOk || !wOk)
+                            throw new LayoutFailureException(string.Format("Cannot satisfy aspect ratio constraint (best attempt {0} out of {1})", width / height, Ratio), this);
+                    }
+
+                } while (changed);
             }
 
             var floated = Float.FloatElement(this, HorizontalAlignment, VerticalAlignment, width, height, left, right, top, bottom);
@@ -102,7 +114,7 @@ namespace BeautifulBlueprints.Elements
             //Go as far up as we can
             if (h > maxHeight)
             {
-                height = MaxHeight;
+                height = maxHeight;
                 return false;
             }
 
