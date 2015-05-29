@@ -68,8 +68,15 @@ namespace BeautifulBlueprints.Elements
             var height = maxHeight;
             if (Math.Abs((width / height) - Ratio) > float.Epsilon)
             {
-                RecalculateHeight(width, maxHeight, ref height);
-                RecalculateWidth(height, maxWidth, ref width);
+                bool hOk, wOk;
+                do
+                {
+                    hOk = RecalculateHeight(width, maxHeight, out height);
+                    wOk = RecalculateWidth(height, maxWidth, out width);
+                } while (hOk ^ wOk);
+
+                if (!hOk && !wOk)
+                    throw new LayoutFailureException(string.Format("Cannot satisfy aspect ratio constraint (best attempt {0} out of {1})", width / height, Ratio), this);
             }
 
             var floated = Float.FloatElement(this, HorizontalAlignment, VerticalAlignment, width, height, left, right, top, bottom);
@@ -80,36 +87,50 @@ namespace BeautifulBlueprints.Elements
                     yield return solution;
         }
 
-        protected bool RecalculateHeight(float width, float maxHeight, ref float height)
+        protected bool RecalculateHeight(float width, float maxHeight, out float height)
         {
+            //Given the width, what's the ideal height?
             var h = width / Ratio;
 
+            //Go as far down as we can
             if (h < MinHeight)
-                throw new LayoutFailureException("height is < MinHeight", this);
-
-            if (h > maxHeight)
-                h = maxHeight;
-
-            if (Math.Abs(h - height) < float.Epsilon)
+            {
+                height = MinHeight;
                 return false;
+            }
 
+            //Go as far up as we can
+            if (h > MaxHeight)
+            {
+                height = MaxHeight;
+                return false;
+            }
+
+            //We can do that!
             height = h;
             return true;
         }
 
-        protected bool RecalculateWidth(float height, float maxWidth, ref float width)
+        protected bool RecalculateWidth(float height, float maxWidth, out float width)
         {
+            //Get the height, what's the ideal width?
             var w = height * Ratio;
 
+            //Go as far down as we can
             if (w < MinWidth)
-                throw new LayoutFailureException("width is < MinWidth", this);
-
-            if (w > maxWidth)
-                w = maxWidth;
-
-            if (Math.Abs(w - width) < float.Epsilon)
+            {
+                width = MinWidth;
                 return false;
+            }
 
+            //Go as far up as we can
+            if (w > maxWidth)
+            {
+                width = maxWidth;
+                return false;
+            }
+
+            //We can do that!
             width = w;
             return true;
         }

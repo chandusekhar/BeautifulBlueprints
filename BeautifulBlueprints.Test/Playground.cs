@@ -83,12 +83,10 @@ Children:
     MinWidth: 20
   - !Fallback
     Children:
-      - !Float
-        Children:
-          - !AspectRatio
-            MinWidth: 20
-            MaxWidth: 75
-            Margin: { Left: 10, Right: 10 }
+    - !AspectRatio
+       MinWidth: 20
+       MaxWidth: 75
+       Margin: { Left: 10, Right: 10 }
   - !Float
     MinWidth: 40
     MaxWidth: 200
@@ -101,12 +99,10 @@ Children:
         MinHeight: 100
   - !Fallback
     Children:
-      - !Float
-        Children:
-          - !AspectRatio
-            MinWidth: 20
-            MaxWidth: 75
-            Margin: { Left: 10, Right: 10 }
+     - !AspectRatio
+       MinWidth: 20
+       MaxWidth: 75
+       Margin: { Left: 10, Right: 10 }
   - !Space
     MinWidth: 20
 
@@ -114,7 +110,7 @@ Children:
 ";
 
             var des = Yaml.Deserialize(new StringReader(layout));
-            var solution = Layout.Solver.Solve(-50, 50, 75, -75, des).ToArray();
+            var solution = Layout.Solver.Solve(-55, 55, 75, -75, des).ToArray();
 
             Assert.AreNotEqual(0, solution.Length);
             foreach (var part in solution)
