@@ -8,7 +8,7 @@ namespace BeautifulBlueprints.Elements
     public class Fallback
         : BaseContainerElement
     {
-        public override float? PreferredWidth
+        public override decimal? PreferredWidth
         {
             get
             {
@@ -18,7 +18,7 @@ namespace BeautifulBlueprints.Elements
             }
         }
 
-        public override float? PreferredHeight
+        public override decimal? PreferredHeight
         {
             get
             {
@@ -30,12 +30,12 @@ namespace BeautifulBlueprints.Elements
 
         public Fallback(
             string name = null,
-            float minWidth = DEFAULT_MIN_WIDTH,
-            float? preferredWidth = null,
-            float maxWidth = DEFAULT_MAX_WIDTH,
-            float minHeight = DEFAULT_MIN_HEIGHT,
-            float? preferredHeight = null,
-            float maxHeight = DEFAULT_MAX_HEIGHT
+            decimal minWidth = DEFAULT_MIN_WIDTH,
+            decimal? preferredWidth = null,
+            decimal maxWidth = DEFAULT_MAX_WIDTH,
+            decimal minHeight = DEFAULT_MIN_HEIGHT,
+            decimal? preferredHeight = null,
+            decimal maxHeight = DEFAULT_MAX_HEIGHT
         )
             : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight)
         {
@@ -49,7 +49,7 @@ namespace BeautifulBlueprints.Elements
             }
         }
 
-        internal override IEnumerable<Solver.Solution> Solve(float left, float right, float top, float bottom)
+        internal override IEnumerable<Solver.Solution> Solve(decimal left, decimal right, decimal top, decimal bottom)
         {
             List<Solver.Solution> solutions = new List<Solver.Solution>();
 

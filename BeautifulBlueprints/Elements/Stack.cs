@@ -31,8 +31,8 @@
 //        private readonly Spacing _offsideSpacing;
 //        public Spacing OffsideSpacing { get { return _offsideSpacing; } }
 
-//        private float? _maxWidth;
-//        public override float MaxWidth
+//        private decimal? _maxWidth;
+//        public override decimal MaxWidth
 //        {
 //            get
 //            {
@@ -40,8 +40,8 @@
 //            }
 //        }
 
-//        private float? _minWidth;
-//        public override float MinWidth
+//        private decimal? _minWidth;
+//        public override decimal MinWidth
 //        {
 //            get
 //            {
@@ -49,8 +49,8 @@
 //            }
 //        }
 
-//        private float? _maxHeight;
-//        public override float MaxHeight
+//        private decimal? _maxHeight;
+//        public override decimal MaxHeight
 //        {
 //            get
 //            {
@@ -58,8 +58,8 @@
 //            }
 //        }
 
-//        private float? _minHeight;
-//        public override float MinHeight
+//        private decimal? _minHeight;
+//        public override decimal MinHeight
 //        {
 //            get
 //            {
@@ -69,10 +69,10 @@
 
 //        public Stack(
 //            string name = null,
-//            float minWidth = DEFAULT_MIN_WIDTH,
-//            float maxWidth = DEFAULT_MAX_WIDTH,
-//            float minHeight = DEFAULT_MIN_HEIGHT,
-//            float maxHeight = DEFAULT_MAX_HEIGHT,
+//            decimal minWidth = DEFAULT_MIN_WIDTH,
+//            decimal maxWidth = DEFAULT_MAX_WIDTH,
+//            decimal minHeight = DEFAULT_MIN_HEIGHT,
+//            decimal maxHeight = DEFAULT_MAX_HEIGHT,
 //            Margin margin = null,
 //            Orientation orientation = DEFAULT_ORIENTATION,
 //            HorizontalAlignment horizontalAlignment = DEFAULT_HORIZONTAL_ALIGNMENT,
@@ -97,7 +97,7 @@
 //            }
 //        }
 
-//        internal override IEnumerable<Solver.Solution> Solve(float left, float right, float top, float bottom)
+//        internal override IEnumerable<Solver.Solution> Solve(decimal left, decimal right, decimal top, decimal bottom)
 //        {
 //            List<Solver.Solution> solutions = new List<Solver.Solution>();
 
@@ -110,9 +110,9 @@
 //                return solutions;
 
 //            //Measure min, max and preferred width of child elements
-//            float totalMin = 0;
-//            float totalMax = 0;
-//            float totalPreferred = 0;
+//            decimal totalMin = 0;
+//            decimal totalMax = 0;
+//            decimal totalPreferred = 0;
 //            foreach (var child in children)
 //            {
 //                if (Orientation == Orientation.Horizontal)
@@ -195,7 +195,7 @@
 //            }
 //        }
 
-//        private float? MeasureInlineSpacing(Spacing inlineSpacing, float selfMax, float sumChildMaxSizes)
+//        private decimal? MeasureInlineSpacing(Spacing inlineSpacing, decimal selfMax, decimal sumChildMaxSizes)
 //        {
 //            switch (inlineSpacing)
 //            {
@@ -213,7 +213,7 @@
 //            }
 //        }
 
-//        private float? MeasureOffsideSpacing(Spacing offsideSpacing, float selfMax, float minChildMaxSize)
+//        private decimal? MeasureOffsideSpacing(Spacing offsideSpacing, decimal selfMax, decimal minChildMaxSize)
 //        {
 //            switch (OffsideSpacing)
 //            {

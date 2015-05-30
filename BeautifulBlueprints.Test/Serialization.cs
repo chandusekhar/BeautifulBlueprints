@@ -1,9 +1,10 @@
-﻿using System.Linq;
-using BeautifulBlueprints.Elements;
+﻿using BeautifulBlueprints.Elements;
 using BeautifulBlueprints.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SharpYaml.Serialization;
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace BeautifulBlueprints.Test
@@ -29,8 +30,8 @@ Children:
         [TestMethod]
         public void SerializeElement()
         {
-            var el = new Fallback() {
-                new Repeat() {
+            var el = new Fallback {
+                new Repeat {
                     new Space()
                 },
                 new Space()
@@ -40,6 +41,18 @@ Children:
             Yaml.Serialize(el, new StringWriter(builder));
 
             Console.WriteLine(builder.ToString());
+        }
+
+        [TestMethod]
+        public void AreDecimalsBroken_YesTheyAre()
+        {
+            var serializer = new Serializer(new SerializerSettings
+            {
+                EmitTags = true,
+            });
+
+            var builder = new StringBuilder();
+            serializer.Serialize(new StringWriter(builder), new { Value = 1.023m });
         }
     }
 }

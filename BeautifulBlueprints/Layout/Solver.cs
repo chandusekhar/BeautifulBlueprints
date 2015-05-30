@@ -6,7 +6,7 @@ namespace BeautifulBlueprints.Layout
 {
     public static class Solver
     {
-        public static IEnumerable<Solution> Solve(float left, float right, float top, float bottom, BaseElement root)
+        public static IEnumerable<Solution> Solve(decimal left, decimal right, decimal top, decimal bottom, BaseElement root)
         {
             root.Prepare();
 
@@ -28,12 +28,12 @@ namespace BeautifulBlueprints.Layout
         {
             public BaseElement Element { get; private set; }
 
-            public float Left { get; private set; }
-            public float Right { get; private set; }
-            public float Top { get; private set; }
-            public float Bottom { get; private set; }
+            public decimal Left { get; private set; }
+            public decimal Right { get; private set; }
+            public decimal Top { get; private set; }
+            public decimal Bottom { get; private set; }
 
-            public Solution(BaseElement element, float left, float right, float top, float bottom)
+            public Solution(BaseElement element, decimal left, decimal right, decimal top, decimal bottom)
                 : this()
             {
                 Element = element;

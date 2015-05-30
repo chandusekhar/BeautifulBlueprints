@@ -22,10 +22,10 @@
 
 //        public Flow(
 //            string name = null,
-//            float minWidth = DEFAULT_MIN_WIDTH,
-//            float maxWidth = DEFAULT_MAX_WIDTH,
-//            float minHeight = DEFAULT_MIN_HEIGHT,
-//            float maxHeight = DEFAULT_MAX_HEIGHT,
+//            decimal minWidth = DEFAULT_MIN_WIDTH,
+//            decimal maxWidth = DEFAULT_MAX_WIDTH,
+//            decimal minHeight = DEFAULT_MIN_HEIGHT,
+//            decimal maxHeight = DEFAULT_MAX_HEIGHT,
 //            Margin margin = null,
 //            Orientation orientation = DEFAULT_ORIENTATION,
 //            HorizontalAlignment horizontalAlignment = DEFAULT_HORIZONTAL_ALIGNMENT,
@@ -48,7 +48,7 @@
 //            }
 //        }
 
-//        internal override IEnumerable<Layout.Solver.Solution> Solve(float left, float right, float top, float bottom)
+//        internal override IEnumerable<Layout.Solver.Solution> Solve(decimal left, decimal right, decimal top, decimal bottom)
 //        {
 //            throw new NotImplementedException();
 //        }

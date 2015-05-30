@@ -37,7 +37,7 @@ namespace BeautifulBlueprints.Test.Elements
         [TestMethod]
         public void AssertThat_AspectRatioElement_FailsLayout_WithImpossibleWidthConstraint()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 0.5f, minWidth: 90)).ToArray();
+            var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 0.5m, minWidth: 90)).ToArray();
 
             Assert.AreEqual(0, solution.Length);
         }
@@ -61,7 +61,7 @@ namespace BeautifulBlueprints.Test.Elements
         [TestMethod]
         public void AssertThat_AspectRatioElement_HorizontallyAlignsToCenter()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 0.5f)).ToArray();
+            var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 0.5m)).ToArray();
 
             var sol = solution.Single();
 
@@ -75,7 +75,7 @@ namespace BeautifulBlueprints.Test.Elements
         }
 
         [TestMethod]
-        public void AssertThat_AspectRatioElement_FloatsCorrectly_WithAlignmentCenterCenter()
+        public void AssertThat_AspectRatioElement_decimalsCorrectly_WithAlignmentCenterCenter()
         {
             var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 1, maxWidth: 50, maxHeight: 50)).ToArray();
 
@@ -91,7 +91,7 @@ namespace BeautifulBlueprints.Test.Elements
         }
 
         [TestMethod]
-        public void AssertThat_AspectRatioElement_FloatsCorrectly_WithAlignmentLeftCenter()
+        public void AssertThat_AspectRatioElement_decimalsCorrectly_WithAlignmentLeftCenter()
         {
             var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 1, maxWidth: 50, maxHeight: 50, horizontalAlignment: HorizontalAlignment.Left)).ToArray();
 
@@ -107,7 +107,7 @@ namespace BeautifulBlueprints.Test.Elements
         }
 
         [TestMethod]
-        public void AssertThat_AspectRatioElement_FloatsCorrectly_WithAlignmentRightCenter()
+        public void AssertThat_AspectRatioElement_decimalsCorrectly_WithAlignmentRightCenter()
         {
             var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 1, maxWidth: 50, maxHeight: 50, horizontalAlignment: HorizontalAlignment.Right)).ToArray();
 
@@ -123,7 +123,7 @@ namespace BeautifulBlueprints.Test.Elements
         }
 
         [TestMethod]
-        public void AssertThat_AspectRatioElement_FloatsCorrectly_WithAlignmentCenterTop()
+        public void AssertThat_AspectRatioElement_decimalsCorrectly_WithAlignmentCenterTop()
         {
             var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 1, maxWidth: 50, maxHeight: 50, verticalAlignment: VerticalAlignment.Top)).ToArray();
 
@@ -139,7 +139,7 @@ namespace BeautifulBlueprints.Test.Elements
         }
 
         [TestMethod]
-        public void AssertThat_AspectRatioElement_FloatsCorrectly_WithAlignmentCenterBottom()
+        public void AssertThat_AspectRatioElement_decimalsCorrectly_WithAlignmentCenterBottom()
         {
             var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 1, maxWidth: 50, maxHeight: 50, verticalAlignment: VerticalAlignment.Bottom)).ToArray();
 
@@ -183,7 +183,6 @@ namespace BeautifulBlueprints.Test.Elements
 
             StringBuilder builder = new StringBuilder();
             Yaml.Serialize(element, new StringWriter(builder));
-
             Console.WriteLine(builder.ToString());
 
             var deserialized = (AspectRatio)Yaml.Deserialize(new StringReader(builder.ToString()));
@@ -199,7 +198,7 @@ namespace BeautifulBlueprints.Test.Elements
         [TestMethod]
         public void AssertThat_AspectRatioElement_ModifiesMinWidth_WithRespectToMinHeight()
         {
-            var element = new AspectRatio(minWidth: 1, minHeight: 10, ratio: 0.5f);
+            var element = new AspectRatio(minWidth: 1, minHeight: 10, ratio: 0.5m);
 
             Assert.AreEqual(5, element.MinWidth);
         }
@@ -207,7 +206,7 @@ namespace BeautifulBlueprints.Test.Elements
         [TestMethod]
         public void AssertThat_AspectRatioElement_ModifiesMinHeight_WithRespectToMinWidth()
         {
-            var element = new AspectRatio(minWidth: 10, minHeight: 1, ratio: 0.5f);
+            var element = new AspectRatio(minWidth: 10, minHeight: 1, ratio: 0.5m);
 
             Assert.AreEqual(20, element.MinHeight);
         }

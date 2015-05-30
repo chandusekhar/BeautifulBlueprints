@@ -15,7 +15,7 @@ namespace BeautifulBlueprints.Test.Elements
         [TestMethod]
         public void AssertThat_FallbackElement_ReturnsFirstNonFailingChild()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new Fallback() {
+            var solution = Solver.Solve(0, 100, 100, 0, new Fallback {
                 new Space("200", minWidth: 200),
                 new Space("100", minWidth: 150),
                 new Space("50", minWidth: 50),

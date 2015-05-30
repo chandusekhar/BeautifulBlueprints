@@ -45,7 +45,7 @@ namespace BeautifulBlueprints.Test.Elements
         public void AssertThat_RepeatElement_OutputsSingleChild_WhenCorrectWidth()
         {
             var solution = Solver.Solve(0, 10, 10, 0, new Repeat(minimizeRepeats: false) {
-                new Space(minWidth: 7.5f)
+                new Space(minWidth: 7.5m)
             }).ToArray();
 
             Assert.AreEqual(2, solution.Count());
@@ -55,7 +55,7 @@ namespace BeautifulBlueprints.Test.Elements
         public void AssertThat_RepeatElement_OutputsSingleChild_WhenCorrectHeight()
         {
             var solution = Solver.Solve(0, 10, 10, 0, new Repeat(orientation: Orientation.Vertical, minimizeRepeats: false) {
-                new Space(minHeight: 7.5f)
+                new Space(minHeight: 7.5m)
             }).ToArray();
 
             Assert.AreEqual(2, solution.Count());
@@ -79,7 +79,7 @@ namespace BeautifulBlueprints.Test.Elements
             // However, this time we've set minimizeRepeats, which will see if we can reduce the count as much as possible
             // Since max width is eleven we can indeed reduce the count and have just one item 10 wide
 
-            var solution = Solver.Solve(0, 10, 10, 0, new Repeat(minimizeRepeats: true) {
+            var solution = Solver.Solve(0, 10, 10, 0, new Repeat {
                 new Space(minWidth: 4, maxWidth: 11)
             }).ToArray();
 

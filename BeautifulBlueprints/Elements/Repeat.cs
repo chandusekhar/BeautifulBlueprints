@@ -27,12 +27,12 @@ namespace BeautifulBlueprints.Elements
             bool allowZeroRepeats = DEFAULT_ALLOW_ZERO_REPEATS,
             Orientation orientation = DEFAULT_ORIENTATION,
             string name = null,
-            float minWidth = DEFAULT_MIN_WIDTH,
-            float? preferredWidth = null,
-            float maxWidth = DEFAULT_MAX_WIDTH,
-            float minHeight = DEFAULT_MIN_HEIGHT,
-            float? preferredHeight = null,
-            float maxHeight = DEFAULT_MAX_HEIGHT
+            decimal minWidth = DEFAULT_MIN_WIDTH,
+            decimal? preferredWidth = null,
+            decimal maxWidth = DEFAULT_MAX_WIDTH,
+            decimal minHeight = DEFAULT_MIN_HEIGHT,
+            decimal? preferredHeight = null,
+            decimal maxHeight = DEFAULT_MAX_HEIGHT
         )
             : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight)
 
@@ -42,7 +42,7 @@ namespace BeautifulBlueprints.Elements
             _orientation = orientation;
         }
 
-        internal override IEnumerable<Solver.Solution> Solve(float left, float right, float top, float bottom)
+        internal override IEnumerable<Solver.Solution> Solve(decimal left, decimal right, decimal top, decimal bottom)
         {
             List<Solver.Solution> solutions = new List<Solver.Solution>();
 
@@ -64,7 +64,7 @@ namespace BeautifulBlueprints.Elements
                 //How few elements can we fit, if we stretch them as much as possible?
                 //How many whole elements can we fit, if we squeeze them up as much as possible?
                 var maxExtent = (Orientation == Orientation.Horizontal ? child.MaxWidth : child.MaxHeight);
-                if (Math.Abs(maxExtent) < float.Epsilon)
+                if (maxExtent.IsEqualTo(0))
                     throw new LayoutFailureException("Repeat cannot contain an element with 0 maximum size", this);
 
                 repeatCount = (int)Math.Ceiling((Orientation == Orientation.Horizontal ? (self.Right - self.Left) : (self.Top - self.Bottom)) / maxExtent);
@@ -73,7 +73,7 @@ namespace BeautifulBlueprints.Elements
             {
                 //How many whole elements can we fit, if we squeeze them up as much as possible?
                 var minExtent = (Orientation == Orientation.Horizontal ? child.MinWidth : child.MinHeight);
-                if (Math.Abs(minExtent) < float.Epsilon)
+                if (minExtent.IsEqualTo(0))
                     throw new LayoutFailureException("Repeat cannot contain an element with 0 minimum size", this);
 
                 repeatCount = (int)Math.Floor((Orientation == Orientation.Horizontal ? (self.Right - self.Left) : (self.Top - self.Bottom)) / minExtent);
@@ -81,6 +81,8 @@ namespace BeautifulBlueprints.Elements
 
             if (repeatCount == 0 && !AllowZeroRepeats)
                 throw new LayoutFailureException("Repeat element repeats zero times, but \"AllowZeroRepeats\" is false", this);
+            else if (repeatCount == 0)
+                return solutions;
 
             //Solve the child multiple times, once for each repeat
             if (Orientation == Orientation.Horizontal)

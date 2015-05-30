@@ -23,6 +23,6 @@ namespace BeautifulBlueprints
     {
         SizeMode Mode { get; }
 
-        float Size { get; }
+        decimal Size { get; }
     }
 }

@@ -1,10 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Text;
-using BeautifulBlueprints.Elements;
+﻿using BeautifulBlueprints.Elements;
 using BeautifulBlueprints.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace BeautifulBlueprints.Test
 {
@@ -25,11 +24,11 @@ namespace BeautifulBlueprints.Test
                 new Space()
             };
 
-            StringBuilder b = new StringBuilder();
-            Yaml.Serialize(root, new StringWriter(b));
+            //StringBuilder b = new StringBuilder();
+            //Yaml.Serialize(root, new StringWriter(b));
 
-            Console.WriteLine(b);
-            var d = Yaml.Deserialize(new StringReader(b.ToString()));
+            //Console.WriteLine(b);
+            //var d = Yaml.Deserialize(new StringReader(b.ToString()));
 
             var sol = Layout.Solver.Solve(0, 100, 10, 0, root).ToArray();
             Assert.AreEqual(6, sol.Length);
@@ -46,14 +45,14 @@ namespace BeautifulBlueprints.Test
                 columns: new[] { new GridColumn(1, SizeMode.Grow) }
             ) {
                 new Space(), //Empty space to the left
-                new Space(minHeight: 1, preferredHeight: 1.3f),
-                new Space(minHeight: 1, preferredHeight: 15f),
-                new Space(minHeight: 1, preferredHeight: 1.3f),
+                new Space(minHeight: 1, preferredHeight: 1.3m),
+                new Space(minHeight: 1, preferredHeight: 15m),
+                new Space(minHeight: 1, preferredHeight: 1.3m),
                 new Space()
             };
 
-            StringBuilder b = new StringBuilder();
-            Yaml.Serialize(root, new StringWriter(b));
+            //StringBuilder b = new StringBuilder();
+            //Yaml.Serialize(root, new StringWriter(b));
 
             //Console.WriteLine(b);
 
@@ -67,7 +66,7 @@ namespace BeautifulBlueprints.Test
         [TestMethod]
         public void MethodName()
         {
-            var layout = @"
+            const string LAYOUT = @"
 !Grid
 Name: Root
 Columns:
@@ -96,7 +95,7 @@ Children:
 
 ";
 
-            var des = Yaml.Deserialize(new StringReader(layout));
+            var des = Yaml.Deserialize(new StringReader(LAYOUT));
             var solution = Layout.Solver.Solve(-155, 155, 75, -75, des).ToArray();
 
             Assert.AreNotEqual(0, solution.Length);
@@ -110,7 +109,7 @@ Children:
         [TestMethod]
         public void MethodName2()
         {
-            var layout = @"
+            const string LAYOUT = @"
 !Repeat
 Children:
   - !AspectRatio
@@ -120,7 +119,7 @@ Children:
     Ratio: 0.75
 ";
 
-            var des = Yaml.Deserialize(new StringReader(layout));
+            var des = Yaml.Deserialize(new StringReader(LAYOUT));
             var solution = Layout.Solver.Solve(0, 601, 200, 0, des).ToArray();
 
             Assert.AreNotEqual(0, solution.Length);

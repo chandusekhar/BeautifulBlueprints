@@ -19,12 +19,12 @@ namespace BeautifulBlueprints.Elements
             IEnumerable<GridRow> rows,
             IEnumerable<GridColumn> columns,
             string name = null,
-            float minWidth = DEFAULT_MIN_WIDTH,
-            float? preferredWidth = null,
-            float maxWidth = DEFAULT_MAX_WIDTH,
-            float minHeight = DEFAULT_MIN_HEIGHT,
-            float? preferredHeight = null,
-            float maxHeight = DEFAULT_MAX_HEIGHT
+            decimal minWidth = DEFAULT_MIN_WIDTH,
+            decimal? preferredWidth = null,
+            decimal maxWidth = DEFAULT_MAX_WIDTH,
+            decimal minHeight = DEFAULT_MIN_HEIGHT,
+            decimal? preferredHeight = null,
+            decimal maxHeight = DEFAULT_MAX_HEIGHT
         )
             : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight)
         {
@@ -41,7 +41,7 @@ namespace BeautifulBlueprints.Elements
         }
 
         #region prepare layout
-        private static SizedElement[] MeasureSizes(ISizeable[] definitions, int rowCount, int columnCount, BaseElement[] elements, Func<BaseElement[], int, int, int, float> measureElementSizes, Func<BaseElement[], int, int, int, float> measureElementPreferredSize)
+        private static SizedElement[] MeasureSizes(ISizeable[] definitions, int rowCount, int columnCount, BaseElement[] elements, Func<BaseElement[], int, int, int, decimal> measureElementSizes, Func<BaseElement[], int, int, int, decimal> measureElementPreferredSize)
         {
             var output = new SizedElement[definitions.Length];
 
@@ -72,9 +72,9 @@ namespace BeautifulBlueprints.Elements
             return output;
         }
 
-        private static float MeasureRowElementHeights(BaseElement[] elements, int rowIndex, int rowCount, int columnCount)
+        private static decimal MeasureRowElementHeights(BaseElement[] elements, int rowIndex, int rowCount, int columnCount)
         {
-            float height = 0;
+            decimal height = 0;
 
             for (int i = rowIndex * columnCount; i < rowIndex * columnCount + columnCount && i < elements.Length; i++)
                 height = Math.Max(height, elements[i].MinHeight);
@@ -82,12 +82,12 @@ namespace BeautifulBlueprints.Elements
             return height;
         }
 
-        private static float MeasureRowPreferredHeight(BaseElement[] elements, int rowIndex, int rowCount, int columnCount)
+        private static decimal MeasureRowPreferredHeight(BaseElement[] elements, int rowIndex, int rowCount, int columnCount)
         {
-            float prefer = 0;
+            decimal prefer = 0;
 
-            var minMax = float.PositiveInfinity;
-            var maxMin = 0f;
+            var minMax = decimal.MaxValue;
+            var maxMin = 0m;
 
             for (int i = rowIndex * columnCount; i < rowIndex * columnCount + columnCount && i < elements.Length; i++)
             {
@@ -107,9 +107,9 @@ namespace BeautifulBlueprints.Elements
             return Math.Min(Math.Max(prefer, maxMin), minMax);
         }
 
-        private static float MeasureColumnElementWidths(BaseElement[] elements, int columnIndex, int rowCount, int columnCount)
+        private static decimal MeasureColumnElementWidths(BaseElement[] elements, int columnIndex, int rowCount, int columnCount)
         {
-            float width = 0;
+            decimal width = 0;
 
             for (int i = columnIndex; i < elements.Length; i += columnCount)
                 width = Math.Max(width, elements[i].MinWidth);
@@ -117,12 +117,12 @@ namespace BeautifulBlueprints.Elements
             return width;
         }
 
-        private static float MeasureColumnPreferredWidth(BaseElement[] elements, int columnIndex, int rowCount, int columnCount)
+        private static decimal MeasureColumnPreferredWidth(BaseElement[] elements, int columnIndex, int rowCount, int columnCount)
         {
-            float prefer = 0;
+            decimal prefer = 0;
 
-            var minMax = float.PositiveInfinity;
-            var maxMin = 0f;
+            var minMax = decimal.MaxValue;
+            var maxMin = 0m;
 
             for (int i = columnIndex; i < elements.Length; i += columnCount)
             {
@@ -140,7 +140,7 @@ namespace BeautifulBlueprints.Elements
         }
         #endregion
 
-        internal override IEnumerable<Solver.Solution> Solve(float left, float right, float top, float bottom)
+        internal override IEnumerable<Solver.Solution> Solve(decimal left, decimal right, decimal top, decimal bottom)
         {
             var elements = Children.ToArray();
 
@@ -156,8 +156,8 @@ namespace BeautifulBlueprints.Elements
             var columnSizes = MeasureSizes(_columns, _rows.Length, _columns.Length, elements, MeasureColumnElementWidths, MeasureColumnPreferredWidth);
 // ReSharper restore CoVariantArrayConversion
 
-            float allocatedRowSpace = rowSizes.Select(a => a.Size).Sum();
-            float allocatedColSpace = columnSizes.Select(a => a.Size).Sum();
+            decimal allocatedRowSpace = rowSizes.Select(a => a.Size).Sum();
+            decimal allocatedColSpace = columnSizes.Select(a => a.Size).Sum();
 
             //Make sure we haven't exceeded our size budget with the fixed parts
             if ((self.Right - self.Left) < allocatedColSpace)
@@ -186,26 +186,26 @@ namespace BeautifulBlueprints.Elements
             return solutions;
         }
 
-        private static float RoundToZero(float value)
+        private static decimal RoundToZero(decimal value)
         {
-            if (Math.Abs(value) < 0.001f)
+            if (value.IsEqualTo(0))
                 return 0;
             return value;
         }
 
-        private void AssertAllSpaceIsUsed(float excess, string el, string dim)
+        private void AssertAllSpaceIsUsed(decimal excess, string el, string dim)
         {
-            if (excess > float.Epsilon)
+            if (excess.IsGreaterThan(0))
                 throw new LayoutFailureException(string.Format("Total {0} of all {1}s is less than total {0} of element", dim, el), this);
         }
 
         private void FitChildren(SizedElement[] rowSizes, SizedElement[] columnSizes, BaseElement[] elements, Solver.Solution self, List<Solver.Solution> solutions)
         {
-            var yOffset = 0f;
+            var yOffset = 0m;
             for (int r = 0; r < rowSizes.Length; r++)
             {
                 var row = rowSizes[r].Size;
-                var xOffset = 0f;
+                var xOffset = 0m;
 
                 for (int c = 0; c < columnSizes.Length; c++)
                 {
@@ -229,11 +229,11 @@ namespace BeautifulBlueprints.Elements
             }
         }
 
-        private static float AutoSizeElements(SizedElement[] elements, float totalExcess)
+        private static decimal AutoSizeElements(SizedElement[] elements, decimal totalExcess)
         {
-            float remainingExcess = totalExcess;
+            decimal remainingExcess = totalExcess;
 
-            while (remainingExcess > 0.00001f)
+            while (!remainingExcess.IsEqualTo(0))
             {
                 //Count of auto sizes which are not yet at their preferred size
                 var autoSizeCount = elements.Where(a => a.Mode == SizeMode.Auto && a.Size < a.PreferredSize).Count();
@@ -241,7 +241,7 @@ namespace BeautifulBlueprints.Elements
                     return remainingExcess;
 
                 //Max amount each element may grow
-                var growthAllocation = 1f / autoSizeCount * totalExcess;
+                var growthAllocation = 1m / autoSizeCount * totalExcess;
 
                 //Some sizes will be negative, distribute the excess space over these
                 for (int i = 0; i < elements.Length; i++)
@@ -258,7 +258,7 @@ namespace BeautifulBlueprints.Elements
                 }
 
                 //Have we reached a fixpoint?
-                if (Math.Abs(totalExcess - remainingExcess) < float.Epsilon)
+                if (totalExcess.IsEqualTo(remainingExcess))
                     break;
 
                 totalExcess = remainingExcess;
@@ -267,9 +267,9 @@ namespace BeautifulBlueprints.Elements
             return remainingExcess;
         }
 
-        private static float GrowElements(SizedElement[] elements, float totalExcess)
+        private static decimal GrowElements(SizedElement[] elements, decimal totalExcess)
         {
-            float remainingExcess = totalExcess;
+            decimal remainingExcess = totalExcess;
 
             //We share out space by ratio of preferred sizes, so we need to know the total of all preferred sizes to figure that out
             var growSizeTotal = elements.Where(a => a.Mode == SizeMode.Grow).Select(a => a.PreferredSize).Sum();
@@ -299,12 +299,12 @@ namespace BeautifulBlueprints.Elements
             /// <summary>
             /// Size this element would like to be
             /// </summary>
-            public float PreferredSize;
+            public decimal PreferredSize;
 
             /// <summary>
             /// Space currently assigned to this element
             /// </summary>
-            public float Size;
+            public decimal Size;
         }
 
         #region serialization

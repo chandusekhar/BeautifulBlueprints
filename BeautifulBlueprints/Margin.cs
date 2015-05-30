@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.ComponentModel;
+using BeautifulBlueprints.Layout;
 
 namespace BeautifulBlueprints
 {
@@ -8,18 +9,18 @@ namespace BeautifulBlueprints
         : IEquatable<Margin>
     {
         [DefaultValue(0)]
-        public float Left { get; private set; }
+        public decimal Left { get; private set; }
 
         [DefaultValue(0)]
-        public float Right { get; private set; }
+        public decimal Right { get; private set; }
 
         [DefaultValue(0)]
-        public float Top { get; private set; }
+        public decimal Top { get; private set; }
 
         [DefaultValue(0)]
-        public float Bottom { get; private set; }
+        public decimal Bottom { get; private set; }
 
-        public Margin(float left = 0, float right = 0, float top = 0, float bottom = 0)
+        public Margin(decimal left = 0, decimal right = 0, decimal top = 0, decimal bottom = 0)
         {
             Left = left;
             Right = right;
@@ -29,10 +30,10 @@ namespace BeautifulBlueprints
 
         public bool Equals(Margin other)
         {
-            return Math.Abs(other.Left - Left) < float.Epsilon
-                && Math.Abs(other.Right - Right) < float.Epsilon
-                && Math.Abs(other.Top - Top) < float.Epsilon
-                && Math.Abs(other.Bottom - Bottom) < float.Epsilon;
+            return other.Left.IsEqualTo(Left)
+                && other.Right.IsEqualTo(Right)
+                && other.Top.IsEqualTo(Top)
+                && other.Bottom.IsEqualTo(Bottom);
         }
 
         public override bool Equals(object obj)
@@ -58,7 +59,7 @@ namespace BeautifulBlueprints
 
         internal MarginContainer Wrap()
         {
-            if (Math.Abs(Left) < float.Epsilon && Math.Abs(Right) < float.Epsilon && Math.Abs(Top) < float.Epsilon && Math.Abs(Bottom) < float.Epsilon)
+            if (Left.IsEqualTo(0) && Right.IsEqualTo(0) && Top.IsEqualTo(0) && Bottom.IsEqualTo(0))
                 return null;
 
             return new MarginContainer {
@@ -72,14 +73,14 @@ namespace BeautifulBlueprints
 
     public static class MarginExtensions
     {
-        public static float Width(this Margin margin)
+        public static decimal Width(this Margin margin)
         {
             if (margin == null)
                 return 0;
             return margin.Left + margin.Right;
         }
 
-        public static float Height(this Margin margin)
+        public static decimal Height(this Margin margin)
         {
             if (margin == null)
                 return 0;
@@ -90,16 +91,16 @@ namespace BeautifulBlueprints
     internal class MarginContainer
     {
         [DefaultValue(0)]
-        public float Left { get; set; }
+        public decimal Left { get; set; }
 
         [DefaultValue(0)]
-        public float Right { get; set; }
+        public decimal Right { get; set; }
 
         [DefaultValue(0)]
-        public float Top { get; set; }
+        public decimal Top { get; set; }
 
         [DefaultValue(0)]
-        public float Bottom { get; set; }
+        public decimal Bottom { get; set; }
 
         public Margin Unwrap()
         {

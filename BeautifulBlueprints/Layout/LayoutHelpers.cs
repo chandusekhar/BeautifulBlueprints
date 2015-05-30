@@ -5,13 +5,13 @@ namespace BeautifulBlueprints.Layout
 {
     public static class LayoutHelpers
     {
-        public static Solver.Solution FloatElement(BaseElement el, HorizontalAlignment hAlign, VerticalAlignment vAlign, float width, float height, float left, float right, float top, float bottom)
+        public static Solver.Solution decimalElement(BaseElement el, HorizontalAlignment hAlign, VerticalAlignment vAlign, decimal width, decimal height, decimal left, decimal right, decimal top, decimal bottom)
         {
             var self = el.FillSpace(left, right, top, bottom, checkMaxWidth: false, checkMaxHeight: false);
 
             //Position the element correctly (Horizontal)
             var spareHSpace = (right - left) - width;
-            float l, r;
+            decimal l, r;
             switch (hAlign)
             {
                 case HorizontalAlignment.Left:
@@ -32,7 +32,7 @@ namespace BeautifulBlueprints.Layout
 
             //Position the element correctly (Vertical)
             var spareVSpace = (top - bottom) - height;
-            float t, b;
+            decimal t, b;
             switch (vAlign)
             {
                 case VerticalAlignment.Top:
@@ -52,6 +52,23 @@ namespace BeautifulBlueprints.Layout
             }
 
             return new Solver.Solution(el, l, r, t, b);
+        }
+
+        public const decimal EPSILON = 0.0001m;
+
+        public static bool IsEqualTo(this decimal a, decimal b)
+        {
+            return Math.Abs(a - b) < EPSILON;
+        }
+
+        public static bool IsGreaterThan(this decimal a, decimal b)
+        {
+            return a > b + EPSILON;
+        }
+
+        public static bool IsLessThan(this decimal a, decimal b)
+        {
+            return a < b - EPSILON;
         }
     }
 }

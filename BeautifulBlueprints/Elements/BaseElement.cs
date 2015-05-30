@@ -10,10 +10,10 @@ namespace BeautifulBlueprints.Elements
     /// </summary>
     public abstract class BaseElement
     {
-        internal const float DEFAULT_MIN_WIDTH = 0;
-        internal const float DEFAULT_MAX_WIDTH = 10000;
-        internal const float DEFAULT_MIN_HEIGHT = 0;
-        internal const float DEFAULT_MAX_HEIGHT = 10000;
+        internal const decimal DEFAULT_MIN_WIDTH = 0;
+        internal const decimal DEFAULT_MAX_WIDTH = 10000;
+        internal const decimal DEFAULT_MIN_HEIGHT = 0;
+        internal const decimal DEFAULT_MAX_HEIGHT = 10000;
 
         private readonly string _name;
         /// <summary>
@@ -21,23 +21,23 @@ namespace BeautifulBlueprints.Elements
         /// </summary>
         public string Name { get { return _name; } }
 
-        private readonly float _minWidth;
+        private readonly decimal _minWidth;
         /// <summary>
         /// The minimum width this element may be shrunk to
         /// </summary>
-        public virtual float MinWidth { get { return _minWidth; } }
+        public virtual decimal MinWidth { get { return _minWidth; } }
 
-        private readonly float _maxWidth;
+        private readonly decimal _maxWidth;
         /// <summary>
         /// The maximum width this element may be stretched to
         /// </summary>
-        public virtual float MaxWidth { get { return _maxWidth; } }
+        public virtual decimal MaxWidth { get { return _maxWidth; } }
 
-        private readonly float? _preferredWidth;
+        private readonly decimal? _preferredWidth;
         /// <summary>
         /// Once all other constraints are satisfied, the width this element should be closest to
         /// </summary>
-        public virtual float? PreferredWidth
+        public virtual decimal? PreferredWidth
         {
             get
             {
@@ -45,23 +45,23 @@ namespace BeautifulBlueprints.Elements
             }
         }
 
-        private readonly float _minHeight;
+        private readonly decimal _minHeight;
         /// <summary>
         /// The minimum height of this element
         /// </summary>
-        public virtual float MinHeight { get { return _minHeight; } }
+        public virtual decimal MinHeight { get { return _minHeight; } }
 
-        private readonly float _maxHeight;
+        private readonly decimal _maxHeight;
         /// <summary>
         /// The maximum height this element may be stretched to
         /// </summary>
-        public virtual float MaxHeight { get { return _maxHeight; } }
+        public virtual decimal MaxHeight { get { return _maxHeight; } }
 
-        private readonly float? _preferredHeight;
+        private readonly decimal? _preferredHeight;
         /// <summary>
         /// Once all other constraints are satisfied, the height this element should be closest to
         /// </summary>
-        public virtual float? PreferredHeight
+        public virtual decimal? PreferredHeight
         {
             get
             {
@@ -70,12 +70,12 @@ namespace BeautifulBlueprints.Elements
         }
 
         protected BaseElement(string name = null,
-            float minWidth = DEFAULT_MIN_WIDTH,
-            float? preferredWidth = null,
-            float maxWidth = DEFAULT_MAX_WIDTH,
-            float minHeight = DEFAULT_MIN_HEIGHT,
-            float? preferredHeight = null,
-            float maxHeight = DEFAULT_MAX_HEIGHT)
+            decimal minWidth = DEFAULT_MIN_WIDTH,
+            decimal? preferredWidth = null,
+            decimal maxWidth = DEFAULT_MAX_WIDTH,
+            decimal minHeight = DEFAULT_MIN_HEIGHT,
+            decimal? preferredHeight = null,
+            decimal maxHeight = DEFAULT_MAX_HEIGHT)
         {
             _name = name ?? Guid.NewGuid().ToString();
 
@@ -88,13 +88,13 @@ namespace BeautifulBlueprints.Elements
             _maxHeight = maxHeight;
         }
 
-        internal abstract IEnumerable<Solver.Solution> Solve(float left, float right, float top, float bottom);
+        internal abstract IEnumerable<Solver.Solution> Solve(decimal left, decimal right, decimal top, decimal bottom);
 
         internal virtual void Prepare()
         {
         }
 
-        protected internal Solver.Solution FillSpace(float left, float right, float top, float bottom, bool checkMinWidth = true, bool checkMaxWidth = true, bool checkMinHeight = true, bool checkMaxHeight = true)
+        protected internal Solver.Solution FillSpace(decimal left, decimal right, decimal top, decimal bottom, bool checkMinWidth = true, bool checkMaxWidth = true, bool checkMinHeight = true, bool checkMaxHeight = true)
         {
             var width = (right - left);
             var height = (top - bottom);
@@ -118,23 +118,23 @@ namespace BeautifulBlueprints.Elements
         {
             public string Name { get; set; }
 
-            [DefaultValue(DEFAULT_MIN_WIDTH)]
-            public float MinWidth { get; set; }
+            //[DefaultValue(DEFAULT_MIN_WIDTH)]
+            public decimal MinWidth { get; set; }
 
-            [DefaultValue(DEFAULT_MAX_WIDTH)]
-            public float MaxWidth { get; set; }
-
-            [DefaultValue(null)]
-            public float? PreferredWidth { get; set; }
-
-            [DefaultValue(DEFAULT_MIN_HEIGHT)]
-            public float MinHeight { get; set; }
-
-            [DefaultValue(DEFAULT_MAX_HEIGHT)]
-            public float MaxHeight { get; set; }
+            //[DefaultValue(DEFAULT_MAX_WIDTH)]
+            public decimal MaxWidth { get; set; }
 
             [DefaultValue(null)]
-            public float? PreferredHeight { get; set; }
+            public decimal? PreferredWidth { get; set; }
+
+            //[DefaultValue(DEFAULT_MIN_HEIGHT)]
+            public decimal MinHeight { get; set; }
+
+            //[DefaultValue(DEFAULT_MAX_HEIGHT)]
+            public decimal MaxHeight { get; set; }
+
+            [DefaultValue(null)]
+            public decimal? PreferredHeight { get; set; }
 
             protected BaseElementContainer()
             {

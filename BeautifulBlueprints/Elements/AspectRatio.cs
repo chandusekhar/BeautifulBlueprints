@@ -10,10 +10,10 @@ namespace BeautifulBlueprints.Elements
     {
         internal const HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.Center;
         internal const VerticalAlignment DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.Center;
-        internal const float DEFAULT_RATIO = 1;
+        internal const decimal DEFAULT_RATIO = 1;
 
-        private readonly float _ratio;
-        public float Ratio
+        private readonly decimal _ratio;
+        public decimal Ratio
         {
             get
             {
@@ -29,13 +29,13 @@ namespace BeautifulBlueprints.Elements
 
         public AspectRatio(
             string name = null,
-            float minWidth = DEFAULT_MIN_WIDTH,
-            float? preferredWidth = null,
-            float maxWidth = DEFAULT_MAX_WIDTH,
-            float minHeight = DEFAULT_MIN_HEIGHT,
-            float? preferredHeight = null,
-            float maxHeight = DEFAULT_MAX_HEIGHT,
-            float ratio = DEFAULT_RATIO,
+            decimal minWidth = DEFAULT_MIN_WIDTH,
+            decimal? preferredWidth = null,
+            decimal maxWidth = DEFAULT_MAX_WIDTH,
+            decimal minHeight = DEFAULT_MIN_HEIGHT,
+            decimal? preferredHeight = null,
+            decimal maxHeight = DEFAULT_MAX_HEIGHT,
+            decimal ratio = DEFAULT_RATIO,
             HorizontalAlignment horizontalAlignment = DEFAULT_HORIZONTAL_ALIGNMENT,
             VerticalAlignment verticalAlignment = DEFAULT_VERTICAL_ALIGNMENT
         )
@@ -61,7 +61,7 @@ namespace BeautifulBlueprints.Elements
             }
         }
 
-        internal override IEnumerable<Solver.Solution> Solve(float left, float right, float top, float bottom)
+        internal override IEnumerable<Solver.Solution> Solve(decimal left, decimal right, decimal top, decimal bottom)
         {
             //Fill up the available space (no care for aspect ratio)
             var self = FillSpace(left, right, top, bottom, checkMaxWidth: false, checkMaxHeight: false);
@@ -72,19 +72,19 @@ namespace BeautifulBlueprints.Elements
             //Correct the aspect ratio
             var width = maxWidth;
             var height = maxHeight;
-            if (Math.Abs((width / height) - Ratio) > float.Epsilon)
+            if (!(width / height).IsEqualTo(Ratio))
             {
                 bool changed;
                 do
                 {
-                    float h;
-                    float w = width;
+                    decimal h;
+                    decimal w = width;
                     bool hOk = RecalculateHeight(w, maxHeight, out h);
                     bool wOk = RecalculateWidth(h, maxWidth, out w);
 
-// ReSharper disable CompareOfFloatsByEqualityOperator
+// ReSharper disable CompareOfdecimalsByEqualityOperator
                     changed = h != height || w != width;
-// ReSharper restore CompareOfFloatsByEqualityOperator
+// ReSharper restore CompareOfdecimalsByEqualityOperator
                     if (changed)
                     {
                         width = w;
@@ -99,15 +99,15 @@ namespace BeautifulBlueprints.Elements
                 } while (changed);
             }
 
-            var floated = LayoutHelpers.FloatElement(this, HorizontalAlignment, VerticalAlignment, width, height, left, right, top, bottom);
-            yield return floated;
+            var decimaled = LayoutHelpers.decimalElement(this, HorizontalAlignment, VerticalAlignment, width, height, left, right, top, bottom);
+            yield return decimaled;
 
             foreach (var child in Children)
-                foreach (var solution in child.Solve(floated.Left, floated.Right, floated.Top, floated.Bottom))
+                foreach (var solution in child.Solve(decimaled.Left, decimaled.Right, decimaled.Top, decimaled.Bottom))
                     yield return solution;
         }
 
-        protected bool RecalculateHeight(float width, float maxHeight, out float height)
+        protected bool RecalculateHeight(decimal width, decimal maxHeight, out decimal height)
         {
             //Given the width, what's the ideal height?
             var h = width / Ratio;
@@ -131,7 +131,7 @@ namespace BeautifulBlueprints.Elements
             return true;
         }
 
-        protected bool RecalculateWidth(float height, float maxWidth, out float width)
+        protected bool RecalculateWidth(decimal height, decimal maxWidth, out decimal width)
         {
             //Get the height, what's the ideal width?
             var w = height * Ratio;
@@ -164,8 +164,8 @@ namespace BeautifulBlueprints.Elements
     internal class AspectRatioContainer
         : BaseContainerElement.BaseContainerElementContainer
     {
-        [DefaultValue(AspectRatio.DEFAULT_RATIO)]
-        public float Ratio { get; set; }
+        //[DefaultValue(AspectRatio.DEFAULT_RATIO)]
+        public decimal Ratio { get; set; }
 
         [DefaultValue(AspectRatio.DEFAULT_HORIZONTAL_ALIGNMENT)]
         public HorizontalAlignment HorizontalAlignment { get; set; }

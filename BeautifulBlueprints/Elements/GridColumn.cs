@@ -1,16 +1,17 @@
 ﻿
 using System;
+using BeautifulBlueprints.Layout;
 
 namespace BeautifulBlueprints.Elements
 {
     public class GridColumn
         : IEquatable<GridColumn>, ISizeable
     {
-        public float Size { get; private set; }
+        public decimal Size { get; private set; }
 
         public SizeMode Mode { get; private set; }
 
-        public GridColumn(float size, SizeMode mode)
+        public GridColumn(decimal size, SizeMode mode)
         {
             Size = size;
             Mode = mode;
@@ -18,7 +19,7 @@ namespace BeautifulBlueprints.Elements
 
         public bool Equals(GridColumn other)
         {
-            return Math.Abs(other.Size - Size) < float.Epsilon
+            return other.Size.IsEqualTo(Size)
                 && other.Mode == Mode;
         }
 
@@ -50,7 +51,7 @@ namespace BeautifulBlueprints.Elements
 
     internal class GridColumnContainer
     {
-        public float Size { get; set; }
+        public decimal Size { get; set; }
 
         public SizeMode Mode { get; set; }
 
