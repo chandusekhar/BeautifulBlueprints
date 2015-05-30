@@ -1,4 +1,6 @@
-﻿using BeautifulBlueprints.Layout;
+﻿using System;
+using System.Linq;
+using BeautifulBlueprints.Layout;
 using System.Collections.Generic;
 
 namespace BeautifulBlueprints.Elements
@@ -6,6 +8,26 @@ namespace BeautifulBlueprints.Elements
     public class Fallback
         : BaseContainerElement
     {
+        public override float? PreferredWidth
+        {
+            get
+            {
+                if (ChildCount == 0)
+                    return 0;
+                return Children.Select(a => a.PreferredWidth.HasValue ? Math.Max(a.PreferredWidth.Value, a.MinWidth) : a.MinWidth).Max();
+            }
+        }
+
+        public override float? PreferredHeight
+        {
+            get
+            {
+                if (ChildCount == 0)
+                    return 0;
+                return Children.Select(a => a.PreferredHeight.HasValue ? Math.Max(a.PreferredHeight.Value, a.MinHeight) : a.MinHeight).Max();
+            }
+        }
+
         public Fallback(
             string name = null,
             float minWidth = DEFAULT_MIN_WIDTH,
@@ -13,10 +35,9 @@ namespace BeautifulBlueprints.Elements
             float maxWidth = DEFAULT_MAX_WIDTH,
             float minHeight = DEFAULT_MIN_HEIGHT,
             float? preferredHeight = null,
-            float maxHeight = DEFAULT_MAX_HEIGHT,
-            Margin margin = null
+            float maxHeight = DEFAULT_MAX_HEIGHT
         )
-            : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight, margin)
+            : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight)
         {
         }
 
@@ -77,8 +98,7 @@ namespace BeautifulBlueprints.Elements
                 maxWidth: MaxWidth,
                 minHeight: MinHeight,
                 preferredHeight: PreferredHeight,
-                maxHeight: MaxHeight,
-                margin: (Margin ?? new MarginContainer()).Unwrap()
+                maxHeight: MaxHeight
             );
 
             UnwrapChildren(s);

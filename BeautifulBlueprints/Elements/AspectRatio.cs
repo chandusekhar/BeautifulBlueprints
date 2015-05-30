@@ -35,7 +35,6 @@ namespace BeautifulBlueprints.Elements
             float minHeight = DEFAULT_MIN_HEIGHT,
             float? preferredHeight = null,
             float maxHeight = DEFAULT_MAX_HEIGHT,
-            Margin margin = null,
             float ratio = DEFAULT_RATIO,
             HorizontalAlignment horizontalAlignment = DEFAULT_HORIZONTAL_ALIGNMENT,
             VerticalAlignment verticalAlignment = DEFAULT_VERTICAL_ALIGNMENT
@@ -46,8 +45,7 @@ namespace BeautifulBlueprints.Elements
                 maxWidth,
                 Math.Max(minHeight, minWidth / ratio),
                 preferredHeight,
-                maxHeight,
-                margin
+                maxHeight
             )
         {
             _ratio = ratio;
@@ -199,7 +197,6 @@ namespace BeautifulBlueprints.Elements
                 minHeight: MinHeight,
                 preferredHeight: PreferredHeight,
                 maxHeight: MaxHeight,
-                margin: (Margin ?? new MarginContainer()).Unwrap(),
                 ratio: Ratio,
                 horizontalAlignment: HorizontalAlignment,
                 verticalAlignment: VerticalAlignment

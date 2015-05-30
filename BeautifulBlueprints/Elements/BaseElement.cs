@@ -33,7 +33,7 @@ namespace BeautifulBlueprints.Elements
         /// </summary>
         public virtual float MaxWidth { get { return _maxWidth; } }
 
-        private float? _preferredWidth;
+        private readonly float? _preferredWidth;
         /// <summary>
         /// Once all other constraints are satisfied, the width this element should be closest to
         /// </summary>
@@ -42,10 +42,6 @@ namespace BeautifulBlueprints.Elements
             get
             {
                 return _preferredWidth;
-            }
-            set
-            {
-                _preferredWidth = value;
             }
         }
 
@@ -61,7 +57,7 @@ namespace BeautifulBlueprints.Elements
         /// </summary>
         public virtual float MaxHeight { get { return _maxHeight; } }
 
-        private float? _preferredHeight;
+        private readonly float? _preferredHeight;
         /// <summary>
         /// Once all other constraints are satisfied, the height this element should be closest to
         /// </summary>
@@ -71,17 +67,7 @@ namespace BeautifulBlueprints.Elements
             {
                 return _preferredHeight;
             }
-            set
-            {
-                _preferredHeight = value;
-            }
         }
-
-        private readonly Margin _margin;
-        /// <summary>
-        /// The empty space which is always included around this element
-        /// </summary>
-        public Margin Margin { get { return _margin; } }
 
         protected BaseElement(string name = null,
             float minWidth = DEFAULT_MIN_WIDTH,
@@ -89,8 +75,7 @@ namespace BeautifulBlueprints.Elements
             float maxWidth = DEFAULT_MAX_WIDTH,
             float minHeight = DEFAULT_MIN_HEIGHT,
             float? preferredHeight = null,
-            float maxHeight = DEFAULT_MAX_HEIGHT,
-            Margin margin = null)
+            float maxHeight = DEFAULT_MAX_HEIGHT)
         {
             _name = name ?? Guid.NewGuid().ToString();
 
@@ -101,8 +86,6 @@ namespace BeautifulBlueprints.Elements
             _minHeight = minHeight;
             _preferredHeight = preferredHeight;
             _maxHeight = maxHeight;
-
-            _margin = margin ?? new Margin();
         }
 
         internal abstract IEnumerable<Solver.Solution> Solve(float left, float right, float top, float bottom);
@@ -113,8 +96,8 @@ namespace BeautifulBlueprints.Elements
 
         protected internal Solver.Solution FillSpace(float left, float right, float top, float bottom, bool checkMinWidth = true, bool checkMaxWidth = true, bool checkMinHeight = true, bool checkMaxHeight = true)
         {
-            var width = (right - left) - (Margin.Left + Margin.Right);
-            var height = (top - bottom) - (Margin.Top + Margin.Bottom);
+            var width = (right - left);
+            var height = (top - bottom);
 
             if (checkMinWidth && width < MinWidth)
                 throw new LayoutFailureException("available width is < MinWidth", this);
@@ -126,7 +109,7 @@ namespace BeautifulBlueprints.Elements
             if (checkMaxHeight && height > MaxHeight)
                 throw new LayoutFailureException("available height is > MaxHeight", this);
 
-            return new Solver.Solution(this, left + Margin.Left, right - Margin.Right, top - Margin.Top, bottom + Margin.Bottom);
+            return new Solver.Solution(this, left, right, top, bottom);
         }
 
         internal abstract BaseElementContainer Wrap();
@@ -153,9 +136,6 @@ namespace BeautifulBlueprints.Elements
             [DefaultValue(null)]
             public float? PreferredHeight { get; set; }
 
-            [DefaultValue(null)]
-            public MarginContainer Margin { get; set; }
-
             protected BaseElementContainer()
             {
                 MinWidth = DEFAULT_MIN_WIDTH;
@@ -167,7 +147,6 @@ namespace BeautifulBlueprints.Elements
 
             protected BaseElementContainer(BaseElement element)
             {
-                Margin = element.Margin.Wrap();
                 MaxHeight = element.MaxHeight;
                 MaxWidth = element.MaxWidth;
                 MinHeight = element.MinHeight;

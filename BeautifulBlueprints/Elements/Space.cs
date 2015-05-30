@@ -13,10 +13,9 @@ namespace BeautifulBlueprints.Elements
             float maxWidth = DEFAULT_MAX_WIDTH,
             float minHeight = DEFAULT_MIN_HEIGHT,
             float? preferredHeight = null,
-            float maxHeight = DEFAULT_MAX_HEIGHT,
-            Margin margin = null
+            float maxHeight = DEFAULT_MAX_HEIGHT
         )
-            : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight, margin)
+            : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight)
         {
         }
 
@@ -59,8 +58,7 @@ namespace BeautifulBlueprints.Elements
                 maxWidth: MaxWidth,
                 minHeight: MinHeight,
                 preferredHeight: PreferredHeight,
-                maxHeight: MaxHeight,
-                margin: (Margin ?? new MarginContainer()).Unwrap()
+                maxHeight: MaxHeight
             );
 
             return s;

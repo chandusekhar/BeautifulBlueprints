@@ -20,16 +20,23 @@ namespace BeautifulBlueprints.Elements
         /// </summary>
         public IEnumerable<BaseElement> Children { get { return _children; } }
 
+        public int ChildCount
+        {
+            get
+            {
+                return _children.Count;
+            }
+        }
+
         protected BaseContainerElement(string name = null,
             float minWidth = DEFAULT_MIN_WIDTH,
             float? preferredWidth = null,
             float maxWidth = DEFAULT_MAX_WIDTH,
             float minHeight = DEFAULT_MIN_HEIGHT,
             float? preferredHeight = null,
-            float maxHeight = DEFAULT_MAX_HEIGHT,
-            Margin margin = null
+            float maxHeight = DEFAULT_MAX_HEIGHT
         )
-            : base (name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight, margin)
+            : base (name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight)
         {
         }
 

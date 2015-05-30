@@ -70,11 +70,10 @@ namespace BeautifulBlueprints.Elements
             float minHeight = DEFAULT_MIN_HEIGHT,
             float? preferredHeight = null,
             float maxHeight = DEFAULT_MAX_HEIGHT,
-            Margin margin = null,
             HorizontalAlignment horizontalAlignment = DEFAULT_HORIZONTAL_ALIGNMENT,
             VerticalAlignment verticalAlignment = DEFAULT_VERTICAL_ALIGNMENT
         )
-            : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight, margin)
+            : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight)
         {
             _horizontalAlignment = horizontalAlignment;
             _verticalAlignment = verticalAlignment;
@@ -187,7 +186,6 @@ namespace BeautifulBlueprints.Elements
                 minHeight: MinHeight,
                 preferredHeight: PreferredHeight,
                 maxHeight: MaxHeight,
-                margin: (Margin ?? new MarginContainer()).Unwrap(),
                 horizontalAlignment: HorizontalAlignment,
                 verticalAlignment: VerticalAlignment
             );

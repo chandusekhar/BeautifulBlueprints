@@ -135,7 +135,6 @@ namespace BeautifulBlueprints.Test.Elements
 
             var deserialized = (Grid)Yaml.Deserialize(new StringReader(builder.ToString()));
 
-            Assert.AreEqual(element.Margin, deserialized.Margin);
             Assert.AreEqual(element.MaxHeight, deserialized.MaxHeight);
             Assert.AreEqual(element.MinHeight, deserialized.MinHeight);
             Assert.AreEqual(element.MaxWidth, deserialized.MaxWidth);
@@ -183,7 +182,7 @@ namespace BeautifulBlueprints.Test.Elements
                 rows: new[] { new GridRow(100, SizeMode.Fixed) },
                 columns: new[] { new GridColumn(1, SizeMode.Auto), new GridColumn(1, SizeMode.Auto) }
             ) {
-                new Space("l") { PreferredWidth = 100 }, new Space("r") { PreferredWidth = 100 }
+                new Space("l", preferredWidth: 100), new Space("r", preferredWidth: 100)
             }).ToArray();
             // ^ We make sure to set the preferred width of these, otherwise the layout fails!
             // This is what we'd expect, the grid columns size themselves to the preferred size of their children, so no preference means no width!
@@ -232,9 +231,9 @@ namespace BeautifulBlueprints.Test.Elements
                 new GridRow[] {new GridRow(1, SizeMode.Grow)},
                 new GridColumn[] {new GridColumn(1, SizeMode.Auto), new GridColumn(1, SizeMode.Grow), new GridColumn(1, SizeMode.Auto)}
             ) {
-                new Space(name: "a") { PreferredWidth = 1000 },
+                new Space(name: "a", preferredWidth: 1000),
                 new Space(name: "b", minWidth: 20),
-                new Space(name: "c") { PreferredWidth = 1000 }
+                new Space(name: "c", preferredWidth: 1000)
             };
             // ^ Set the preferred sizes out the auto columns such that they'll try to take all space. The grow column will be sized as small as possible
 

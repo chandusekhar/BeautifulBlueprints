@@ -190,7 +190,6 @@ namespace BeautifulBlueprints.Test.Elements
 
             Assert.AreEqual(element.HorizontalAlignment, deserialized.HorizontalAlignment);
             Assert.AreEqual(element.VerticalAlignment, deserialized.VerticalAlignment);
-            Assert.AreEqual(element.Margin, deserialized.Margin);
             Assert.AreEqual(element.MaxHeight, deserialized.MaxHeight);
             Assert.AreEqual(element.MinHeight, deserialized.MinHeight);
             Assert.AreEqual(element.MaxWidth, deserialized.MaxWidth);

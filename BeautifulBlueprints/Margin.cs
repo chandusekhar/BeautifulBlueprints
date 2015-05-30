@@ -70,6 +70,23 @@ namespace BeautifulBlueprints
         }
     }
 
+    public static class MarginExtensions
+    {
+        public static float Width(this Margin margin)
+        {
+            if (margin == null)
+                return 0;
+            return margin.Left + margin.Right;
+        }
+
+        public static float Height(this Margin margin)
+        {
+            if (margin == null)
+                return 0;
+            return margin.Top + margin.Bottom;
+        }
+    }
+
     internal class MarginContainer
     {
         [DefaultValue(0)]

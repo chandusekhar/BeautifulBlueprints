@@ -74,7 +74,6 @@ Columns:
   - { Mode: Grow, Size: 1 }
   - { Mode: Auto, Size: 1 }
   - { Mode: Auto, Size: 1 }
-  - { Mode: Auto, Size: 1 }
   - { Mode: Grow, Size: 1 }
 Rows:
   - { Mode: Grow, Size: 1 }
@@ -84,25 +83,13 @@ Children:
   - !Fallback
     Children:
     - !AspectRatio
-       MinWidth: 20
+       MinWidth: 40
        MaxWidth: 75
-       Margin: { Left: 10, Right: 10 }
-  - !Float
-    MinWidth: 40
-    MaxWidth: 200
-    VerticalAlignment: Bottom
-    Name: FL
-    Children:
-      - !AspectRatio
-        Ratio: 0.5
-        MinWidth: 40
-        MinHeight: 100
   - !Fallback
     Children:
      - !AspectRatio
        MinWidth: 20
        MaxWidth: 75
-       Margin: { Left: 10, Right: 10 }
   - !Space
     MinWidth: 20
 
@@ -110,9 +97,12 @@ Children:
 ";
 
             var des = Yaml.Deserialize(new StringReader(layout));
-            var solution = Layout.Solver.Solve(-55, 55, 75, -75, des).ToArray();
+            var solution = Layout.Solver.Solve(-155, 155, 75, -75, des).ToArray();
 
             Assert.AreNotEqual(0, solution.Length);
+
+            Assert.IsTrue(solution.Any(a => a.Element is AspectRatio));
+
             foreach (var part in solution)
                 Console.WriteLine(part.Element.GetType().Name + " " + part.Element.Name + " " + part.Left + " " + part.Right + " " + part.Top + " " + part.Bottom);
         }

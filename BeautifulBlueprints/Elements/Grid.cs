@@ -24,10 +24,9 @@ namespace BeautifulBlueprints.Elements
             float maxWidth = DEFAULT_MAX_WIDTH,
             float minHeight = DEFAULT_MIN_HEIGHT,
             float? preferredHeight = null,
-            float maxHeight = DEFAULT_MAX_HEIGHT,
-            Margin margin = null
+            float maxHeight = DEFAULT_MAX_HEIGHT
         )
-            : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight, margin)
+            : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight)
         {
             _rows = rows.ToArray();
             _columns = columns.ToArray();
@@ -99,8 +98,9 @@ namespace BeautifulBlueprints.Elements
                 maxMin = Math.Min(maxMin, el.MinHeight);
 
                 //Record the most permissive preference
-                if (el.PreferredHeight.HasValue)
-                    prefer = Math.Max(prefer, el.PreferredHeight.Value);
+                var elp = el.PreferredHeight;
+                if (elp.HasValue)
+                    prefer = Math.Max(prefer, elp.Value);
             }
 
             //Clamp prefer into the range of the most constrictive min and max constraints we've found
@@ -131,8 +131,9 @@ namespace BeautifulBlueprints.Elements
                 minMax = Math.Min(minMax, el.MaxWidth);
                 maxMin = Math.Min(maxMin, el.MinWidth);
 
-                if (el.PreferredWidth.HasValue)
-                    prefer = Math.Max(prefer, el.PreferredWidth.Value);
+                var elp = el.PreferredWidth;
+                if (elp.HasValue)
+                    prefer = Math.Max(prefer, elp.Value);
             }
 
             return Math.Min(Math.Max(prefer, maxMin), minMax);
@@ -343,8 +344,7 @@ namespace BeautifulBlueprints.Elements
                 maxWidth: MaxWidth,
                 minHeight: MinHeight,
                 preferredHeight: PreferredHeight,
-                maxHeight: MaxHeight,
-                margin: (Margin ?? new MarginContainer()).Unwrap()
+                maxHeight: MaxHeight
             );
 
             if (Children != null)
