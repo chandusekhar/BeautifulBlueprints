@@ -47,7 +47,6 @@
     <Compile Include="Elements\BaseContainerElement.cs" />
     <Compile Include="Elements\BaseElement.cs" />
     <Compile Include="Elements\Fallback.cs" />
-    <Compile Include="Elements\Float.cs" />
     <Compile Include="Elements\Flow.cs" />
     <Compile Include="Elements\Grid.cs" />
     <Compile Include="Elements\GridRow.cs" />
@@ -56,6 +55,7 @@
     <Compile Include="Elements\Repeat.cs" />
     <Compile Include="HorizontalAlignment.cs" />
     <Compile Include="Layout\LayoutFailureException.cs" />
+    <Compile Include="Layout\LayoutHelpers.cs" />
     <Compile Include="Layout\Solver.cs" />
     <Compile Include="Margin.cs" />
     <Compile Include="Orientation.cs" />

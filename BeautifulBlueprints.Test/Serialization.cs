@@ -17,14 +17,10 @@ namespace BeautifulBlueprints.Test
             var el = Yaml.Deserialize(new StringReader(@"
 !Fallback
 Children:
-  - !Float
+  - !Repeat
     Children:
-      - !Space
-        Name: 87e92c86-864f-460b-a651-aebfee9d7a0e
-    HorizontalAlignment: Uniform
-    Name: eefa8f75-d082-4955-b8af-88b4b8b6c6b2
-  - !Space
-    Name: 319ed878-b52f-4181-b0db-be379af9e1b5
+      - !Space {}
+  - !Space {}
 "));
 
             Assert.AreEqual(2, ((BaseContainerElement)el).Children.Count());
@@ -34,7 +30,7 @@ Children:
         public void SerializeElement()
         {
             var el = new Fallback() {
-                new Float(horizontalAlignment: HorizontalAlignment.Uniform) {
+                new Repeat() {
                     new Space()
                 },
                 new Space()

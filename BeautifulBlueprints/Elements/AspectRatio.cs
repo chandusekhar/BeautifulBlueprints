@@ -99,7 +99,7 @@ namespace BeautifulBlueprints.Elements
                 } while (changed);
             }
 
-            var floated = Float.FloatElement(this, HorizontalAlignment, VerticalAlignment, width, height, left, right, top, bottom);
+            var floated = LayoutHelpers.FloatElement(this, HorizontalAlignment, VerticalAlignment, width, height, left, right, top, bottom);
             yield return floated;
 
             foreach (var child in Children)

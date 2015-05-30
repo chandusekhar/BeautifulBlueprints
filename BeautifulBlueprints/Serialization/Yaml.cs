@@ -22,7 +22,6 @@ namespace BeautifulBlueprints.Serialization
         {
             serializer.Settings.RegisterTagMapping("AspectRatio", typeof(AspectRatioContainer));
             serializer.Settings.RegisterTagMapping("Fallback", typeof(FallbackContainer));
-            serializer.Settings.RegisterTagMapping("Float", typeof(FloatContainer));
             //serializer.Settings.RegisterTagMapping("Flow", typeof(FlowContainer));
             serializer.Settings.RegisterTagMapping("Repeat", typeof(RepeatContainer));
             serializer.Settings.RegisterTagMapping("Grid", typeof(GridContainer));
