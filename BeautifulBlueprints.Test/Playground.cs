@@ -106,5 +106,29 @@ Children:
             foreach (var part in solution)
                 Console.WriteLine(part.Element.GetType().Name + " " + part.Element.Name + " " + part.Left + " " + part.Right + " " + part.Top + " " + part.Bottom);
         }
+
+        [TestMethod]
+        public void MethodName2()
+        {
+            var layout = @"
+!Repeat
+Children:
+  - !AspectRatio
+    MinWidth: 100
+    MaxHeight: 200
+    PreferredWidth: 75
+    Ratio: 0.75
+";
+
+            var des = Yaml.Deserialize(new StringReader(layout));
+            var solution = Layout.Solver.Solve(0, 601, 200, 0, des).ToArray();
+
+            Assert.AreNotEqual(0, solution.Length);
+
+            Assert.IsTrue(solution.Any(a => a.Element is AspectRatio));
+
+            foreach (var part in solution)
+                Console.WriteLine(part.Element.GetType().Name + " " + part.Element.Name + " " + part.Left + " " + part.Right + " " + part.Top + " " + part.Bottom);
+        }
     }
 }
