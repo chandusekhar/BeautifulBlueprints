@@ -20,10 +20,10 @@ namespace BeautifulBlueprints.Elements
             IEnumerable<GridColumn> columns,
             string name = null,
             float minWidth = DEFAULT_MIN_WIDTH,
-            float preferredWidth = DEFAULT_PREFERRED_WIDTH,
+            float? preferredWidth = null,
             float maxWidth = DEFAULT_MAX_WIDTH,
             float minHeight = DEFAULT_MIN_HEIGHT,
-            float preferredHeight = DEFAULT_PREFERRED_HEIGHT,
+            float? preferredHeight = null,
             float maxHeight = DEFAULT_MAX_HEIGHT,
             Margin margin = null
         )
@@ -99,7 +99,8 @@ namespace BeautifulBlueprints.Elements
                 maxMin = Math.Min(maxMin, el.MinHeight);
 
                 //Record the most permissive preference
-                prefer = Math.Max(prefer, el.PreferredHeight);
+                if (el.PreferredHeight.HasValue)
+                    prefer = Math.Max(prefer, el.PreferredHeight.Value);
             }
 
             //Clamp prefer into the range of the most constrictive min and max constraints we've found
@@ -130,7 +131,8 @@ namespace BeautifulBlueprints.Elements
                 minMax = Math.Min(minMax, el.MaxWidth);
                 maxMin = Math.Min(maxMin, el.MinWidth);
 
-                prefer = Math.Max(prefer, el.PreferredHeight);
+                if (el.PreferredWidth.HasValue)
+                    prefer = Math.Max(prefer, el.PreferredWidth.Value);
             }
 
             return Math.Min(Math.Max(prefer, maxMin), minMax);
@@ -193,7 +195,7 @@ namespace BeautifulBlueprints.Elements
         private void AssertAllSpaceIsUsed(float excess, string el, string dim)
         {
             if (excess > float.Epsilon)
-                throw new LayoutFailureException(string.Format("Total {0} of all {1}s is more than total {0} of element", dim, el), this);
+                throw new LayoutFailureException(string.Format("Total {0} of all {1}s is less than total {0} of element", dim, el), this);
         }
 
         private void FitChildren(SizedElement[] rowSizes, SizedElement[] columnSizes, BaseElement[] elements, Solver.Solution self, List<Solver.Solution> solutions)
@@ -233,7 +235,7 @@ namespace BeautifulBlueprints.Elements
             while (remainingExcess > 0.00001f)
             {
                 //Count of auto sizes which are not yet at their preferred size
-                var autoSizeCount = elements.Where(a => a.Mode == SizeMode.Auto && Math.Abs(a.Size - a.PreferredSize) > float.Epsilon).Count();
+                var autoSizeCount = elements.Where(a => a.Mode == SizeMode.Auto && a.Size < a.PreferredSize).Count();
                 if (autoSizeCount == 0)
                     return remainingExcess;
 
@@ -245,7 +247,7 @@ namespace BeautifulBlueprints.Elements
                 {
                     if (elements[i].Mode != SizeMode.Auto)
                         continue;
-                    if (Math.Abs(elements[i].Size - elements[i].PreferredSize) < float.Epsilon)
+                    if (elements[i].Size > elements[i].PreferredSize)
                         continue;
 
                     // Excess is distributed equally across all auto size elements
@@ -337,10 +339,10 @@ namespace BeautifulBlueprints.Elements
                 Columns.Select(a => a.Unwrap()),
                 name: Name,
                 minWidth: MinWidth,
-                preferredWidth: PreferredWidth ?? BaseElement.DEFAULT_PREFERRED_WIDTH,
+                preferredWidth: PreferredWidth,
                 maxWidth: MaxWidth,
                 minHeight: MinHeight,
-                preferredHeight: PreferredHeight ?? BaseElement.DEFAULT_PREFERRED_HEIGHT,
+                preferredHeight: PreferredHeight,
                 maxHeight: MaxHeight,
                 margin: (Margin ?? new MarginContainer()).Unwrap()
             );

@@ -22,10 +22,10 @@ namespace BeautifulBlueprints.Elements
 
         protected BaseContainerElement(string name = null,
             float minWidth = DEFAULT_MIN_WIDTH,
-            float preferredWidth = DEFAULT_PREFERRED_WIDTH,
+            float? preferredWidth = null,
             float maxWidth = DEFAULT_MAX_WIDTH,
             float minHeight = DEFAULT_MIN_HEIGHT,
-            float preferredHeight = DEFAULT_PREFERRED_HEIGHT,
+            float? preferredHeight = null,
             float maxHeight = DEFAULT_MAX_HEIGHT,
             Margin margin = null
         )

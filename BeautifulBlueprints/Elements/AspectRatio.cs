@@ -30,17 +30,25 @@ namespace BeautifulBlueprints.Elements
         public AspectRatio(
             string name = null,
             float minWidth = DEFAULT_MIN_WIDTH,
-            float preferredWidth = DEFAULT_PREFERRED_WIDTH,
+            float? preferredWidth = null,
             float maxWidth = DEFAULT_MAX_WIDTH,
             float minHeight = DEFAULT_MIN_HEIGHT,
-            float preferredHeight = DEFAULT_PREFERRED_HEIGHT,
+            float? preferredHeight = null,
             float maxHeight = DEFAULT_MAX_HEIGHT,
             Margin margin = null,
             float ratio = DEFAULT_RATIO,
             HorizontalAlignment horizontalAlignment = DEFAULT_HORIZONTAL_ALIGNMENT,
             VerticalAlignment verticalAlignment = DEFAULT_VERTICAL_ALIGNMENT
         )
-            : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight, margin)
+            : base(name,
+                Math.Max(minWidth, minHeight * ratio),
+                preferredWidth,
+                maxWidth,
+                Math.Max(minHeight, minWidth / ratio),
+                preferredHeight,
+                maxHeight,
+                margin
+            )
         {
             _ratio = ratio;
             _horizontalAlignment = horizontalAlignment;
@@ -186,10 +194,10 @@ namespace BeautifulBlueprints.Elements
         {
             var s = new AspectRatio(name: Name,
                 minWidth: MinWidth,
-                preferredWidth: PreferredWidth ?? BaseElement.DEFAULT_PREFERRED_WIDTH,
+                preferredWidth: PreferredWidth,
                 maxWidth: MaxWidth,
                 minHeight: MinHeight,
-                preferredHeight: PreferredHeight ?? BaseElement.DEFAULT_PREFERRED_HEIGHT,
+                preferredHeight: PreferredHeight,
                 maxHeight: MaxHeight,
                 margin: (Margin ?? new MarginContainer()).Unwrap(),
                 ratio: Ratio,

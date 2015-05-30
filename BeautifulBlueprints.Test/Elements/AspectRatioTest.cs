@@ -1,12 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Security.Cryptography;
-using System.Text;
-using BeautifulBlueprints.Elements;
+﻿using BeautifulBlueprints.Elements;
 using BeautifulBlueprints.Layout;
 using BeautifulBlueprints.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace BeautifulBlueprints.Test.Elements
 {
@@ -196,6 +195,22 @@ namespace BeautifulBlueprints.Test.Elements
             Assert.AreEqual(element.MinHeight, deserialized.MinHeight);
             Assert.AreEqual(element.MaxWidth, deserialized.MaxWidth);
             Assert.AreEqual(element.MinWidth, deserialized.MinWidth);
+        }
+
+        [TestMethod]
+        public void AssertThat_AspectRatioElement_ModifiesMinWidth_WithRespectToMinHeight()
+        {
+            var element = new AspectRatio(minWidth: 1, minHeight: 10, ratio: 0.5f);
+
+            Assert.AreEqual(5, element.MinWidth);
+        }
+
+        [TestMethod]
+        public void AssertThat_AspectRatioElement_ModifiesMinHeight_WithRespectToMinWidth()
+        {
+            var element = new AspectRatio(minWidth: 10, minHeight: 1, ratio: 0.5f);
+
+            Assert.AreEqual(20, element.MinHeight);
         }
     }
 }

@@ -183,8 +183,10 @@ namespace BeautifulBlueprints.Test.Elements
                 rows: new[] { new GridRow(100, SizeMode.Fixed) },
                 columns: new[] { new GridColumn(1, SizeMode.Auto), new GridColumn(1, SizeMode.Auto) }
             ) {
-                new Space("l"), new Space("r")
+                new Space("l") { PreferredWidth = 100 }, new Space("r") { PreferredWidth = 100 }
             }).ToArray();
+            // ^ We make sure to set the preferred width of these, otherwise the layout fails!
+            // This is what we'd expect, the grid columns size themselves to the preferred size of their children, so no preference means no width!
 
             Assert.AreEqual(3, solution.Length);
 
@@ -230,10 +232,11 @@ namespace BeautifulBlueprints.Test.Elements
                 new GridRow[] {new GridRow(1, SizeMode.Grow)},
                 new GridColumn[] {new GridColumn(1, SizeMode.Auto), new GridColumn(1, SizeMode.Grow), new GridColumn(1, SizeMode.Auto)}
             ) {
-                new Space(name: "a"),
+                new Space(name: "a") { PreferredWidth = 1000 },
                 new Space(name: "b", minWidth: 20),
-                new Space(name: "c")
+                new Space(name: "c") { PreferredWidth = 1000 }
             };
+            // ^ Set the preferred sizes out the auto columns such that they'll try to take all space. The grow column will be sized as small as possible
 
             var solution = Solver.Solve(-100, 100, 50, -50, root).ToArray();
 

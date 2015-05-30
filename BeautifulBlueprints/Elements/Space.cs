@@ -9,10 +9,10 @@ namespace BeautifulBlueprints.Elements
         public Space(
             string name = null,
             float minWidth = DEFAULT_MIN_WIDTH,
-            float preferredWidth = DEFAULT_PREFERRED_WIDTH,
+            float? preferredWidth = null,
             float maxWidth = DEFAULT_MAX_WIDTH,
             float minHeight = DEFAULT_MIN_HEIGHT,
-            float preferredHeight = DEFAULT_PREFERRED_HEIGHT,
+            float? preferredHeight = null,
             float maxHeight = DEFAULT_MAX_HEIGHT,
             Margin margin = null
         )
@@ -55,10 +55,10 @@ namespace BeautifulBlueprints.Elements
         {
             var s = new Space(name: Name,
                 minWidth: MinWidth,
-                preferredWidth: PreferredWidth ?? BaseElement.DEFAULT_PREFERRED_WIDTH,
+                preferredWidth: PreferredWidth,
                 maxWidth: MaxWidth,
                 minHeight: MinHeight,
-                preferredHeight: PreferredHeight ?? BaseElement.DEFAULT_PREFERRED_HEIGHT,
+                preferredHeight: PreferredHeight,
                 maxHeight: MaxHeight,
                 margin: (Margin ?? new MarginContainer()).Unwrap()
             );

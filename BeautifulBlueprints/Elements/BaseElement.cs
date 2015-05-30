@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using BeautifulBlueprints.Layout;
-using SharpYaml.Serialization;
+﻿using BeautifulBlueprints.Layout;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -14,10 +11,8 @@ namespace BeautifulBlueprints.Elements
     public abstract class BaseElement
     {
         internal const float DEFAULT_MIN_WIDTH = 0;
-        internal const float DEFAULT_PREFERRED_WIDTH = float.NaN;
         internal const float DEFAULT_MAX_WIDTH = 10000;
         internal const float DEFAULT_MIN_HEIGHT = 0;
-        internal const float DEFAULT_PREFERRED_HEIGHT = float.NaN;
         internal const float DEFAULT_MAX_HEIGHT = 10000;
 
         private readonly string _name;
@@ -42,21 +37,15 @@ namespace BeautifulBlueprints.Elements
         /// <summary>
         /// Once all other constraints are satisfied, the width this element should be closest to
         /// </summary>
-        public virtual float PreferredWidth
+        public virtual float? PreferredWidth
         {
             get
             {
-                if (_preferredWidth.HasValue)
-                    return _preferredWidth.Value;
-
-                return MinWidth * 0.5f + MaxWidth * 0.5f;
+                return _preferredWidth;
             }
             set
             {
-                if (float.IsNaN(value))
-                    _preferredWidth = null;
-                else
-                    _preferredWidth = value;
+                _preferredWidth = value;
             }
         }
 
@@ -76,21 +65,15 @@ namespace BeautifulBlueprints.Elements
         /// <summary>
         /// Once all other constraints are satisfied, the height this element should be closest to
         /// </summary>
-        public virtual float PreferredHeight
+        public virtual float? PreferredHeight
         {
             get
             {
-                if (_preferredHeight.HasValue)
-                    return _preferredHeight.Value;
-
-                return MinHeight * 0.5f + MaxHeight * 0.5f;
+                return _preferredHeight;
             }
             set
             {
-                if (float.IsNaN(value))
-                    _preferredHeight = null;
-                else
-                    _preferredHeight = value;
+                _preferredHeight = value;
             }
         }
 
@@ -102,21 +85,21 @@ namespace BeautifulBlueprints.Elements
 
         protected BaseElement(string name = null,
             float minWidth = DEFAULT_MIN_WIDTH,
-            float preferredWidth = DEFAULT_PREFERRED_WIDTH,
+            float? preferredWidth = null,
             float maxWidth = DEFAULT_MAX_WIDTH,
             float minHeight = DEFAULT_MIN_HEIGHT,
-            float preferredHeight = DEFAULT_PREFERRED_HEIGHT,
+            float? preferredHeight = null,
             float maxHeight = DEFAULT_MAX_HEIGHT,
             Margin margin = null)
         {
             _name = name ?? Guid.NewGuid().ToString();
 
             _minWidth = minWidth;
-            _preferredWidth = float.IsNaN(preferredWidth) ? (float?)null : preferredWidth;
+            _preferredWidth = preferredWidth;
             _maxWidth = maxWidth;
 
             _minHeight = minHeight;
-            _preferredHeight = float.IsNaN(preferredHeight) ? (float?)null : preferredHeight;
+            _preferredHeight = preferredHeight;
             _maxHeight = maxHeight;
 
             _margin = margin ?? new Margin();
@@ -173,7 +156,7 @@ namespace BeautifulBlueprints.Elements
             [DefaultValue(null)]
             public MarginContainer Margin { get; set; }
 
-            public BaseElementContainer()
+            protected BaseElementContainer()
             {
                 MinWidth = DEFAULT_MIN_WIDTH;
                 MaxWidth = DEFAULT_MAX_WIDTH;
