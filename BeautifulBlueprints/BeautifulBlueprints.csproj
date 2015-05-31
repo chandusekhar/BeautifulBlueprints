@@ -51,6 +51,7 @@
     <Compile Include="Elements\Grid.cs" />
     <Compile Include="Elements\GridRow.cs" />
     <Compile Include="Elements\GridColumn.cs" />
+    <Compile Include="Elements\Margin.cs" />
     <Compile Include="Elements\Space.cs" />
     <Compile Include="Elements\Repeat.cs" />
     <Compile Include="HorizontalAlignment.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Elements\Stack.cs" />
     <Compile Include="Serialization\Yaml.cs" />
+    <Compile Include="Size.cs" />
     <Compile Include="SizeMode.cs" />
     <Compile Include="Spacing.cs" />
     <Compile Include="VerticalAlignment.cs" />
