@@ -98,9 +98,7 @@ namespace BeautifulBlueprints.Elements
                 maxMin = Math.Min(maxMin, el.MinHeight);
 
                 //Record the most permissive preference
-                var elp = el.PreferredHeight;
-                if (elp.HasValue)
-                    prefer = Math.Max(prefer, elp.Value);
+                prefer = Math.Max(prefer, el.PreferredHeight);
             }
 
             //Clamp prefer into the range of the most constrictive min and max constraints we've found
@@ -131,9 +129,7 @@ namespace BeautifulBlueprints.Elements
                 minMax = Math.Min(minMax, el.MaxWidth);
                 maxMin = Math.Min(maxMin, el.MinWidth);
 
-                var elp = el.PreferredWidth;
-                if (elp.HasValue)
-                    prefer = Math.Max(prefer, elp.Value);
+                prefer = Math.Max(prefer, el.PreferredWidth);
             }
 
             return Math.Min(Math.Max(prefer, maxMin), minMax);

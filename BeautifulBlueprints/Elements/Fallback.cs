@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using BeautifulBlueprints.Layout;
 using System.Collections.Generic;
 
@@ -8,23 +7,23 @@ namespace BeautifulBlueprints.Elements
     public class Fallback
         : BaseContainerElement
     {
-        public override decimal? PreferredWidth
+        public override decimal PreferredWidth
         {
             get
             {
                 if (ChildCount == 0)
                     return 0;
-                return Children.Select(a => a.PreferredWidth.HasValue ? Math.Max(a.PreferredWidth.Value, a.MinWidth) : a.MinWidth).Max();
+                return Children.Select(a => a.PreferredWidth).Max();
             }
         }
 
-        public override decimal? PreferredHeight
+        public override decimal PreferredHeight
         {
             get
             {
                 if (ChildCount == 0)
                     return 0;
-                return Children.Select(a => a.PreferredHeight.HasValue ? Math.Max(a.PreferredHeight.Value, a.MinHeight) : a.MinHeight).Max();
+                return Children.Select(a => a.PreferredHeight).Max();
             }
         }
 

@@ -5,8 +5,6 @@ namespace BeautifulBlueprints
 {
     public struct Size
     {
-        private const decimal VERY_LARGE_VALUE = 10000;
-
         public decimal Min { get; private set; }
         public decimal Prefer { get; private set; }
         public decimal Max { get; private set; }
@@ -20,13 +18,13 @@ namespace BeautifulBlueprints
             //Default prefer to smallest size possible
             Prefer = prefer ?? Math.Min(0, Min);
 
-            //Default to a very large value
-            Max = max ?? Math.Max(Math.Max(VERY_LARGE_VALUE, Prefer), Min);
+            //Default to smallest possible value
+            Max = max ?? Math.Max(Math.Max(0, Prefer), Min);
         }
 
         internal Size? AsNullable()
         {
-            if (Min == 0 && Prefer == 0 && Max == VERY_LARGE_VALUE)
+            if (Min == 0 && Prefer == 0 && Max == 0)
                 return null;
             return this;
         }

@@ -37,11 +37,11 @@ namespace BeautifulBlueprints.Elements
         /// <summary>
         /// Once all other constraints are satisfied, the width this element should be closest to
         /// </summary>
-        public virtual decimal? PreferredWidth
+        public virtual decimal PreferredWidth
         {
             get
             {
-                return _preferredWidth;
+                return _preferredWidth ?? MinWidth;
             }
         }
 
@@ -61,11 +61,11 @@ namespace BeautifulBlueprints.Elements
         /// <summary>
         /// Once all other constraints are satisfied, the height this element should be closest to
         /// </summary>
-        public virtual decimal? PreferredHeight
+        public virtual decimal PreferredHeight
         {
             get
             {
-                return _preferredHeight;
+                return _preferredHeight ?? MinHeight;
             }
         }
 
