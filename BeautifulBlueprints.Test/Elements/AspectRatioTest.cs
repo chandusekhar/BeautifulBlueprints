@@ -27,19 +27,17 @@ namespace BeautifulBlueprints.Test.Elements
         }
 
         [TestMethod]
+        [ExpectedException(typeof(LayoutFailureException))]
         public void AssertThat_AspectRatioElement_FailsLayout_WithImpossibleHeightConstraint()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 2, minHeight: 90)).ToArray();
-
-            Assert.AreEqual(0, solution.Length);
+            Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 2, minHeight: 90));
         }
 
         [TestMethod]
+        [ExpectedException(typeof(LayoutFailureException))]
         public void AssertThat_AspectRatioElement_FailsLayout_WithImpossibleWidthConstraint()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 0.5m, minWidth: 90)).ToArray();
-
-            Assert.AreEqual(0, solution.Length);
+            Solver.Solve(0, 100, 100, 0, new AspectRatio(ratio: 0.5m, minWidth: 90));
         }
 
         [TestMethod]

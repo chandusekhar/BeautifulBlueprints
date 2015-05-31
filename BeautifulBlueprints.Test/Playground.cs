@@ -64,7 +64,7 @@ namespace BeautifulBlueprints.Test
         }
 
         [TestMethod]
-        public void MethodName()
+        public void Layout1()
         {
             const string LAYOUT = @"
 !Grid
@@ -107,7 +107,7 @@ Children:
         }
 
         [TestMethod]
-        public void MethodName2()
+        public void Layout2()
         {
             const string LAYOUT = @"
 !Repeat

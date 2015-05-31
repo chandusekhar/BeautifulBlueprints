@@ -9,19 +9,7 @@ namespace BeautifulBlueprints.Layout
         public static IEnumerable<Solution> Solve(decimal left, decimal right, decimal top, decimal bottom, BaseElement root)
         {
             root.Prepare();
-
-            Solution[] solutions;
-            try
-            {
-                solutions = root.Solve(left, right, top, bottom).ToArray();
-            }
-            catch (LayoutFailureException)
-            {
-                yield break;
-            }
-
-            foreach (var solution in solutions)
-                yield return solution;
+            return root.Solve(left, right, top, bottom).ToArray();
         }
 
         public struct Solution

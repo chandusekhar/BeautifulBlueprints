@@ -79,6 +79,7 @@ namespace BeautifulBlueprints.Elements
                 repeatCount = (int)Math.Floor((Orientation == Orientation.Horizontal ? (self.Right - self.Left) : (self.Top - self.Bottom)) / minExtent);
             }
 
+            //Bail out if there are zero repeats
             if (repeatCount == 0 && !AllowZeroRepeats)
                 throw new LayoutFailureException("Repeat element repeats zero times, but \"AllowZeroRepeats\" is false", this);
             else if (repeatCount == 0)

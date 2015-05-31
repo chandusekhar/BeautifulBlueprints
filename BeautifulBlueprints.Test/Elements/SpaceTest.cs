@@ -25,19 +25,17 @@ namespace BeautifulBlueprints.Test.Elements
         }
 
         [TestMethod]
+        [ExpectedException(typeof(LayoutFailureException))]
         public void AssertThat_SpaceElement_DoesNot_ExceedMaxWidth()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new Space(maxWidth: 50)).ToArray();
-
-            Assert.AreEqual(0, solution.Count());
+            Solver.Solve(0, 100, 100, 0, new Space(maxWidth: 50));
         }
 
         [TestMethod]
+        [ExpectedException(typeof(LayoutFailureException))]
         public void AssertThat_SpaceElement_DoesNot_ExceedMaxHeight()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new Space(maxHeight: 50)).ToArray();
-
-            Assert.AreEqual(0, solution.Count());
+            Solver.Solve(0, 100, 100, 0, new Space(maxHeight: 50));
         }
 
         [TestMethod]

@@ -77,28 +77,27 @@ namespace BeautifulBlueprints.Test.Elements
         }
 
         [TestMethod]
+        [ExpectedException(typeof(LayoutFailureException))]
         public void AssertThat_GridElement_FailsLayout_WhenFixedColSizesExceedParentWidth()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new Grid(
-                rows: new[] { new GridRow(10, SizeMode.Fixed) },
-                columns: new[] { new GridColumn(60, SizeMode.Fixed), new GridColumn(60, SizeMode.Fixed) }
-            )).ToArray();
-
-            Assert.AreEqual(0, solution.Length);
+            Solver.Solve(0, 100, 100, 0, new Grid(
+                rows: new[] {new GridRow(10, SizeMode.Fixed)},
+                columns: new[] {new GridColumn(60, SizeMode.Fixed), new GridColumn(60, SizeMode.Fixed)}
+            ));
         }
 
         [TestMethod]
+        [ExpectedException(typeof(LayoutFailureException))]
         public void AssertThat_GridElement_FailsLayout_WhenFixedRowSizesExceedParentHeight()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new Grid(
-                rows: new[] { new GridRow(60, SizeMode.Fixed), new GridRow(60, SizeMode.Fixed) },
-                columns: new[] { new GridColumn(10, SizeMode.Fixed) }
-            )).ToArray();
-
-            Assert.AreEqual(0, solution.Length);
+            Solver.Solve(0, 100, 100, 0, new Grid(
+                rows: new[] {new GridRow(60, SizeMode.Fixed), new GridRow(60, SizeMode.Fixed)},
+                columns: new[] {new GridColumn(10, SizeMode.Fixed)}
+            ));
         }
 
         [TestMethod]
+        [ExpectedException(typeof(LayoutFailureException))]
         public void AssertThat_GridElement_FailsLayout_WhenFixedColSizesLessThanParentWidth()
         {
             var solution = Solver.Solve(0, 100, 100, 0, new Grid(
@@ -110,14 +109,13 @@ namespace BeautifulBlueprints.Test.Elements
         }
 
         [TestMethod]
+        [ExpectedException(typeof(LayoutFailureException))]
         public void AssertThat_GridElement_FailsLayout_WhenFixedRowSizesLessThanParentHeight()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new Grid(
-                rows: new[] { new GridRow(10, SizeMode.Fixed) },
-                columns: new[] { new GridColumn(10, SizeMode.Grow) }
-            )).ToArray();
-
-            Assert.AreEqual(0, solution.Length);
+            Solver.Solve(0, 100, 100, 0, new Grid(
+                rows: new[] {new GridRow(10, SizeMode.Fixed)},
+                columns: new[] {new GridColumn(10, SizeMode.Grow)}
+            ));
         }
 
         [TestMethod]
@@ -130,7 +128,6 @@ namespace BeautifulBlueprints.Test.Elements
 
             StringBuilder builder = new StringBuilder();
             Yaml.Serialize(element, new StringWriter(builder));
-
             Console.WriteLine(builder.ToString());
 
             var deserialized = (Grid)Yaml.Deserialize(new StringReader(builder.ToString()));
