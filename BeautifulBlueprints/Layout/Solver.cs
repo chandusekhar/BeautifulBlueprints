@@ -16,6 +16,8 @@ namespace BeautifulBlueprints.Layout
         {
             public BaseElement Element { get; private set; }
 
+            public object Tag { get; internal set; }
+
             public decimal Left { get; private set; }
             public decimal Right { get; private set; }
             public decimal Top { get; private set; }
