@@ -31,8 +31,8 @@ namespace BeautifulBlueprints.Serialization
             }
             serializer.Settings.RegisterTagMapping("Space", typeof(SpaceContainer));
             //serializer.Settings.RegisterTagMapping("Stack", typeof(StackContainer));
-
             serializer.Settings.RegisterTagMapping("Margin", typeof(MarginContainer));
+            serializer.Settings.RegisterTagMapping("Path", typeof(PathContainer));
         }
 
         private static Serializer CreateSerializer()

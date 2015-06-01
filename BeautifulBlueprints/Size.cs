@@ -5,9 +5,9 @@ namespace BeautifulBlueprints
 {
     public struct Size
     {
-        public decimal Min { get; private set; }
-        public decimal Prefer { get; private set; }
-        public decimal Max { get; private set; }
+        public decimal Min { get; set; }
+        public decimal Prefer { get; set; }
+        public decimal Max { get; set; }
 
         public Size(decimal? min = null, decimal? prefer = null, decimal? max = null)
             : this()
