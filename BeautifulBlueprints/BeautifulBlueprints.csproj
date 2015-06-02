@@ -53,9 +53,9 @@
     <Compile Include="Elements\GridColumn.cs" />
     <Compile Include="Elements\Margin.cs" />
     <Compile Include="Elements\Path.cs" />
-    <Compile Include="Elements\RepeatCount.cs" />
-    <Compile Include="Elements\Space.cs" />
     <Compile Include="Elements\Repeat.cs" />
+    <Compile Include="Elements\Space.cs" />
+    <Compile Include="Elements\Fit.cs" />
     <Compile Include="HorizontalAlignment.cs" />
     <Compile Include="Layout\LayoutFailureException.cs" />
     <Compile Include="Layout\LayoutHelpers.cs" />

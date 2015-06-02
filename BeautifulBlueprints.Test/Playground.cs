@@ -110,7 +110,7 @@ Children:
         public void Layout2()
         {
             const string LAYOUT = @"
-!Repeat
+!Fit
 Children:
   - !AspectRatio
     MinWidth: 100
@@ -198,11 +198,11 @@ MaxWidth: 200
 MinHeight: 40
 MaxHeight: 200
 Children:
-  - !Repeat
+  - !Fit
     Orientation: Vertical
     MinimizeRepeats: true
     Children:
-      - !Repeat
+      - !Fit
         Orientation: Horizontal
         MinimizeRepeats: true
         MinWidth: 1

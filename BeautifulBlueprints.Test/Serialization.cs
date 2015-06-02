@@ -31,7 +31,7 @@ Children:
         public void SerializeElement()
         {
             var el = new Fallback {
-                new Repeat {
+                new Fit {
                     new Space()
                 },
                 new Space()

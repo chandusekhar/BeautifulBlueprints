@@ -55,12 +55,13 @@
   <ItemGroup>
     <Compile Include="Elements\AspectRatioTest.cs" />
     <Compile Include="Elements\FallbackTest.cs" />
+    <Compile Include="Elements\FitTest.cs" />
     <Compile Include="Elements\GridTest.cs" />
     <Compile Include="Elements\MarginTest.cs" />
     <Compile Include="Elements\PathTest.cs" />
-    <Compile Include="Elements\RepeatTest.cs" />
     <Compile Include="Elements\SpaceTest.cs" />
     <Compile Include="Elements\FlowTest.cs" />
+    <Compile Include="Elements\RepeatTest.cs" />
     <Compile Include="Playground.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization.cs" />
