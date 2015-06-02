@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using BeautifulBlueprints.Layout;
 using System.Collections.Generic;
 
@@ -21,6 +22,24 @@ namespace BeautifulBlueprints.Elements
             }
         }
 
+        private readonly decimal _minRatio;
+        public decimal MinRatio
+        {
+            get
+            {
+                return _minRatio;
+            }
+        }
+
+        private readonly decimal _maxRatio;
+        public decimal MaxRatio
+        {
+            get
+            {
+                return _maxRatio;
+            }
+        }
+
         private readonly HorizontalAlignment _horizontalAlignment;
         public HorizontalAlignment HorizontalAlignment { get { return _horizontalAlignment; } }
 
@@ -36,6 +55,8 @@ namespace BeautifulBlueprints.Elements
             decimal? preferredHeight = null,
             decimal maxHeight = DEFAULT_MAX_HEIGHT,
             decimal ratio = DEFAULT_RATIO,
+            decimal? minRatio = null,
+            decimal? maxRatio = null,
             HorizontalAlignment horizontalAlignment = DEFAULT_HORIZONTAL_ALIGNMENT,
             VerticalAlignment verticalAlignment = DEFAULT_VERTICAL_ALIGNMENT
         )
@@ -49,6 +70,9 @@ namespace BeautifulBlueprints.Elements
             )
         {
             _ratio = ratio;
+            _minRatio = minRatio ?? ratio;
+            _maxRatio = maxRatio ?? ratio;
+
             _horizontalAlignment = horizontalAlignment;
             _verticalAlignment = verticalAlignment;
         }
@@ -92,8 +116,15 @@ namespace BeautifulBlueprints.Elements
                     }
                     else
                     {
+                        //Check if we have failed to satisfy the constraint
                         if (!hOk || !wOk)
+                        {
+                            if (Ratio >= MinRatio && Ratio <= MaxRatio)
+                                break;
+
+                            //Nope, failed to constrain the ratio tightly enough
                             throw new LayoutFailureException(string.Format("Cannot satisfy aspect ratio constraint (best attempt {0} out of {1})", width / height, Ratio), this);
+                        }
                     }
 
                 } while (changed);
@@ -167,6 +198,12 @@ namespace BeautifulBlueprints.Elements
         //[DefaultValue(AspectRatio.DEFAULT_RATIO)]
         public decimal Ratio { get; set; }
 
+        [DefaultValue(null)]
+        public decimal? MinRatio { get; set; }
+
+        [DefaultValue(null)]
+        public decimal? MaxRatio { get; set; }
+
         [DefaultValue(AspectRatio.DEFAULT_HORIZONTAL_ALIGNMENT)]
         public HorizontalAlignment HorizontalAlignment { get; set; }
 
@@ -184,6 +221,9 @@ namespace BeautifulBlueprints.Elements
             : base(aspect)
         {
             Ratio = aspect.Ratio;
+            MinRatio = aspect.MinRatio == Ratio ? null : (decimal?)aspect.MinRatio;
+            MaxRatio = aspect.MaxRatio == Ratio ? null : (decimal?)aspect.MaxRatio;
+
             HorizontalAlignment = aspect.HorizontalAlignment;
             VerticalAlignment = aspect.VerticalAlignment;
         }
@@ -198,6 +238,8 @@ namespace BeautifulBlueprints.Elements
                 preferredHeight: PreferredHeight,
                 maxHeight: MaxHeight,
                 ratio: Ratio,
+                minRatio: MinRatio,
+                maxRatio: MaxRatio,
                 horizontalAlignment: HorizontalAlignment,
                 verticalAlignment: VerticalAlignment
             );
