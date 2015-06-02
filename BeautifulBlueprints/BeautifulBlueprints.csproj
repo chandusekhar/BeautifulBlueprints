@@ -53,6 +53,7 @@
     <Compile Include="Elements\GridColumn.cs" />
     <Compile Include="Elements\Margin.cs" />
     <Compile Include="Elements\Path.cs" />
+    <Compile Include="Elements\RepeatCount.cs" />
     <Compile Include="Elements\Space.cs" />
     <Compile Include="Elements\Repeat.cs" />
     <Compile Include="HorizontalAlignment.cs" />

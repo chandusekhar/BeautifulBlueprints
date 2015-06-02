@@ -169,16 +169,16 @@ namespace BeautifulBlueprints.Elements
         : BaseContainerElement.BaseContainerElementContainer
     {
         [DefaultValue(null)]
-        public Size? Left { get; set; }
+        public SizeContainer? Left { get; set; }
 
         [DefaultValue(null)]
-        public Size? Top { get; set; }
+        public SizeContainer? Top { get; set; }
 
         [DefaultValue(null)]
-        public Size? Right { get; set; }
+        public SizeContainer? Right { get; set; }
 
         [DefaultValue(null)]
-        public Size? Bottom { get; set; }
+        public SizeContainer? Bottom { get; set; }
 
         public MarginContainer()
         {
@@ -187,15 +187,15 @@ namespace BeautifulBlueprints.Elements
         public MarginContainer(Margin margin)
             : base(margin)
         {
-            Left = margin.Left.AsNullable();
-            Top = margin.Top.AsNullable();
-            Right = margin.Right.AsNullable();
-            Bottom = margin.Bottom.AsNullable();
+            Left = margin.Left.Wrap();
+            Top = margin.Top.Wrap();
+            Right = margin.Right.Wrap();
+            Bottom = margin.Bottom.Wrap();
         }
 
         public override BaseElement Unwrap()
         {
-            return new Margin(Left, Top, Right, Bottom,
+            return UnwrapChildren(new Margin(Left.Unwrap(), Top.Unwrap(), Right.Unwrap(), Bottom.Unwrap(),
                 name: Name,
                 minWidth: MinWidth,
                 preferredWidth: PreferredWidth,
@@ -203,7 +203,7 @@ namespace BeautifulBlueprints.Elements
                 minHeight: MinHeight,
                 preferredHeight: PreferredHeight,
                 maxHeight: MaxHeight
-            );
+            ));
         }
     }
 }

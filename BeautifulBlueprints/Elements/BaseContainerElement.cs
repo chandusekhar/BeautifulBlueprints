@@ -83,11 +83,13 @@ namespace BeautifulBlueprints.Elements
                     Children = null;
             }
 
-            protected void UnwrapChildren(BaseContainerElement element)
+            protected T UnwrapChildren<T>(T element) where T : BaseContainerElement
             {
                 if (Children != null)
                     foreach (var child in Children)
                         element.Add(child.Unwrap());
+
+                return element;
             }
         }
     }

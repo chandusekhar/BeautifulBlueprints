@@ -129,5 +129,102 @@ Children:
             foreach (var part in solution)
                 Console.WriteLine(part.Element.GetType().Name + " " + part.Element.Name + " " + part.Left + " " + part.Right + " " + part.Top + " " + part.Bottom);
         }
+
+        [TestMethod]
+        public void Layout3()
+        {
+            const string LAYOUT = @"
+!AspectRatio
+Name: Window
+Ratio: 1.2
+MinRatio: 1
+MaxRatio: 1.5
+MinWidth: 40
+MaxWidth: 200
+MinHeight: 40
+MaxHeight: 200
+Children:
+  - !Grid
+    Name: grid
+    Rows:
+      - { Mode: Grow, Size: 1 }
+      - { Mode: Grow, Size: 1 }
+    Columns:
+      - { Mode: Grow, Size: 1 }
+      - { Mode: Grow, Size: 1 }
+    Children:
+      - !Margin
+        Name: margin
+        Left: { Min: 2 }
+        Right: { Min: 2 }
+        Top: { Min: 2 }
+        Bottom: { Min: 2 }
+        Children:
+        - !Path
+          Name: path
+          Path: M-1,-1 v2 h2 v-2 z
+          Fill: 1
+      - !Path
+        Name: path
+        Path: M-1,-1 v2 h2 v-2 z
+        Fill: 1
+      - !Path
+        Name: path
+        Path: M-1,-1 v2 h2 v-2 z
+        Fill: 1
+      - !Path
+        Name: path
+        Path: M-1,-1 v2 h2 v-2 z
+        Fill: 1
+";
+
+            var des = Yaml.Deserialize(new StringReader(LAYOUT));
+            var solution = Layout.Solver.Solve(0, 601, 200, 0, des).ToArray();
+
+            Assert.AreEqual(7, solution.Length);
+        }
+
+                [TestMethod]
+        public void Layout4()
+        {
+            const string LAYOUT = @"
+!AspectRatio
+Name: Window
+Ratio: 1.2
+MinRatio: 1
+MaxRatio: 1.5
+MinWidth: 40
+MaxWidth: 200
+MinHeight: 40
+MaxHeight: 200
+Children:
+  - !Repeat
+    Orientation: Vertical
+    MinimizeRepeats: true
+    Children:
+      - !Repeat
+        Orientation: Horizontal
+        MinimizeRepeats: true
+        MinWidth: 1
+        MinHeight: 1
+        Children:
+          - !Margin
+            MinHeight: 1
+            MinWidth: 1
+            Left: { Min: 2 }
+            Right: { Min: 2 }
+            Top: { Min: 2 }
+            Bottom: { Min: 2 }
+            Children:
+              - !Path
+                Path: M-1,-1 v2 h2 v-2 z
+                Fill: 1
+";
+
+            var des = Yaml.Deserialize(new StringReader(LAYOUT));
+            var solution = Layout.Solver.Solve(0, 601, 200, 0, des).ToArray();
+
+            Assert.AreEqual(5, solution.Length);
+        }
     }
 }

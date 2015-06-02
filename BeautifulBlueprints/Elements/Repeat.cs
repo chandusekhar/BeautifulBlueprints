@@ -85,19 +85,8 @@ namespace BeautifulBlueprints.Elements
             else if (repeatCount == 0)
                 return solutions;
 
-            //Solve the child multiple times, once for each repeat
-            if (Orientation == Orientation.Horizontal)
-            {
-                var childWidth = (self.Right - self.Left) / repeatCount;
-                for (int i = 0; i < repeatCount; i++)
-                    solutions.AddRange(child.Solve(self.Left + childWidth * i, self.Left + childWidth * (i + 1), self.Top, self.Bottom));
-            }
-            else
-            {
-                var childHeight = (self.Top - self.Bottom) / repeatCount;
-                for (int i = 0; i < repeatCount; i++)
-                    solutions.AddRange(child.Solve(self.Left, self.Right, self.Top - childHeight * i, self.Top - childHeight * (i + 1)));
-            }
+            //Solve children
+            solutions.AddRange(RepeatCount.Repeat((uint) repeatCount, child, Orientation, self.Left, self.Right, self.Top, self.Bottom));
 
             return solutions;
         }
@@ -142,7 +131,7 @@ namespace BeautifulBlueprints.Elements
 
         public override BaseElement Unwrap()
         {
-            var s = new Repeat(
+            return UnwrapChildren(new Repeat(
                 minimizeRepeats: MinimizeRepeats,
                 allowZeroRepeats: AllowZeroRepeats,
                 orientation: Orientation,
@@ -153,11 +142,7 @@ namespace BeautifulBlueprints.Elements
                 minHeight: MinHeight,
                 preferredHeight: PreferredHeight,
                 maxHeight: MaxHeight
-            );
-
-            UnwrapChildren(s);
-
-            return s;
+            ));
         }
     }
 }

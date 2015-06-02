@@ -91,18 +91,14 @@ namespace BeautifulBlueprints.Elements
 
         public override BaseElement Unwrap()
         {
-            var s = new Fallback(name: Name,
+            return UnwrapChildren(new Fallback(name: Name,
                 minWidth: MinWidth,
                 preferredWidth: PreferredWidth,
                 maxWidth: MaxWidth,
                 minHeight: MinHeight,
                 preferredHeight: PreferredHeight,
                 maxHeight: MaxHeight
-            );
-
-            UnwrapChildren(s);
-
-            return s;
+            ));
         }
     }
 }

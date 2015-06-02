@@ -331,7 +331,7 @@ namespace BeautifulBlueprints.Elements
 
         public override BaseElement Unwrap()
         {
-            var s = new Grid(
+            return UnwrapChildren(new Grid(
                 Rows.Select(a => a.Unwrap()),
                 Columns.Select(a => a.Unwrap()),
                 name: Name,
@@ -341,15 +341,7 @@ namespace BeautifulBlueprints.Elements
                 minHeight: MinHeight,
                 preferredHeight: PreferredHeight,
                 maxHeight: MaxHeight
-            );
-
-            if (Children != null)
-            {
-                foreach (var child in Children)
-                    s.Add(child.Unwrap());
-            }
-
-            return s;
+            ));
         }
     }
 }

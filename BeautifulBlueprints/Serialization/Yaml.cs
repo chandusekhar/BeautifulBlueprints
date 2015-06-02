@@ -24,6 +24,7 @@ namespace BeautifulBlueprints.Serialization
             serializer.Settings.RegisterTagMapping("Fallback", typeof(FallbackContainer));
             //serializer.Settings.RegisterTagMapping("Flow", typeof(FlowContainer));
             serializer.Settings.RegisterTagMapping("Repeat", typeof(RepeatContainer));
+            serializer.Settings.RegisterTagMapping("RepeatCount", typeof(RepeatCountContainer));
             serializer.Settings.RegisterTagMapping("Grid", typeof(GridContainer));
             {
                 serializer.Settings.RegisterTagMapping("Row", typeof(GridRowContainer));

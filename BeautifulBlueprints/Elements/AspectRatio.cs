@@ -230,7 +230,7 @@ namespace BeautifulBlueprints.Elements
 
         public override BaseElement Unwrap()
         {
-            var s = new AspectRatio(name: Name,
+            return UnwrapChildren(new AspectRatio(name: Name,
                 minWidth: MinWidth,
                 preferredWidth: PreferredWidth,
                 maxWidth: MaxWidth,
@@ -242,11 +242,7 @@ namespace BeautifulBlueprints.Elements
                 maxRatio: MaxRatio,
                 horizontalAlignment: HorizontalAlignment,
                 verticalAlignment: VerticalAlignment
-            );
-
-            UnwrapChildren(s);
-
-            return s;
+            ));
         }
     }
 }
