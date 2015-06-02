@@ -14,7 +14,7 @@ namespace BeautifulBlueprints.Test.Elements
         [TestMethod]
         public void AsserThat_PathElement_ExpandsToFillSpace()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new Path("m0,0 l0,1 h1 v-1 z")).ToArray();
+            var solution = Solver.Solve(0, 100, 100, 0, new Path("M0,0 L0,1 H1 V-1 Z")).ToArray();
 
             Assert.AreEqual(1, solution.Count());
             Assert.AreEqual(0, solution.Single().Left);
@@ -26,7 +26,7 @@ namespace BeautifulBlueprints.Test.Elements
         [TestMethod]
         public void AsserThat_PathElement_LaysOutBasicRectanglePath()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new Path("m0,0 l0,1 h1 v0 z")).ToArray();
+            var solution = Solver.Solve(0, 100, 100, 0, new Path("M0,0 L0,1 H1 V0 Z")).ToArray();
 
             Assert.IsNotNull(solution.Single().Tag);
             var layout = (PathLayout)solution.Single().Tag;
@@ -55,9 +55,9 @@ namespace BeautifulBlueprints.Test.Elements
         }
 
         [TestMethod]
-        public void Bezier()
+        public void AssertThat_BezierCurve_IsContainedWithinParent()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new Path("M-1 -1 C -1 1, 1 1, 1 -1")).ToArray();
+            var solution = Solver.Solve(0, 100, 100, 0, new Path("M-1 -1 C -10 1, 1 1, 1 -1")).ToArray();
 
             Assert.IsNotNull(solution.Single().Tag);
             var layout = (PathLayout)solution.Single().Tag;
@@ -65,14 +65,37 @@ namespace BeautifulBlueprints.Test.Elements
             StringBuilder builder = new StringBuilder();
             foreach (var point in layout.Points)
             {
-                //Asser that the points all lie within the boundary
+                //Assert that the points all lie within the boundary
                 Assert.IsTrue(point.X >= 0 && point.X <= 100);
                 Assert.IsTrue(point.Y >= 0 && point.Y <= 100);
 
                 if (point.StartOfLine)
-                    builder.Append(string.Format("m{0},{1} ", point.X, point.Y));
+                    builder.Append(string.Format("M{0},{1} ", point.X, point.Y));
                 else
-                    builder.Append(string.Format("l{0},{1} ", point.X, point.Y));
+                    builder.Append(string.Format("L{0},{1} ", point.X, point.Y));
+            }
+            Console.WriteLine(builder.ToString());
+        }
+
+        [TestMethod]
+        public void AssertThat_QuadraticCurve_IsContainedWithinParent()
+        {
+            var solution = Solver.Solve(0, 100, 100, 0, new Path("M-1 -1 Q 0,1 1,-1")).ToArray();
+
+            Assert.IsNotNull(solution.Single().Tag);
+            var layout = (PathLayout)solution.Single().Tag;
+
+            StringBuilder builder = new StringBuilder();
+            foreach (var point in layout.Points)
+            {
+                //Assert that the points all lie within the boundary
+                Assert.IsTrue(point.X >= 0 && point.X <= 100);
+                Assert.IsTrue(point.Y >= 0 && point.Y <= 100);
+
+                if (point.StartOfLine)
+                    builder.Append(string.Format("M{0},{1} ", point.X, point.Y));
+                else
+                    builder.Append(string.Format("L{0},{1} ", point.X, point.Y));
             }
             Console.WriteLine(builder.ToString());
         }
