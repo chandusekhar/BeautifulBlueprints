@@ -169,16 +169,16 @@ namespace BeautifulBlueprints.Elements
         : BaseContainerElement.BaseContainerElementContainer
     {
         [DefaultValue(null)]
-        public Size? Left { get; private set; }
+        public Size? Left { get; set; }
 
         [DefaultValue(null)]
-        public Size? Top { get; private set; }
+        public Size? Top { get; set; }
 
         [DefaultValue(null)]
-        public Size? Right { get; private set; }
+        public Size? Right { get; set; }
 
         [DefaultValue(null)]
-        public Size? Bottom { get; private set; }
+        public Size? Bottom { get; set; }
 
         public MarginContainer()
         {
