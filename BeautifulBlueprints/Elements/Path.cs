@@ -9,13 +9,13 @@ namespace BeautifulBlueprints.Elements
     {
         public string SvgPath { get; private set; }
 
+        public decimal Fill { get; private set; }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="path">SVG path to place into this space. Coordinates are relative (-1,-1 indicates bottom left, 1,1 indicates top right)</param>
         /// <param name="fill">Depth to push the fill of this path to</param>
-        /// <param name="stroke">Depth to push the stoke of this path to</param>
-        /// <param name="strokeWidth">Width of th stroke</param>
         /// <param name="name"></param>
         /// <param name="minWidth"></param>
         /// <param name="preferredWidth"></param>
@@ -26,8 +26,6 @@ namespace BeautifulBlueprints.Elements
         public Path(
             string path,
             decimal fill = 0,
-            decimal stroke = 0,
-            decimal strokeWidth = 0,
             string name = null,
             decimal minWidth = DEFAULT_MIN_WIDTH,
             decimal? preferredWidth = null,
@@ -39,6 +37,7 @@ namespace BeautifulBlueprints.Elements
             : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight)
         {
             SvgPath = path;
+            Fill = fill;
         }
 
         internal override IEnumerable<Solver.Solution> Solve(decimal left, decimal right, decimal top, decimal bottom)
@@ -61,6 +60,8 @@ namespace BeautifulBlueprints.Elements
     {
         public string Path { get; set; }
 
+        public decimal Fill { get; set; }
+
         public PathContainer()
         {
         }
@@ -69,6 +70,7 @@ namespace BeautifulBlueprints.Elements
             : base(path)
         {
             Path = path.SvgPath;
+            Fill = path.Fill;
         }
 
         public override BaseElement Unwrap()
@@ -81,7 +83,8 @@ namespace BeautifulBlueprints.Elements
                 maxWidth: MaxWidth,
                 minHeight: MinHeight,
                 preferredHeight: PreferredHeight,
-                maxHeight: MaxHeight
+                maxHeight: MaxHeight,
+                fill: Fill
             );
         }
     }
