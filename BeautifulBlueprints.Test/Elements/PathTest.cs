@@ -1,4 +1,6 @@
-﻿using BeautifulBlueprints.Elements;
+﻿using System;
+using System.Text;
+using BeautifulBlueprints.Elements;
 using BeautifulBlueprints.Layout;
 using BeautifulBlueprints.Layout.Svg;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -55,10 +57,24 @@ namespace BeautifulBlueprints.Test.Elements
         [TestMethod]
         public void Bezier()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new Path("M10 10 C 20 20, 40 20, 50 10")).ToArray();
+            var solution = Solver.Solve(0, 100, 100, 0, new Path("M-1 -1 C -1 1, 1 1, 1 -1")).ToArray();
 
             Assert.IsNotNull(solution.Single().Tag);
             var layout = (PathLayout)solution.Single().Tag;
+
+            StringBuilder builder = new StringBuilder();
+            foreach (var point in layout.Points)
+            {
+                //Asser that the points all lie within the boundary
+                Assert.IsTrue(point.X >= 0 && point.X <= 100);
+                Assert.IsTrue(point.Y >= 0 && point.Y <= 100);
+
+                if (point.StartOfLine)
+                    builder.Append(string.Format("m{0},{1} ", point.X, point.Y));
+                else
+                    builder.Append(string.Format("l{0},{1} ", point.X, point.Y));
+            }
+            Console.WriteLine(builder.ToString());
         }
     }
 }

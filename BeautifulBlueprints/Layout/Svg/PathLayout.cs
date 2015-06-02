@@ -163,7 +163,7 @@ namespace BeautifulBlueprints.Layout.Svg
 
                     case SvgCommandType.C:
                     case SvgCommandType.c: {
-                        const decimal ERR = 15;
+                        const decimal ERR = 1;
                         EvaluateBezier(points, (ERR / width) * (ERR / height));
                         break;
                     }
@@ -203,8 +203,8 @@ namespace BeautifulBlueprints.Layout.Svg
                 var y2 = Arguments[3];
 
                 //Line end
-                var x = Arguments[0];
-                var y = Arguments[0];
+                var x = Arguments[4];
+                var y = Arguments[5];
 
                 //Evaluator function for 1 dimension of a curve
                 Func<decimal, decimal, decimal, decimal, decimal, decimal> evaluator = (a, b, c, d, t) => (decimal)Math.Pow(1 - (double)t, 3) * a + 3 * (decimal)Math.Pow(1 - (double)t, 2) * t * b + 3 * (1 - t) * t * t * c + t * t * t * d;
@@ -228,7 +228,7 @@ namespace BeautifulBlueprints.Layout.Svg
                 var endY = evalY(1);
 
                 //Add start and end points to list
-                wip.Add(new KeyValuePair<decimal, PathPoint>(0, new PathPoint(startX, startY, true)));
+                wip.Add(new KeyValuePair<decimal, PathPoint>(0, new PathPoint(startX, startY, false)));
                 wip.Add(new KeyValuePair<decimal, PathPoint>(1, new PathPoint(endX, endY, false)));
 
                 RecursiveEvaluateCurveSegment(wip, evalX, evalY, maxError, 0, 1);
