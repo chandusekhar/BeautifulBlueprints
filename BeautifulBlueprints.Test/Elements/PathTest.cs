@@ -51,5 +51,14 @@ namespace BeautifulBlueprints.Test.Elements
             Assert.AreEqual(50, points[4].Y);
             Assert.IsFalse(points[4].StartOfLine);
         }
+
+        [TestMethod]
+        public void Bezier()
+        {
+            var solution = Solver.Solve(0, 100, 100, 0, new Path("M10 10 C 20 20, 40 20, 50 10")).ToArray();
+
+            Assert.IsNotNull(solution.Single().Tag);
+            var layout = (PathLayout)solution.Single().Tag;
+        }
     }
 }

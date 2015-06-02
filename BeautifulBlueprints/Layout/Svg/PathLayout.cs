@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text.RegularExpressions;
 
 namespace BeautifulBlueprints.Layout.Svg
@@ -42,14 +43,15 @@ namespace BeautifulBlueprints.Layout.Svg
                                 .Select(SvgCommand.Parse)
                                 .ToArray();
 
+            var width = _right - _left;
+            var height = _top - _bottom;
+
             //Evaluate all the SVG commands
             List<PathPoint> points = new List<PathPoint>();
             for (int i = 0; i < commands.Length; i++)
-                commands[i].Execute(this, points, i == 0 ? null : (SvgCommand?)commands[i - 1]);
+                commands[i].Execute(this, points, i == 0 ? null : (SvgCommand?)commands[i - 1], width, height);
 
-            //Points are in -1 to 1 range, conver to absolute position
-            var width = _right - _left;
-            var height = _top - _bottom;
+            //Points are in -1 to 1 range, convert to absolute position
             for (int i = 0; i < points.Count; i++)
             {
                 points[i] = new PathPoint(
@@ -117,7 +119,7 @@ namespace BeautifulBlueprints.Layout.Svg
                 return new SvgCommand(cmd, args);
             }
 
-            public void Execute(PathLayout layout, List<PathPoint> points, SvgCommand? previousCommand)
+            public void Execute(PathLayout layout, List<PathPoint> points, SvgCommand? previousCommand, decimal width, decimal height)
             {
                 switch (Command)
                 {
@@ -160,9 +162,11 @@ namespace BeautifulBlueprints.Layout.Svg
                     }
 
                     case SvgCommandType.C:
-                    case SvgCommandType.c:
-                        throw new NotSupportedException("Cubic bezier curve not supported");
-
+                    case SvgCommandType.c: {
+                        const decimal ERR = 15;
+                        EvaluateBezier(points, (ERR / width) * (ERR / height));
+                        break;
+                    }
 
                     case SvgCommandType.S:
                     case SvgCommandType.s:
@@ -183,6 +187,84 @@ namespace BeautifulBlueprints.Layout.Svg
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+            }
+
+            private void EvaluateBezier(List<PathPoint> points, decimal error)
+            {
+                //Line start
+                var start = points.Last();
+
+                //Start control point
+                var x1 = Arguments[0];
+                var y1 = Arguments[1];
+
+                //end control points
+                var x2 = Arguments[2];
+                var y2 = Arguments[3];
+
+                //Line end
+                var x = Arguments[0];
+                var y = Arguments[0];
+
+                //Evaluator function for 1 dimension of a curve
+                Func<decimal, decimal, decimal, decimal, decimal, decimal> evaluator = (a, b, c, d, t) => (decimal)Math.Pow(1 - (double)t, 3) * a + 3 * (decimal)Math.Pow(1 - (double)t, 2) * t * b + 3 * (1 - t) * t * t * c + t * t * t * d;
+
+                //Evaluators for specific dimensions
+                Func<decimal, decimal> evalX = t => evaluator(start.X, x1, x2, x, t);
+                Func<decimal, decimal> evalY = t => evaluator(start.Y, y1, y2, y, t);
+
+                //Now evaluate the curve
+                EvaluateCurve(points, evalX, evalY, maxError: error);
+            }
+
+            private void EvaluateCurve(List<PathPoint> points, Func<decimal, decimal> evalX, Func<decimal, decimal> evalY, decimal maxError = 10)
+            {
+                List<KeyValuePair<decimal, PathPoint>> wip = new List<KeyValuePair<decimal, PathPoint>>();
+
+                //Evaluate the start and end points of the curve
+                var startX = evalX(0);
+                var startY = evalY(0);
+                var endX = evalX(1);
+                var endY = evalY(1);
+
+                //Add start and end points to list
+                wip.Add(new KeyValuePair<decimal, PathPoint>(0, new PathPoint(startX, startY, true)));
+                wip.Add(new KeyValuePair<decimal, PathPoint>(1, new PathPoint(endX, endY, false)));
+
+                RecursiveEvaluateCurveSegment(wip, evalX, evalY, maxError, 0, 1);
+
+                points.AddRange(wip.OrderBy(a => a.Key).Select(a => a.Value));
+            }
+
+            private void RecursiveEvaluateCurveSegment(List<KeyValuePair<decimal, PathPoint>> points, Func<decimal, decimal> evalX, Func<decimal, decimal> evalY, decimal maxError, decimal start, decimal end)
+            {
+                //Evaluate the start and end points of this curve segment
+                var startX = evalX(start);
+                var startY = evalY(start);
+                var endX = evalX(end);
+                var endY = evalY(end);
+
+                //Evaluate the middle of this curve segment
+                var midT = start * 0.5m + end * 0.5m;
+                var midX = evalX(midT);
+                var midY = evalY(midT);
+
+                //What's the area of the curve (estimated by area of the triangle formed with mid point)
+                var trueArea = Math.Abs(startX * (midY - endY) + midX * (endY - startY) + endX * (startY - midY)) / 2;
+
+                //What's the area of our approximation (currently always a line)
+                var estArea = 0;
+
+                //If the area is small we've reached a good enough approximation, terminate recursion
+                if (trueArea - estArea < maxError)
+                    return;
+
+                //Insert a point in the middle of the endpoints, making the approximation more accurate
+                points.Add(new KeyValuePair<decimal, PathPoint>(midT, new PathPoint(midX, midY, false)));
+
+                //Evaluate the two halves of the curve
+                RecursiveEvaluateCurveSegment(points, evalX, evalY, maxError, midT, end);
+                RecursiveEvaluateCurveSegment(points, evalX, evalY, maxError, midT, end);
             }
         }
 
