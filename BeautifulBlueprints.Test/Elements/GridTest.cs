@@ -224,23 +224,23 @@ namespace BeautifulBlueprints.Test.Elements
         [TestMethod]
         public void AssertThat_GridElement_LaysOutPercentageElements()
         {
-            var solution = Solver.Solve(0, 100, 100, 0, new Grid(
+            var solution = Solver.Solve(-100, 100, 100, 0, new Grid(
                 rows: new[] { new GridRow(100, SizeMode.Fixed) },
-                columns: new[] { new GridColumn(50, SizeMode.Percentage), new GridColumn(50, SizeMode.Percentage) }
+                columns: new[] { new GridColumn(20, SizeMode.Percentage), new GridColumn(1, SizeMode.Grow), new GridColumn(20, SizeMode.Percentage) }
             ) {
-                new Space("l"), new Space("r")
+                new Space("l"), new Space("m"), new Space("r")
             }).ToArray();
 
-            Assert.AreEqual(3, solution.Length);
+            Assert.AreEqual(4, solution.Length);
 
             var l = solution.Single(a => a.Element.Name == "l");
             var r = solution.Single(a => a.Element.Name == "r");
 
             //Check that space is distributed between the two auto elements (according to ratio of initial sizes)
-            Assert.AreEqual(0, l.Left);
-            Assert.AreEqual(50, l.Right);
+            Assert.AreEqual(-100, l.Left);
+            Assert.AreEqual(-60, l.Right);
 
-            Assert.AreEqual(50, r.Left);
+            Assert.AreEqual(60, r.Left);
             Assert.AreEqual(100, r.Right);
         }
 

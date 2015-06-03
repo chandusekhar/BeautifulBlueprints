@@ -152,8 +152,8 @@ namespace BeautifulBlueprints.Elements
 
             // First we lay out fixed elements (and auto elements, to their minimum allowed size), this left us with some excess space...
 // ReSharper disable CoVariantArrayConversion
-            var rowSizes = MeasureSizes(_rows, _rows.Length, _columns.Length, elements, MeasureRowElementHeights, MeasureRowPreferredHeight, self.Right - self.Left);
-            var columnSizes = MeasureSizes(_columns, _rows.Length, _columns.Length, elements, MeasureColumnElementWidths, MeasureColumnPreferredWidth, self.Top - self.Bottom);
+            var rowSizes = MeasureSizes(_rows, _rows.Length, _columns.Length, elements, MeasureRowElementHeights, MeasureRowPreferredHeight, self.Top - self.Bottom);
+            var columnSizes = MeasureSizes(_columns, _rows.Length, _columns.Length, elements, MeasureColumnElementWidths, MeasureColumnPreferredWidth, self.Right - self.Left);
 // ReSharper restore CoVariantArrayConversion
 
             decimal allocatedRowSpace = rowSizes.Select(a => a.Size).Sum();
