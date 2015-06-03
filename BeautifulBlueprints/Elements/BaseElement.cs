@@ -114,7 +114,7 @@ namespace BeautifulBlueprints.Elements
 
         internal abstract BaseElementContainer Wrap();
 
-        internal abstract class BaseElementContainer
+        public abstract class BaseElementContainer
         {
             public string Name { get; set; }
 
