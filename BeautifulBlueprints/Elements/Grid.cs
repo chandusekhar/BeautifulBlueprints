@@ -41,7 +41,7 @@ namespace BeautifulBlueprints.Elements
         }
 
         #region prepare layout
-        private static SizedElement[] MeasureSizes(ISizeable[] definitions, int rowCount, int columnCount, BaseElement[] elements, Func<BaseElement[], int, int, int, decimal> measureElementSizes, Func<BaseElement[], int, int, int, decimal> measureElementPreferredSize)
+        private static SizedElement[] MeasureSizes(ISizeable[] definitions, int rowCount, int columnCount, BaseElement[] elements, Func<BaseElement[], int, int, int, decimal> measureElementSizes, Func<BaseElement[], int, int, int, decimal> measureElementPreferredSize, decimal totalSpaceInDimension)
         {
             var output = new SizedElement[definitions.Length];
 
@@ -65,8 +65,12 @@ namespace BeautifulBlueprints.Elements
                     output[i].Size = measureElementSizes(elements, i, rowCount, columnCount);
                     output[i].PreferredSize = measureElementPreferredSize(elements, i, rowCount, columnCount);
                 }
+                else if (definitions[i].Mode == SizeMode.Percentage)
+                {
+                    output[i].Size = definitions[i].Size / 100 * totalSpaceInDimension;
+                }
                 else
-                    throw new NotSupportedException(string.Format("Unknwon size mode {0}", definitions[i].Mode));
+                    throw new NotSupportedException(string.Format("Unknown size mode {0}", definitions[i].Mode));
             }
 
             return output;
@@ -148,8 +152,8 @@ namespace BeautifulBlueprints.Elements
 
             // First we lay out fixed elements (and auto elements, to their minimum allowed size), this left us with some excess space...
 // ReSharper disable CoVariantArrayConversion
-            var rowSizes = MeasureSizes(_rows, _rows.Length, _columns.Length, elements, MeasureRowElementHeights, MeasureRowPreferredHeight);
-            var columnSizes = MeasureSizes(_columns, _rows.Length, _columns.Length, elements, MeasureColumnElementWidths, MeasureColumnPreferredWidth);
+            var rowSizes = MeasureSizes(_rows, _rows.Length, _columns.Length, elements, MeasureRowElementHeights, MeasureRowPreferredHeight, self.Right - self.Left);
+            var columnSizes = MeasureSizes(_columns, _rows.Length, _columns.Length, elements, MeasureColumnElementWidths, MeasureColumnPreferredWidth, self.Top - self.Bottom);
 // ReSharper restore CoVariantArrayConversion
 
             decimal allocatedRowSpace = rowSizes.Select(a => a.Size).Sum();

@@ -9,6 +9,11 @@ namespace BeautifulBlueprints
         Fixed,
 
         /// <summary>
+        /// This element has a fixed width of a certain percent of the space available
+        /// </summary>
+        Percentage,
+
+        /// <summary>
         /// This element will be automatically sized to contain children
         /// </summary>
         Auto,
