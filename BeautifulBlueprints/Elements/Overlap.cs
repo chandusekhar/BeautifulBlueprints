@@ -50,6 +50,10 @@ namespace BeautifulBlueprints.Elements
     internal class OverlapContainer
         : BaseContainerElement.BaseContainerElementContainer
     {
+        public OverlapContainer()
+        {
+        }
+
         public OverlapContainer(Overlap overlap)
             : base(overlap)
         {
