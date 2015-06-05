@@ -15,11 +15,14 @@ namespace BeautifulBlueprints.Elements
 
         public decimal StartDepth { get; private set; }
 
+        public string Brush { get; private set; }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="path">SVG path to place into this space. Coordinates are relative (-1,-1 indicates bottom left, 1,1 indicates top right)</param>
         /// <param name="additive"></param>
+        /// <param name="brush"></param>
         /// <param name="name"></param>
         /// <param name="minWidth"></param>
         /// <param name="preferredWidth"></param>
@@ -34,6 +37,7 @@ namespace BeautifulBlueprints.Elements
             decimal startDepth = 0,
             decimal thickness = 1,
             bool additive = false,
+            string brush = null,
             string name = null,
             decimal minWidth = DEFAULT_MIN_WIDTH,
             decimal? preferredWidth = null,
@@ -48,6 +52,7 @@ namespace BeautifulBlueprints.Elements
             StartDepth = startDepth;
             Thickness = thickness;
             Additive = additive;
+            Brush = brush;
         }
 
         internal override IEnumerable<Solver.Solution> Solve(decimal left, decimal right, decimal top, decimal bottom)
@@ -76,6 +81,8 @@ namespace BeautifulBlueprints.Elements
 
         public decimal StartDepth { get; set; }
 
+        public string Brush { get; set; }
+
         public PathContainer()
         {
         }
@@ -87,6 +94,7 @@ namespace BeautifulBlueprints.Elements
             Additive = path.Additive;
             Thickness = path.Thickness;
             StartDepth = path.StartDepth;
+            Brush = path.Brush;
         }
 
         public override BaseElement Unwrap()
@@ -102,7 +110,8 @@ namespace BeautifulBlueprints.Elements
                 maxHeight: MaxHeight,
                 startDepth: StartDepth,
                 thickness: Thickness,
-                additive: Additive
+                additive: Additive,
+                brush: Brush
             );
         }
     }
