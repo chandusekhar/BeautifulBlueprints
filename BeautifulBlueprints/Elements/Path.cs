@@ -1,6 +1,6 @@
 ﻿using BeautifulBlueprints.Layout;
-using System.Collections.Generic;
 using BeautifulBlueprints.Layout.Svg;
+using System.Collections.Generic;
 
 namespace BeautifulBlueprints.Elements
 {
@@ -9,13 +9,17 @@ namespace BeautifulBlueprints.Elements
     {
         public string SvgPath { get; private set; }
 
-        public decimal Fill { get; private set; }
+        public bool Additive { get; private set; }
+
+        public decimal Thickness { get; private set; }
+
+        public decimal StartDepth { get; private set; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="path">SVG path to place into this space. Coordinates are relative (-1,-1 indicates bottom left, 1,1 indicates top right)</param>
-        /// <param name="fill">Depth to push the fill of this path to</param>
+        /// <param name="additive"></param>
         /// <param name="name"></param>
         /// <param name="minWidth"></param>
         /// <param name="preferredWidth"></param>
@@ -23,9 +27,13 @@ namespace BeautifulBlueprints.Elements
         /// <param name="minHeight"></param>
         /// <param name="preferredHeight"></param>
         /// <param name="maxHeight"></param>
+        /// <param name="startDepth"></param>
+        /// <param name="thickness"></param>
         public Path(
             string path,
-            decimal fill = 0,
+            decimal startDepth = 0,
+            decimal thickness = 1,
+            bool additive = false,
             string name = null,
             decimal minWidth = DEFAULT_MIN_WIDTH,
             decimal? preferredWidth = null,
@@ -37,7 +45,9 @@ namespace BeautifulBlueprints.Elements
             : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight)
         {
             SvgPath = path;
-            Fill = fill;
+            StartDepth = startDepth;
+            Thickness = thickness;
+            Additive = additive;
         }
 
         internal override IEnumerable<Solver.Solution> Solve(decimal left, decimal right, decimal top, decimal bottom)
@@ -60,7 +70,11 @@ namespace BeautifulBlueprints.Elements
     {
         public string Path { get; set; }
 
-        public decimal Fill { get; set; }
+        public bool Additive { get; set; }
+
+        public decimal Thickness { get; set; }
+
+        public decimal StartDepth { get; set; }
 
         public PathContainer()
         {
@@ -70,7 +84,9 @@ namespace BeautifulBlueprints.Elements
             : base(path)
         {
             Path = path.SvgPath;
-            Fill = path.Fill;
+            Additive = path.Additive;
+            Thickness = path.Thickness;
+            StartDepth = path.StartDepth;
         }
 
         public override BaseElement Unwrap()
@@ -84,7 +100,9 @@ namespace BeautifulBlueprints.Elements
                 minHeight: MinHeight,
                 preferredHeight: PreferredHeight,
                 maxHeight: MaxHeight,
-                fill: Fill
+                startDepth: StartDepth,
+                thickness: Thickness,
+                additive: Additive
             );
         }
     }

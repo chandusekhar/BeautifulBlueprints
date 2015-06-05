@@ -163,19 +163,23 @@ Children:
         - !Path
           Name: path
           Path: M-1,-1 v2 h2 v-2 z
-          Fill: 1
+          StartDepth: 0
+          Thickness: 1
       - !Path
         Name: path
         Path: M-1,-1 v2 h2 v-2 z
-        Fill: 1
+        StartDepth: 0
+        Thickness: 1
       - !Path
         Name: path
         Path: M-1,-1 v2 h2 v-2 z
-        Fill: 1
+        StartDepth: 0
+        Thickness: 1
       - !Path
         Name: path
         Path: M-1,-1 v2 h2 v-2 z
-        Fill: 1
+        StartDepth: 0
+        Thickness: 1
 ";
 
             var des = Yaml.Deserialize(new StringReader(LAYOUT));
@@ -218,7 +222,8 @@ Children:
             Children:
               - !Path
                 Path: M-1,-1 v2 h2 v-2 z
-                Fill: 1
+                StartDepth: 0
+                Thickness: 1
 ";
 
             var des = Yaml.Deserialize(new StringReader(LAYOUT));
