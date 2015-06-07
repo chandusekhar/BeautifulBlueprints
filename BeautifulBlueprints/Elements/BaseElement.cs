@@ -90,7 +90,7 @@ namespace BeautifulBlueprints.Elements
 
         internal abstract IEnumerable<Solver.Solution> Solve(decimal left, decimal right, decimal top, decimal bottom);
 
-        internal virtual void Prepare()
+        internal virtual void Prepare(Solver.SolverOptions options)
         {
         }
 

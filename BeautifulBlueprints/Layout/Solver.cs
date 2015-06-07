@@ -6,10 +6,23 @@ namespace BeautifulBlueprints.Layout
 {
     public static class Solver
     {
-        public static IEnumerable<Solution> Solve(decimal left, decimal right, decimal top, decimal bottom, BaseElement root)
+        public static IEnumerable<Solution> Solve(decimal left, decimal right, decimal top, decimal bottom, BaseElement root, SolverOptions options = default(SolverOptions))
         {
-            root.Prepare();
+            root.Prepare(options);
             return root.Solve(left, right, top, bottom).ToArray();
+        }
+
+        public delegate BaseElement SubsectionFinder(string name, string[] tags);
+
+        public struct SolverOptions
+        {
+            public SubsectionFinder SubsectionFinder { get; set; }
+
+            public SolverOptions(SubsectionFinder subsectionFinder = null)
+                : this()
+            {
+                SubsectionFinder = subsectionFinder;
+            }
         }
 
         public struct Solution

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using BeautifulBlueprints.Layout;
 
 namespace BeautifulBlueprints.Elements
 {
@@ -47,12 +48,12 @@ namespace BeautifulBlueprints.Elements
             _children.Add(baseElement);
         }
 
-        internal override void Prepare()
+        internal override void Prepare(Solver.SolverOptions options)
         {
-            base.Prepare();
+            base.Prepare(options);
 
             foreach (var child in Children)
-                child.Prepare();
+                child.Prepare(options);
         }
 
         public IEnumerator<BaseElement> GetEnumerator()
