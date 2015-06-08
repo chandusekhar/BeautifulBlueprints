@@ -1,25 +1,23 @@
-﻿using System;
+﻿using BeautifulBlueprints.Layout;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using BeautifulBlueprints.Layout;
 
 namespace BeautifulBlueprints.Elements
 {
     public class Subsection
         : BaseElement
     {
-        public string[] SearchParameters { get; private set; }
+        public IEnumerable<KeyValuePair<string, string>> SearchParameters { get; private set; }
 
         public Subsection(
+            IEnumerable<KeyValuePair<string, string>> searchParameters,
             string name = null,
             decimal minWidth = DEFAULT_MIN_WIDTH,
             decimal? preferredWidth = null,
             decimal maxWidth = DEFAULT_MAX_WIDTH,
             decimal minHeight = DEFAULT_MIN_HEIGHT,
             decimal? preferredHeight = null,
-            decimal maxHeight = DEFAULT_MAX_HEIGHT,
-            params string[] searchParameters
+            decimal maxHeight = DEFAULT_MAX_HEIGHT
         )
             : base(name, minWidth, preferredWidth, maxWidth, minHeight, preferredHeight, maxHeight)
         {
@@ -33,7 +31,7 @@ namespace BeautifulBlueprints.Elements
                 _subsection = null;
             else
             {
-                _subsection = options.SubsectionFinder(Name, SearchParameters);
+                _subsection = options.SubsectionFinder(Name, SearchParameters.ToArray());
                 if (_subsection != null)
                     _subsection.Prepare(options);
             }
@@ -58,7 +56,7 @@ namespace BeautifulBlueprints.Elements
     internal class SubsectionContainer
         : BaseElement.BaseElementContainer
     {
-        public string[] Tags { get; set; }
+        public Dictionary<string, string> Parameters { get; set; }
 
         public SubsectionContainer()
         {
@@ -78,7 +76,7 @@ namespace BeautifulBlueprints.Elements
                 minHeight: MinHeight,
                 preferredHeight: PreferredHeight,
                 maxHeight: MaxHeight,
-                searchParameters: Tags
+                searchParameters: Parameters
             );
 
             return s;

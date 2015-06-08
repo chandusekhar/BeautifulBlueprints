@@ -1,4 +1,5 @@
-﻿using BeautifulBlueprints.Elements;
+﻿using System.Collections.Concurrent;
+using BeautifulBlueprints.Elements;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,7 +13,7 @@ namespace BeautifulBlueprints.Layout
             return root.Solve(left, right, top, bottom).ToArray();
         }
 
-        public delegate BaseElement SubsectionFinder(string name, string[] tags);
+        public delegate BaseElement SubsectionFinder(string name, KeyValuePair<string, string>[] tags);
 
         public struct SolverOptions
         {
@@ -21,8 +22,25 @@ namespace BeautifulBlueprints.Layout
             public SolverOptions(SubsectionFinder subsectionFinder = null)
                 : this()
             {
-                SubsectionFinder = subsectionFinder;
+                SubsectionFinder = CreateFinder(subsectionFinder);
             }
+        }
+
+        private static SubsectionFinder CreateFinder(SubsectionFinder searchMethod)
+        {
+            ConcurrentDictionary<string, BaseElement> resolvedSubsections = new ConcurrentDictionary<string, BaseElement>();
+
+            //Return a func which caches results by their id
+            return (n, t) => {
+                var id = t.SingleOrDefault(a => a.Key == "cache_id");
+
+                //No ID, so no caching
+                if (id.Key == null)
+                    return searchMethod(n, t);
+
+                //Get the item from the cache (or create it and add it if necessary)
+                return resolvedSubsections.GetOrAdd(id.Value, _ => searchMethod(n, t));
+            };
         }
 
         public struct Solution
