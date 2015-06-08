@@ -44,11 +44,11 @@ namespace BeautifulBlueprints.Test.Elements
             var element = new Space();
 
             StringBuilder builder = new StringBuilder();
-            Yaml.Serialize(element, new StringWriter(builder));
+            Yaml.Serialize(new LayoutContainer(element), new StringWriter(builder));
 
             Console.WriteLine(builder.ToString());
 
-            var deserialized = (Space)Yaml.Deserialize(new StringReader(builder.ToString()));
+            var deserialized = (Space)Yaml.Deserialize(new StringReader(builder.ToString())).Root;
 
             Assert.AreEqual(element.MaxHeight, deserialized.MaxHeight);
             Assert.AreEqual(element.MinHeight, deserialized.MinHeight);

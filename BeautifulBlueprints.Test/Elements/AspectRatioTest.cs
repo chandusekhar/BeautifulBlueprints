@@ -180,10 +180,10 @@ namespace BeautifulBlueprints.Test.Elements
             var element = new AspectRatio();
 
             StringBuilder builder = new StringBuilder();
-            Yaml.Serialize(element, new StringWriter(builder));
+            Yaml.Serialize(new LayoutContainer(element), new StringWriter(builder));
             Console.WriteLine(builder.ToString());
 
-            var deserialized = (AspectRatio)Yaml.Deserialize(new StringReader(builder.ToString()));
+            var deserialized = (AspectRatio)Yaml.Deserialize(new StringReader(builder.ToString())).Root;
 
             Assert.AreEqual(element.HorizontalAlignment, deserialized.HorizontalAlignment);
             Assert.AreEqual(element.VerticalAlignment, deserialized.VerticalAlignment);

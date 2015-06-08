@@ -67,35 +67,37 @@ namespace BeautifulBlueprints.Test
         public void Layout1()
         {
             const string LAYOUT = @"
-!Grid
-Name: Root
-Columns:
-  - { Mode: Grow, Size: 1 }
-  - { Mode: Auto, Size: 1 }
-  - { Mode: Auto, Size: 1 }
-  - { Mode: Grow, Size: 1 }
-Rows:
-  - { Mode: Grow, Size: 1 }
-Children:
-  - !Space
-    MinWidth: 20
-  - !Fallback
+!Layout
+Root:
+    !Grid
+    Name: Root
+    Columns:
+      - { Mode: Grow, Size: 1 }
+      - { Mode: Auto, Size: 1 }
+      - { Mode: Auto, Size: 1 }
+      - { Mode: Grow, Size: 1 }
+    Rows:
+      - { Mode: Grow, Size: 1 }
     Children:
-    - !AspectRatio
-       MinWidth: 40
-       MaxWidth: 75
-  - !Fallback
-    Children:
-     - !AspectRatio
-       MinWidth: 20
-       MaxWidth: 75
-  - !Space
-    MinWidth: 20
+      - !Space
+        MinWidth: 20
+      - !Fallback
+        Children:
+        - !AspectRatio
+           MinWidth: 40
+           MaxWidth: 75
+      - !Fallback
+        Children:
+         - !AspectRatio
+           MinWidth: 20
+           MaxWidth: 75
+      - !Space
+        MinWidth: 20
 
 
 ";
 
-            var des = Yaml.Deserialize(new StringReader(LAYOUT));
+            var des = Yaml.Deserialize(new StringReader(LAYOUT)).Root;
             var solution = Layout.Solver.Solve(-155, 155, 75, -75, des).ToArray();
 
             Assert.AreNotEqual(0, solution.Length);
@@ -110,16 +112,18 @@ Children:
         public void Layout2()
         {
             const string LAYOUT = @"
-!Fit
-Children:
-  - !AspectRatio
-    MinWidth: 100
-    MaxHeight: 200
-    PreferredWidth: 75
-    Ratio: 0.75
+!Layout
+Root:
+    !Fit
+    Children:
+      - !AspectRatio
+        MinWidth: 100
+        MaxHeight: 200
+        PreferredWidth: 75
+        Ratio: 0.75
 ";
 
-            var des = Yaml.Deserialize(new StringReader(LAYOUT));
+            var des = Yaml.Deserialize(new StringReader(LAYOUT)).Root;
             var solution = Layout.Solver.Solve(0, 601, 200, 0, des).ToArray();
 
             Assert.AreNotEqual(0, solution.Length);
@@ -134,55 +138,57 @@ Children:
         public void Layout3()
         {
             const string LAYOUT = @"
-!AspectRatio
-Name: Window
-Ratio: 1.2
-MinRatio: 1
-MaxRatio: 1.5
-MinWidth: 40
-MaxWidth: 200
-MinHeight: 40
-MaxHeight: 200
-Children:
-  - !Grid
-    Name: grid
-    Rows:
-      - { Mode: Grow, Size: 1 }
-      - { Mode: Grow, Size: 1 }
-    Columns:
-      - { Mode: Grow, Size: 1 }
-      - { Mode: Grow, Size: 1 }
+!Layout
+Root:
+    !AspectRatio
+    Name: Window
+    Ratio: 1.2
+    MinRatio: 1
+    MaxRatio: 1.5
+    MinWidth: 40
+    MaxWidth: 200
+    MinHeight: 40
+    MaxHeight: 200
     Children:
-      - !Margin
-        Name: margin
-        Left: { Min: 2 }
-        Right: { Min: 2 }
-        Top: { Min: 2 }
-        Bottom: { Min: 2 }
+      - !Grid
+        Name: grid
+        Rows:
+          - { Mode: Grow, Size: 1 }
+          - { Mode: Grow, Size: 1 }
+        Columns:
+          - { Mode: Grow, Size: 1 }
+          - { Mode: Grow, Size: 1 }
         Children:
-        - !Path
-          Name: path
-          Path: M-1,-1 v2 h2 v-2 z
-          StartDepth: 0
-          Thickness: 1
-      - !Path
-        Name: path
-        Path: M-1,-1 v2 h2 v-2 z
-        StartDepth: 0
-        Thickness: 1
-      - !Path
-        Name: path
-        Path: M-1,-1 v2 h2 v-2 z
-        StartDepth: 0
-        Thickness: 1
-      - !Path
-        Name: path
-        Path: M-1,-1 v2 h2 v-2 z
-        StartDepth: 0
-        Thickness: 1
+          - !Margin
+            Name: margin
+            Left: { Min: 2 }
+            Right: { Min: 2 }
+            Top: { Min: 2 }
+            Bottom: { Min: 2 }
+            Children:
+            - !Path
+              Name: path
+              Path: M-1,-1 v2 h2 v-2 z
+              StartDepth: 0
+              Thickness: 1
+          - !Path
+            Name: path
+            Path: M-1,-1 v2 h2 v-2 z
+            StartDepth: 0
+            Thickness: 1
+          - !Path
+            Name: path
+            Path: M-1,-1 v2 h2 v-2 z
+            StartDepth: 0
+            Thickness: 1
+          - !Path
+            Name: path
+            Path: M-1,-1 v2 h2 v-2 z
+            StartDepth: 0
+            Thickness: 1
 ";
 
-            var des = Yaml.Deserialize(new StringReader(LAYOUT));
+            var des = Yaml.Deserialize(new StringReader(LAYOUT)).Root;
             var solution = Layout.Solver.Solve(0, 601, 200, 0, des).ToArray();
 
             Assert.AreEqual(7, solution.Length);
@@ -192,41 +198,43 @@ Children:
         public void Layout4()
         {
             const string LAYOUT = @"
-!AspectRatio
-Name: Window
-Ratio: 1.2
-MinRatio: 1
-MaxRatio: 1.5
-MinWidth: 40
-MaxWidth: 200
-MinHeight: 40
-MaxHeight: 200
-Children:
-  - !Fit
-    Orientation: Vertical
-    MinimizeRepeats: true
+!Layout
+Root:
+    !AspectRatio
+    Name: Window
+    Ratio: 1.2
+    MinRatio: 1
+    MaxRatio: 1.5
+    MinWidth: 40
+    MaxWidth: 200
+    MinHeight: 40
+    MaxHeight: 200
     Children:
       - !Fit
-        Orientation: Horizontal
+        Orientation: Vertical
         MinimizeRepeats: true
-        MinWidth: 1
-        MinHeight: 1
         Children:
-          - !Margin
-            MinHeight: 1
+          - !Fit
+            Orientation: Horizontal
+            MinimizeRepeats: true
             MinWidth: 1
-            Left: { Min: 2 }
-            Right: { Min: 2 }
-            Top: { Min: 2 }
-            Bottom: { Min: 2 }
+            MinHeight: 1
             Children:
-              - !Path
-                Path: M-1,-1 v2 h2 v-2 z
-                StartDepth: 0
-                Thickness: 1
+              - !Margin
+                MinHeight: 1
+                MinWidth: 1
+                Left: { Min: 2 }
+                Right: { Min: 2 }
+                Top: { Min: 2 }
+                Bottom: { Min: 2 }
+                Children:
+                  - !Path
+                    Path: M-1,-1 v2 h2 v-2 z
+                    StartDepth: 0
+                    Thickness: 1
 ";
 
-            var des = Yaml.Deserialize(new StringReader(LAYOUT));
+            var des = Yaml.Deserialize(new StringReader(LAYOUT)).Root;
             var solution = Layout.Solver.Solve(0, 601, 200, 0, des).ToArray();
 
             Assert.AreEqual(5, solution.Length);

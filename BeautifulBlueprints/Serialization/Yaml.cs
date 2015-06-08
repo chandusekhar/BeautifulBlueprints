@@ -1,25 +1,18 @@
-﻿using BeautifulBlueprints.Elements;
+﻿using System;
+using System.Collections.Generic;
+using BeautifulBlueprints.Elements;
+using BeautifulBlueprints.Layout;
 using SharpYaml.Serialization;
-using System;
 using System.IO;
 
 namespace BeautifulBlueprints.Serialization
 {
     public static class Yaml
     {
-        [ThreadStatic] private static Serializer _serializer;
-        private static Serializer Serializer
-        {
-            get
-            {
-                if (_serializer == null)
-                    _serializer = CreateSerializer();
-                return _serializer;
-            }
-        }
-
         private static void RegisterTags(Serializer serializer)
         {
+            serializer.Settings.RegisterTagMapping("!Layout", typeof(LayoutContainerInternal));
+
             serializer.Settings.RegisterTagMapping("AspectRatio", typeof(AspectRatioContainer));
             serializer.Settings.RegisterTagMapping("Fallback", typeof(FallbackContainer));
             //serializer.Settings.RegisterTagMapping("Flow", typeof(FlowContainer));
@@ -50,14 +43,32 @@ namespace BeautifulBlueprints.Serialization
             return serializer;
         }
 
-        public static void Serialize(BaseElement root, TextWriter writer)
+        public static void Serialize(Serializer serializer, LayoutContainer root, TextWriter writer)
         {
-            Serializer.Serialize(writer, root.Wrap());
+            serializer.Serialize(writer, root.Wrap());
         }
 
-        public static BaseElement Deserialize(TextReader reader)
+        public static void Serialize(LayoutContainer root, TextWriter writer, params KeyValuePair<string, Type>[] tagMappings)
         {
-            return Serializer.Deserialize<BaseElement.BaseElementContainer>(reader).Unwrap();
+            var s = CreateSerializer();
+            foreach (var mapping in tagMappings)
+                s.Settings.RegisterTagMapping(mapping.Key, mapping.Value);
+
+            Serialize(s, root, writer);
+        }
+
+        public static TRoot Deserialize<TRoot>(Serializer serializer, TextReader reader)
+        {
+            return serializer.Deserialize<TRoot>(reader);
+        }
+
+        public static LayoutContainer Deserialize(TextReader reader, params KeyValuePair<string, Type>[] tagMappings)
+        {
+            var s = CreateSerializer();
+            foreach (var mapping in tagMappings)
+                s.Settings.RegisterTagMapping(mapping.Key, mapping.Value);
+
+            return Deserialize<LayoutContainerInternal>(s, reader).Unwrap();
         }
     }
 }

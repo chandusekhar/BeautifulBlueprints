@@ -1,4 +1,5 @@
 ﻿using BeautifulBlueprints.Elements;
+using BeautifulBlueprints.Layout;
 using BeautifulBlueprints.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharpYaml.Serialization;
@@ -16,13 +17,15 @@ namespace BeautifulBlueprints.Test
         public void DeserializeElement()
         {
             var el = Yaml.Deserialize(new StringReader(@"
-!Fallback
-Children:
-  - !Repeat
+!Layout
+Root:
+    !Fallback
     Children:
+      - !Repeat
+        Children:
+          - !Space {}
       - !Space {}
-  - !Space {}
-"));
+")).Root;
 
             Assert.AreEqual(2, ((BaseContainerElement)el).Children.Count());
         }
@@ -38,7 +41,7 @@ Children:
             };
 
             StringBuilder builder = new StringBuilder();
-            Yaml.Serialize(el, new StringWriter(builder));
+            Yaml.Serialize(new LayoutContainer(el), new StringWriter(builder));
 
             Console.WriteLine(builder.ToString());
         }
