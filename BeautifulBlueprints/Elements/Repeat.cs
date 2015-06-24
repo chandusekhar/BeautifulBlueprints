@@ -92,7 +92,6 @@ namespace BeautifulBlueprints.Elements
         [DefaultValue(Fit.DEFAULT_ORIENTATION)]
         public Orientation Orientation { get; set; }
 
-        [DefaultValue(Fit.DEFAULT_MINIMIZE_REPEATS)]
         public uint Repeats { get; set; }
 
         public RepeatContainer()

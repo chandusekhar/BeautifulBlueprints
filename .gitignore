@@ -4,7 +4,7 @@
 *.suo
 *.user
 *.cache
-
+_NCrunch_BeautifulBlueprints
 _ReSharper.BeautifulBlueprints
 packages
 
@@ -13,3 +13,4 @@ BeautifulBlueprints/obj
 
 BeautifulBlueprints.Test/bin
 BeautifulBlueprints.Test/obj
+
