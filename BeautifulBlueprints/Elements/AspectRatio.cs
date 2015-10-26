@@ -1,8 +1,7 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
-using BeautifulBlueprints.Layout;
+﻿using BeautifulBlueprints.Layout;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace BeautifulBlueprints.Elements
 {
@@ -130,11 +129,11 @@ namespace BeautifulBlueprints.Elements
                 } while (changed);
             }
 
-            var decimaled = LayoutHelpers.decimalElement(this, HorizontalAlignment, VerticalAlignment, width, height, left, right, top, bottom);
-            yield return decimaled;
+            var layoutElement = LayoutHelpers.LayoutElement(this, HorizontalAlignment, VerticalAlignment, width, height, left, right, top, bottom);
+            yield return layoutElement;
 
             foreach (var child in Children)
-                foreach (var solution in child.Solve(decimaled.Left, decimaled.Right, decimaled.Top, decimaled.Bottom))
+                foreach (var solution in child.Solve(layoutElement.Left, layoutElement.Right, layoutElement.Top, layoutElement.Bottom))
                     yield return solution;
         }
 

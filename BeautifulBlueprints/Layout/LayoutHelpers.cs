@@ -5,7 +5,7 @@ namespace BeautifulBlueprints.Layout
 {
     public static class LayoutHelpers
     {
-        public static Solver.Solution decimalElement(BaseElement el, HorizontalAlignment hAlign, VerticalAlignment vAlign, decimal width, decimal height, decimal left, decimal right, decimal top, decimal bottom)
+        public static Solver.Solution LayoutElement(BaseElement el, HorizontalAlignment hAlign, VerticalAlignment vAlign, decimal width, decimal height, decimal left, decimal right, decimal top, decimal bottom)
         {
             var self = el.FillSpace(left, right, top, bottom, checkMaxWidth: false, checkMaxHeight: false);
 

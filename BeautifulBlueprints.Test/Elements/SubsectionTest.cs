@@ -26,7 +26,7 @@ namespace BeautifulBlueprints.Test.Elements
 
             Console.WriteLine(builder.ToString());
 
-            var deserialized = (Fallback)Yaml.Deserialize(new StringReader(builder.ToString())).Root;
+            var deserialized = (Subsection)Yaml.Deserialize(new StringReader(builder.ToString())).Root;
 
             Assert.AreEqual(element.MaxHeight, deserialized.MaxHeight);
             Assert.AreEqual(element.MinHeight, deserialized.MinHeight);

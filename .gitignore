@@ -6,6 +6,7 @@
 *.cache
 _NCrunch_BeautifulBlueprints
 _ReSharper.BeautifulBlueprints
+_ReSharper.Caches
 packages
 
 BeautifulBlueprints/bin

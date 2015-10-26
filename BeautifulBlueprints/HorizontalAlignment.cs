@@ -17,10 +17,5 @@ namespace BeautifulBlueprints
         /// Align all elements to the center, i.e. put all spare space equally on the left and right
         /// </summary>
         Center,
-
-        /// <summary>
-        /// Align elements unformly along the axis, i.e. put all spare space evenly between every element
-        /// </summary>
-        Uniform
     }
 }
