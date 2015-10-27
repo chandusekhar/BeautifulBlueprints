@@ -39,7 +39,7 @@ namespace BeautifulBlueprints.Layout
                     return searchMethod(n, t);
 
                 //Get the item from the cache (or create it and add it if necessary)
-                return resolvedSubsections.GetOrAdd(id.Value, _ => searchMethod(n, t));
+                return resolvedSubsections.GetOrAdd(id.Value, _ => searchMethod(n, t.Where(a => a.Key != "cache_id").ToArray()));
             };
         }
 
