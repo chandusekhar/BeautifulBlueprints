@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using BeautifulBlueprints.Elements;
 using System.Collections.Generic;
 
@@ -40,10 +41,16 @@ namespace BeautifulBlueprints.Layout
             }
         }
 
-        public LayoutContainer(BaseElement root, IDictionary<string, string> tags = null)
+        public Guid Id { get; private set; }
+
+        public string Description { get; private set; }
+
+        public LayoutContainer(BaseElement root, IDictionary<string, string> tags = null, Guid? id = null, string description = "")
         {
             _root = root;
             _tags = tags ?? new Dictionary<string, string>();
+            Id = id ?? Guid.NewGuid();
+            Description = description ?? "";
         }
 
         internal LayoutContainer(LayoutContainerInternal layoutContainerInternal)
