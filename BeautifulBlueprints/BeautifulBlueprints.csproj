@@ -60,6 +60,7 @@
     <Compile Include="Elements\Fit.cs" />
     <Compile Include="Elements\Subsection.cs" />
     <Compile Include="HorizontalAlignment.cs" />
+    <Compile Include="Layout\ILayoutContainer.cs" />
     <Compile Include="Layout\LayoutContainer.cs" />
     <Compile Include="Layout\LayoutFailureException.cs" />
     <Compile Include="Layout\LayoutHelpers.cs" />

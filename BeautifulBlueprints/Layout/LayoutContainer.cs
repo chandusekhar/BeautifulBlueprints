@@ -17,7 +17,7 @@ namespace BeautifulBlueprints.Layout
     }
 
     public class LayoutContainer
-        : IEnumerable<KeyValuePair<string, string>>
+        : IEnumerable<KeyValuePair<string, string>>, ILayoutContainer
     {
         private readonly IDictionary<string, string> _tags; 
         public string this[string key]

@@ -62,7 +62,7 @@ namespace BeautifulBlueprints.Serialization
             return serializer.Deserialize<TRoot>(reader);
         }
 
-        public static LayoutContainer Deserialize(TextReader reader, params KeyValuePair<string, Type>[] tagMappings)
+        public static ILayoutContainer Deserialize(TextReader reader, params KeyValuePair<string, Type>[] tagMappings)
         {
             var s = CreateSerializer();
             foreach (var mapping in tagMappings)
