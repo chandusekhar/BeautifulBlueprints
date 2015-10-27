@@ -11,6 +11,10 @@ namespace BeautifulBlueprints.Layout
 
         public BaseElement.BaseElementContainer Root { get; set; }
 
+        public Guid? Id { get; set; }
+
+        public string Description { get; set; }
+
         public LayoutContainer Unwrap()
         {
             return new LayoutContainer(this);
@@ -54,16 +58,17 @@ namespace BeautifulBlueprints.Layout
         }
 
         internal LayoutContainer(LayoutContainerInternal layoutContainerInternal)
+            : this(layoutContainerInternal.Root.Unwrap(), layoutContainerInternal.Tags, layoutContainerInternal.Id, layoutContainerInternal.Description)
         {
-            _root = layoutContainerInternal.Root.Unwrap();
-            _tags = layoutContainerInternal.Tags;
         }
 
         internal LayoutContainerInternal Wrap()
         {
             return new LayoutContainerInternal {
                 Tags = _tags,
-                Root = _root.Wrap()
+                Root = _root.Wrap(),
+                Description = Description,
+                Id = Id
             };
         }
 
