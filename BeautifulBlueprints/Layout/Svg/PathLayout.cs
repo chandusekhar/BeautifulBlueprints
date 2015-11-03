@@ -37,6 +37,10 @@ namespace BeautifulBlueprints.Layout.Svg
 
         public PathLayout Layout()
         {
+            //Early exit if this path is 0 sized in any dimension
+            if (_right - _left <= 0 || _top - _bottom <= 0)
+                return null;
+
             //Split path into tokens, one per command
             var commands = Regex.Split(_svgPath, SEPARATORS)
                                 .Where(t => !string.IsNullOrEmpty(t))

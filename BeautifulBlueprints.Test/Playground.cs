@@ -194,7 +194,7 @@ Root:
             Assert.AreEqual(7, solution.Length);
         }
 
-                [TestMethod]
+        [TestMethod]
         public void Layout4()
         {
             const string LAYOUT = @"
@@ -238,6 +238,37 @@ Root:
             var solution = Layout.Solver.Solve(0, 601, 200, 0, des).ToArray();
 
             Assert.AreEqual(5, solution.Length);
+        }
+
+        [TestMethod]
+        public void Layout5()
+        {
+            const string LAYOUT = @"
+!Layout
+Tags:
+  Type: Hollow
+  Style: None
+  Id: 6b6d766c-6e99-488e-bed0-8eb244c0cea4
+Root:
+  !Fallback
+  Children:
+    - !Margin
+      Left: { Min: 20, Max: 40 }
+      Right: { Min: 20, Max: 40 }
+      Top: { Min: 20, Max: 40 }
+      Bottom: { Min: 20, Max: 40 }
+      Children:
+        - !Path
+          Path: M-1,-1 v2 h2 v-2 z
+          StartDepth: -1
+          Thickness: 3
+          Brush: Wood
+";
+
+            var des = Yaml.Deserialize(new StringReader(LAYOUT)).Root;
+            var solution = Layout.Solver.Solve(0, 40, 100, 0, des).ToArray();
+
+            Assert.AreEqual(3, solution.Length);
         }
     }
 }
